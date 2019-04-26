@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <title>Sebastian Daza | Reading CDC mortality files using R</title>
+  <meta name="description" content="Sebastian Daza Website. Based on [*folio](https://github.com/bogoli/-folio) design.
+">
+
+  <link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="canonical" href="/blog/2016/readMortalityData/">
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    
+    <span class="site-title">
+        
+        <strong>Sebastian</strong> Daza
+    </span>
+    
+
+    <nav class="site-nav">
+      <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+              <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+              <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+      <div class="trigger">
+        <!-- About -->
+        <a class="page-link" href="/">about</a>
+
+        <!-- Blog -->
+        <a class="page-link" href="/blog/">blog</a>
+
+        <!-- Pages -->
+        
+          
+        
+          
+            <a class="page-link" href="/cv/">cv</a>
+          
+        
+          
+        
+          
+        
+          
+            <a class="page-link" href="/projects/">projects</a>
+          
+        
+          
+            <a class="page-link" href="/publications/">publications</a>
+          
+        
+          
+        
+          
+        
+          
+        
+
+        <!-- CV link -->
+        <!-- <a class="page-link" href="/assets/pdf/CV.pdf">vitae</a> -->
+
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Reading CDC mortality files using R</h1>
+    <p class="post-meta">October 5, 2016</p>
+  </header>
+
+  <article class="post-content">
+    <p>Reading  fixed-width text files might be challenging, specially when we don’t have a dictionary file. In this post, I show steps to read CDC files in a more systematic way. In this example, I import a compress mortality file (CMF 1979-1988) available <a href="http://www.cdc.gov/nchs/data_access/cmf.htm">here</a> and  whose codebook (or layout) is <a href="http://www.cdc.gov/nchs/data/mortab/filelayout68_88.pdf">here</a>.</p>
+
+<p>To read this file, usually with extension <code class="highlighter-rouge">.txt</code> or <code class="highlighter-rouge">.dat</code>,  I first need to know where each column starts and finishes. What I get from the pdf file is something like this:</p>
+
+<p><img src="/assets/img/mortalityLayout.png" alt="" /></p>
+
+<p>The layout is usually a codebook in Word/PDF or just plain text file. Here, I copy the PDF text and put it in a plain text file. I use a text editor (e.g., <a href="https://www.sublimetext.com/">Sublime Text</a>) and <a href="https://en.wikipedia.org/wiki/Regular_expression">regular expressions</a> to extract the information I need.</p>
+
+<p>I have to select every row with this pattern: <code class="highlighter-rouge">1-2 2 FIPS State code Numeric</code>. That is, a number followed by a hyphen (although not always, particularly when the width of the column is one), spaces, another number, spaces, and then any text. I use the following regular expression to get that pattern: <code class="highlighter-rouge">(^[0-9]+).([0-9]+)\s+([0-9])\s+(.+)</code>. Using the Sublime package <a href="https://packagecontrol.io/packages/Filter%20Lines">Filter Lines</a> I get something like this (you can also just copy the selected lines):</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1-2 2 FIPS State code Numeric
+3-5 FIPS county code Numeric
+6-9 4 Year of death Numeric
+11-12 2 Age at death Numeric
+13-16 4 ICD code for underlying cause-of-death 3 digits: Numeric
+17-19 3 Cause-of-Death Recode Numeric
+20-23 4 Number of deaths Numeric
+</code></pre></div></div>
+
+<p>This approach might be particularly useful when you have a long PDF/Word file and you want to extract most of the variables. You would need to adapt the regular expressions I’m using to the particular patterns of your codebook.</p>
+
+<p>To simplify, I format this text as a comma-separated values file (csv). Replacing this regular expression <code class="highlighter-rouge">([0-9]+)(-)([0-9]+)(\s)([0-9]+)(\s)(.+)(\s)(Numeric)</code> by <code class="highlighter-rouge">\1,\3,\5,\7,\9</code> I get:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1,2,2,FIPS State code,Numeric
+3,5,3,FIPS county code,Numeric
+6,9,4,Year of death,Numeric
+11,12,2,Age at death,Numeric
+13,16,4,ICD code for underlying cause-of-death 3 digits:,Numeric
+17,19,3,Cause-of-Death Recode,Numeric
+20,23,4,Number of deaths,Numeric
+</code></pre></div></div>
+
+<p>Then, I read the layout file:</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1"># define names of columns</span><span class="w">
+</span><span class="n">colnames</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"start"</span><span class="p">,</span><span class="w"> </span><span class="s2">"end"</span><span class="p">,</span><span class="w"> </span><span class="s2">"width"</span><span class="p">,</span><span class="w"> </span><span class="s2">"name"</span><span class="p">,</span><span class="w"> </span><span class="s2">"type"</span><span class="p">)</span><span class="w">
+</span><span class="n">dict</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">read.csv</span><span class="p">(</span><span class="s2">"data/dictMortality.csv"</span><span class="p">,</span><span class="w"> </span><span class="n">col.names</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">colnames</span><span class="p">,</span><span class="w"> </span><span class="n">header</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">##   start end width                                             name    type
+## 1     1   2     2                                  FIPS State code Numeric
+## 2     3   5     3                                 FIPS county code Numeric
+## 3     6   9     4                                    Year of death Numeric
+## 4    11  12     2                                     Age at death Numeric
+## 5    13  16     4 ICD code for underlying cause-of-death 3 digits: Numeric
+## 6    17  19     3                            Cause-of-Death Recode Numeric
+## 7    20  23     4                                 Number of deaths Numeric</code></pre></figure>
+
+<p>Now, I can read the fixed-width data file. I use the <a href="https://github.com/hadley/readr">readr</a> package (in my experience relatively fast for big datasets ~ 1 GB).</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">library</span><span class="p">(</span><span class="n">readr</span><span class="p">)</span><span class="w">
+
+</span><span class="c1"># create name of variables</span><span class="w">
+</span><span class="n">cnames</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"state"</span><span class="p">,</span><span class="w"> </span><span class="s2">"county"</span><span class="p">,</span><span class="w"> </span><span class="s2">"year"</span><span class="p">,</span><span class="w"> </span><span class="s2">"age"</span><span class="p">,</span><span class="w"> </span><span class="s2">"icd"</span><span class="p">,</span><span class="w"> </span><span class="s2">"cause"</span><span class="p">,</span><span class="w"> </span><span class="s2">"deaths"</span><span class="p">)</span><span class="w">
+
+</span><span class="c1"># read mortality file</span><span class="w">
+</span><span class="n">mort</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">read_fwf</span><span class="p">(</span><span class="s2">"data/mort7988.txt"</span><span class="p">,</span><span class="w"> </span><span class="n">fwf_positions</span><span class="p">(</span><span class="n">dict</span><span class="o">$</span><span class="n">start</span><span class="p">,</span><span class="w"> </span><span class="n">dict</span><span class="o">$</span><span class="n">end</span><span class="p">,</span><span class="w"> </span><span class="n">cnames</span><span class="p">))</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## # A tibble: 8,776,385 x 7
+##    state county  year   age   icd cause deaths
+##    &lt;chr&gt;  &lt;chr&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;int&gt;
+##  1    01    001  1979    04  5789   780      1
+##  2    01    001  1979    04  7980   770      1
+##  3    01    001  1979    08  8121   800      1
+##  4    01    001  1979    09  3439   780      1
+##  5    01    001  1979    09  8120   800      2
+##  6    01    001  1979    09  8189   800      1
+##  7    01    001  1979    10  1629   180      1
+##  8    01    001  1979    10  2396   250      1
+##  9    01    001  1979    10  4289   410      1
+## 10    01    001  1979    10  8070   810      1
+## # ... with 8,776,375 more rows</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1"># year distribution</span><span class="w">
+</span><span class="n">table</span><span class="p">(</span><span class="n">mort</span><span class="o">$</span><span class="n">year</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">##   1979   1980   1981   1982   1983   1984   1985   1986   1987   1988
+## 831605 854860 854198 850505 867280 875607 894176 905736 912551 929867</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1"># number of deaths</span><span class="w">
+</span><span class="nf">sum</span><span class="p">(</span><span class="n">mort</span><span class="o">$</span><span class="n">deaths</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## [1] 20398153</code></pre></figure>
+
+<p>Hopefully, this might save you some time!</p>
+
+<p><strong>Last Update: 06/29/2017</strong></p>
+
+  </article>
+
+  
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      var disqus_shortname  = 'sdaza';
+      var disqus_identifier = '/blog/2016/readMortalityData';
+      var disqus_title      = "Reading CDC mortality files using R";
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  
+
+</div>
+
+      </div>
+    </div>
+
+    <footer>
+
+  <div class="wrapper">
+    &copy; Copyright 2019 Sebastian Daza.
+    Powered by <a href="http://jekyllrb.com/" target="_blank">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio">al-folio</a> theme. Hosted by <a href="https://pages.github.com/" target="_blank">GitHub Pages</a>.
+
+    
+  </div>
+
+</footer>
+
+
+    <!-- Load jQuery -->
+<script src="//code.jquery.com/jquery-1.12.4.min.js"></script>
+
+<!-- Load Common JS -->
+<script src="/assets/js/common.js"></script>
+
+
+<!-- Load KaTeX -->
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0/katex.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0/katex.min.js"></script>
+<script src="/assets/js/katex.js"></script>
+
+
+
+<!-- Load Anchor JS -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/anchor-js/3.2.2/anchor.min.js"></script>
+<script>
+  anchors.options.visible = 'always';
+  anchors.add('article h2, article h3, article h4, article h5, article h6');
+</script>
+
+
+<!-- Include custom icon fonts -->
+<link rel="stylesheet" href="/assets/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/assets/css/academicons.min.css">
+
+<!-- Google Analytics -->
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-XXXXXXXXX', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+  </body>
+
+</html>
