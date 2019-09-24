@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <title>Sebastian Daza | My Facebook Network</title>
+  <meta name="description" content="Sebastian Daza Website. Based on [*folio](https://github.com/bogoli/-folio) design.
+">
+
+  <link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="canonical" href="/blog/2012/facebook-sna/">
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    
+    <span class="site-title">
+        
+        <strong>Sebastian</strong> Daza
+    </span>
+    
+
+    <nav class="site-nav">
+      <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+              <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+              <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+      <div class="trigger">
+        <!-- About -->
+        <a class="page-link" href="/">about</a>
+
+        <!-- Blog -->
+        <a class="page-link" href="/blog/">blog</a>
+
+        <!-- cv -->
+        <a class="page-link" href="/cv/">cv</a>
+
+        <!-- projects -->
+        <a class="page-link" href="/projects/">projects</a>
+
+        <!-- publications -->
+        <a class="page-link" href="/publications/">publications</a>
+
+        <!-- Pages -->
+<!--         
+          
+        
+          
+            <a class="page-link" href="/cv/">cv</a>
+          
+        
+          
+        
+          
+        
+          
+            <a class="page-link" href="/projects/">projects</a>
+          
+        
+          
+            <a class="page-link" href="/publications/">publications</a>
+          
+        
+          
+        
+          
+            <a class="page-link" href="/assets/presentations/reveal.js-3.6.0/plugin/markdown/example/">Markdown Demo</a>
+          
+        
+          
+            <a class="page-link" href="/assets/presentations/reveal.js-3.6.0/test/simple/">Slide 1.1</a>
+          
+        
+          
+            <a class="page-link" href="/assets/presentations/reveal.js-3.6.0/css/theme/">Dependencies</a>
+          
+        
+          
+        
+          
+         -->
+
+        <!-- CV link -->
+        <!-- <a class="page-link" href="/assets/pdf/CV.pdf">vitae</a> -->
+
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">My Facebook Network</h1>
+    <p class="post-meta">October 4, 2012 • Sebastian Daza</p>
+  </header>
+
+  <article class="post-content">
+    <p>I am taking a <a href="https://www.coursera.org">coursera</a> class on Social Network Analysis. The first assignment consisted of ploting my Facebook network. Below I show how I did it using the R package <strong>igraph</strong>. In order to get your Facebook Network you can use the <a href="https://apps.facebook.com/netvizz/">Netvizz</a> app. This application allows you to create gdf files (a simple text format that specifies an undirected graph) from the friendship relations. I used this <a href="http://snacourse.com/getnet/">simplified Netvizz version</a> from <a href="https://www.coursera.org">coursera</a>  that generates .gml files directly.</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">library</span><span class="p">(</span><span class="n">igraph</span><span class="p">)</span><span class="w">
+
+</span><span class="c1"># read the facebook network from a .gml file</span><span class="w">
+</span><span class="n">f</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">read.graph</span><span class="p">(</span><span class="s2">"sdaza.gml"</span><span class="p">,</span><span class="w"> </span><span class="n">format</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"gml"</span><span class="p">)</span></code></pre></figure>
+
+<p>In order to plot my Facebook network, I extract the following attributes: gender, wall posts count, and interface language. I also assign some colors and shapes to those attributes.</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1"># gender, assigning shapes</span><span class="w">
+</span><span class="n">ssex</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">V</span><span class="p">(</span><span class="n">f</span><span class="p">)</span><span class="o">$</span><span class="n">sex</span><span class="w">
+</span><span class="n">table</span><span class="p">(</span><span class="n">ssex</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## ssex
+## female   male
+##    218    188</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">ssex</span><span class="p">[</span><span class="n">ssex</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">"female"</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="s2">"circle"</span><span class="w">
+</span><span class="n">ssex</span><span class="p">[</span><span class="n">ssex</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">"male"</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="s2">"square"</span><span class="w">
+</span><span class="n">table</span><span class="p">(</span><span class="n">ssex</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## ssex
+## circle square
+##    218    188</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1"># interface language, assigning colors</span><span class="w">
+</span><span class="n">cloc</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">V</span><span class="p">(</span><span class="n">f</span><span class="p">)</span><span class="o">$</span><span class="n">locale</span><span class="w">
+</span><span class="n">table</span><span class="p">(</span><span class="n">cloc</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## cloc
+## en_GB en_US es_CL es_ES es_LA it_IT nl_NL pt_BR
+##    13   132     2     9   245     1     1     3</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">cloc</span><span class="p">[</span><span class="n">cloc</span><span class="w"> </span><span class="o">%in%</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"es_ES"</span><span class="p">,</span><span class="w"> </span><span class="s2">"it_IT"</span><span class="p">,</span><span class="w"> </span><span class="s2">"nl_NL"</span><span class="p">,</span><span class="w"> </span><span class="s2">"en_GB"</span><span class="p">,</span><span class="w"> </span><span class="s2">"gl_ES"</span><span class="p">,</span><span class="w"> </span><span class="s2">"ko_KR"</span><span class="p">)]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w">  </span><span class="s2">"Yellow"</span><span class="w">
+</span><span class="n">cloc</span><span class="p">[</span><span class="n">cloc</span><span class="w"> </span><span class="o">%in%</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"es_CL"</span><span class="p">,</span><span class="w"> </span><span class="s2">"pt_BR"</span><span class="p">,</span><span class="w"> </span><span class="s2">"es_LA"</span><span class="p">)]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="s2">"Green"</span><span class="w">
+</span><span class="n">cloc</span><span class="p">[</span><span class="n">cloc</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"en_US"</span><span class="p">)]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="s2">"Blue"</span><span class="w">
+</span><span class="n">table</span><span class="p">(</span><span class="n">cloc</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## cloc
+##   Blue  Green Yellow
+##    132    250     24</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1"># wall posts count, assigning node size</span><span class="w">
+</span><span class="n">nsize</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="p">(</span><span class="n">V</span><span class="p">(</span><span class="n">f</span><span class="p">)</span><span class="o">$</span><span class="n">wallcount</span><span class="o">/</span><span class="nf">max</span><span class="p">(</span><span class="n">V</span><span class="p">(</span><span class="n">f</span><span class="p">)</span><span class="o">$</span><span class="n">wallcount</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">0.1</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="m">15</span></code></pre></figure>
+
+<p>Now, I can plot the network:</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">plot</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="w"> </span><span class="n">layout</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">layout.fruchterman.reingold</span><span class="p">,</span><span class="w"> </span><span class="n">edge.arrow.size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0.5</span><span class="p">,</span><span class="w">
+    </span><span class="n">vertex.label</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">NA</span><span class="p">,</span><span class="w"> </span><span class="n">vertex.size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">3</span><span class="p">,</span><span class="w"> </span><span class="n">vertex.color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cloc</span><span class="p">,</span><span class="w">
+    </span><span class="n">vertex.shape</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ssex</span><span class="p">)</span></code></pre></figure>
+
+<p><img src="/assets/img/2012-10-04-facebook-sna/fig1.png" alt="center" /></p>
+
+<p>If we use <strong>wall posts count</strong> to size the nodes:</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">plot</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="w"> </span><span class="n">layout</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">layout.fruchterman.reingold</span><span class="p">,</span><span class="w"> </span><span class="n">edge.arrow.size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0.5</span><span class="p">,</span><span class="w">
+    </span><span class="n">vertex.label</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">NA</span><span class="p">,</span><span class="w"> </span><span class="n">vertex.size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">nsize</span><span class="p">,</span><span class="w"> </span><span class="n">vertex.color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cloc</span><span class="p">,</span><span class="w">
+    </span><span class="n">vertex.shape</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ssex</span><span class="p">)</span></code></pre></figure>
+
+<p><img src="/assets/img/2012-10-04-facebook-sna/fig2.png" alt="center" /></p>
+
+<p>We can also obtain some basic descriptive statistics of the network using a <code class="highlighter-rouge">graph.basic.stats</code> function (see <a href="http://www.isk.kth.se/~shahabm/WSAnalysis/networks/NetworkAnalysis.r">here</a> to obtain it):</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">graph.basic.stats</span><span class="p">(</span><span class="n">f</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## Number of nodes: 406
+## Number of edges: 4415
+##
+## Degree
+##   Average: 21.7
+##
+##
+## Giant component  Size: 397
+## Giant component  As perc.: 0.978
+## Second Giant component: 1
+## Second Giant component As perc.: 0.00246
+##
+## Isolated nodes
+##   Number: 9
+##   As perc.: 0.0222</code></pre></figure>
+
+<p>As can be seen, I have relatively compact and homogeneous components (or clusters) regarding language interface on Facebook. You can see now how your own Facebook network looks like.</p>
+
+  </article>
+
+  
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      var disqus_shortname  = 'sdaza';
+      var disqus_identifier = '/blog/2012/facebook-sna';
+      var disqus_title      = "My Facebook Network";
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  
+
+</div>
+
+      </div>
+    </div>
+
+    <footer>
+
+  <div class="wrapper">
+    &copy; Copyright 2019 Sebastian Daza.
+    Powered by <a href="http://jekyllrb.com/" target="_blank">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio">al-folio</a> theme. Hosted by <a href="https://pages.github.com/" target="_blank">GitHub Pages</a>.
+
+    
+  </div>
+
+</footer>
+
+
+    <!-- Load jQuery -->
+<script src="//code.jquery.com/jquery-1.12.4.min.js"></script>
+
+<!-- Load Common JS -->
+<script src="/assets/js/common.js"></script>
+
+
+<!-- Load KaTeX -->
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0/katex.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0/katex.min.js"></script>
+<script src="/assets/js/katex.js"></script>
+
+
+
+<!-- Load Anchor JS -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/anchor-js/3.2.2/anchor.min.js"></script>
+<script>
+  anchors.options.visible = 'always';
+  anchors.add('article h2, article h3, article h4, article h5, article h6');
+</script>
+
+
+<!-- Include custom icon fonts -->
+<link rel="stylesheet" href="/assets/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/assets/css/academicons.min.css">
+
+<!-- Google Analytics -->
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-34554402-2', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+  </body>
+
+</html>

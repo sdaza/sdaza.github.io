@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <title>Sebastian Daza | Cohort component projection</title>
+  <meta name="description" content="Sebastian Daza Website. Based on [*folio](https://github.com/bogoli/-folio) design.
+">
+
+  <link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="canonical" href="/blog/2013/projections/">
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    
+    <span class="site-title">
+        
+        <strong>Sebastian</strong> Daza
+    </span>
+    
+
+    <nav class="site-nav">
+      <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+              <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+              <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+      <div class="trigger">
+        <!-- About -->
+        <a class="page-link" href="/">about</a>
+
+        <!-- Blog -->
+        <a class="page-link" href="/blog/">blog</a>
+
+        <!-- cv -->
+        <a class="page-link" href="/cv/">cv</a>
+
+        <!-- projects -->
+        <a class="page-link" href="/projects/">projects</a>
+
+        <!-- publications -->
+        <a class="page-link" href="/publications/">publications</a>
+
+        <!-- Pages -->
+<!--         
+          
+        
+          
+            <a class="page-link" href="/cv/">cv</a>
+          
+        
+          
+        
+          
+        
+          
+            <a class="page-link" href="/projects/">projects</a>
+          
+        
+          
+            <a class="page-link" href="/publications/">publications</a>
+          
+        
+          
+        
+          
+            <a class="page-link" href="/assets/presentations/reveal.js-3.6.0/plugin/markdown/example/">Markdown Demo</a>
+          
+        
+          
+            <a class="page-link" href="/assets/presentations/reveal.js-3.6.0/test/simple/">Slide 1.1</a>
+          
+        
+          
+            <a class="page-link" href="/assets/presentations/reveal.js-3.6.0/css/theme/">Dependencies</a>
+          
+        
+          
+        
+          
+         -->
+
+        <!-- CV link -->
+        <!-- <a class="page-link" href="/assets/pdf/CV.pdf">vitae</a> -->
+
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Cohort component projection</h1>
+    <p class="post-meta">July 2, 2013 • Sebastian Daza</p>
+  </header>
+
+  <article class="post-content">
+    <p>I present an example of a cohort component projection using a closed female population (Sweden 1993), taken from Preston et al.’s book (Demography 2001, page 125). I use R and basic matrix algebra to replicate their results. The advantage of this procedure is that allows to compute easily the <em>intrinsic growth rate</em> and <em>age-proportionate distribution</em> of the stable equivalent population. All we need is the population by age at time 0 (from a census), survivorship ratios (from a life table), and age-specific fertility rates.</p>
+
+<p>The data:</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">dat</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">read.csv</span><span class="p">(</span><span class="s2">"sweden1993.csv"</span><span class="p">,</span><span class="w"> </span><span class="n">sep</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">","</span><span class="p">,</span><span class="w"> </span><span class="n">header</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">T</span><span class="p">)</span><span class="w">
+</span><span class="n">attach</span><span class="p">(</span><span class="n">dat</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">##    age     Nf     Lf      f
+## 1    0 293395 497487     NA
+## 2    5 248369 497138     NA
+## 3   10 240012 496901     NA
+## 4   15 261346 496531 0.0120
+## 5   20 285209 495902 0.0908
+## 6   25 314388 495168 0.1499
+## 7   30 281290 494213 0.1125
+## 8   35 286923 492760 0.0441
+## 9   40 304108 490447 0.0074
+## 10  45 324946 486613 0.0003
+## 11  50 247613 480665     NA
+## 12  55 211351 471786     NA
+## 13  60 215140 457852     NA
+## 14  65 221764 436153     NA
+## 15  70 223506 402775     NA
+## 16  75 183654 350358     NA
+## 17  80 141990 271512     NA
+## 18  85 112424 291707     NA</code></pre></figure>
+
+<p>As can be seen, the data have five-year-interval age groups, so each projection forward will involve 5 years. The steps are very simple:</p>
+
+<ol>
+  <li>Project forward the population of each age group (estimation of people alive)</li>
+  <li>Calculate the number of births of each age group based on fertility rates, adjusting by mortality (estimation of children alive)</li>
+  <li>Create a Leslie matrix, and then multiple it by the population vector (population by age at time 0)</li>
+</ol>
+
+<h3 id="survivorship-ratios">Survivorship ratios</h3>
+
+<p>We have to estimate life table survival ratios, that is, proportions of birth cohorts surviving from one age interval to the next in a <strong>stationary population</strong>. Basically, we are summarizing the mortality experience of different cohorts assuming stationarity. Because census statistics refer to age “last birthday” (rather than exact age), I estimate ratios using $L_x$ (average number of survivors in an age interval) instead of $l_x$.</p>
+
+<script type="math/tex; mode=display">S_x = \frac{_5L_x}{_5L_{x-5}}</script>
+
+<p>I compute the survival ratios using a loop in R. The estimation of the open-ended survival ratio is slightly different but still straightforward:</p>
+
+<script type="math/tex; mode=display">\frac{T_{85}}{T_{80}}</script>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">Sf</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="kc">NA</span><span class="w">
+</span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="p">(</span><span class="nf">length</span><span class="p">(</span><span class="n">Lf</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="m">1</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="n">Sf</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">Lf</span><span class="p">[</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">1</span><span class="p">]</span><span class="o">/</span><span class="n">Lf</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+
+</span><span class="c1"># open-ended survival ratio</span><span class="w">
+</span><span class="n">Sf</span><span class="p">[</span><span class="nf">length</span><span class="p">(</span><span class="n">Sf</span><span class="p">)]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">Lf</span><span class="p">[</span><span class="m">18</span><span class="p">]</span><span class="o">/</span><span class="p">(</span><span class="n">Lf</span><span class="p">[</span><span class="m">17</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Lf</span><span class="p">[</span><span class="m">18</span><span class="p">])</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">##  [1] 0.999 1.000 0.999 0.999 0.999 0.998 0.997 0.995 0.992 0.988 0.982 0.970 0.953 0.923 0.870 0.775 0.518</code></pre></figure>
+
+<h3 id="number-of-children">Number of children</h3>
+
+<p>This is the tricky part. Because census statistics refer to age “last birthday”, and we are projecting every 5 years, the estimation of the number of person-years lived by women in each age group consists of the average number of women alive at the beginning and end of the period (assuming a linear change over the period). To take advantage of the Leslie matrix, I define the births in R using a loop as follows:</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">Bf</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">rep</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="m">18</span><span class="p">)</span><span class="w">
+</span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="nf">length</span><span class="p">(</span><span class="n">Lf</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="n">Bf</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">1</span><span class="o">/</span><span class="p">(</span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">1.05</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">Lf</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="o">/</span><span class="p">(</span><span class="m">100000</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="m">2</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">Sf</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="w"> </span><span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="w"> </span><span class="n">na.rm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">)</span><span class="w">
+</span><span class="p">}</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">##  [1] 0.000000 0.000000 0.014550 0.124596 0.291792 0.318128 0.189858 0.062447 0.009340 0.000364 0.000000 0.000000
+## [13] 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000</code></pre></figure>
+
+<p>1/(1+1.05) corresponds to a transformation of age-specific fertility rates (son and daughters) to maternity rates (only daughters), assuming that the ratio of male to female births (SBR) is constant across mothers’ ages. The number of births is also adjusted by the corresponding survival ratio from 0 to 5 years old ($\frac{_5L_0}{5 \times l_0}$), the number 5 goes away due to simplifying).</p>
+
+<h3 id="leslie-matrix">Leslie matrix</h3>
+
+<p>I construct a Leslie matrix by replacing specific cells of a 18 x 18 matrix (18 age groups) by the vectors defined above (survival ratios and maternity rates):</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">m</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">matrix</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="m">18</span><span class="p">,</span><span class="w"> </span><span class="m">18</span><span class="p">)</span><span class="w">
+</span><span class="n">m</span><span class="p">[</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">Bf</span><span class="w">
+</span><span class="n">s</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">diag</span><span class="p">(</span><span class="m">17</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">Sf</span><span class="w">
+</span><span class="n">m</span><span class="p">[</span><span class="m">2</span><span class="o">:</span><span class="m">18</span><span class="p">,</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="m">17</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">s</span><span class="w">
+</span><span class="n">m</span><span class="p">[</span><span class="m">18</span><span class="p">,</span><span class="w"> </span><span class="m">18</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">Sf</span><span class="p">[</span><span class="m">17</span><span class="p">]</span></code></pre></figure>
+
+<p>Here we have the Leslie matrix:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">##        [,1] [,2]   [,3]  [,4]  [,5]  [,6]  [,7]   [,8]    [,9]    [,10] [,11] [,12] [,13] [,14] [,15] [,16] [,17] [,18]
+##  [1,] 0.000    0 0.0145 0.125 0.292 0.318 0.190 0.0624 0.00934 0.000364 0.000  0.00 0.000 0.000  0.00 0.000 0.000 0.000
+##  [2,] 0.999    0 0.0000 0.000 0.000 0.000 0.000 0.0000 0.00000 0.000000 0.000  0.00 0.000 0.000  0.00 0.000 0.000 0.000
+##  [3,] 0.000    1 0.0000 0.000 0.000 0.000 0.000 0.0000 0.00000 0.000000 0.000  0.00 0.000 0.000  0.00 0.000 0.000 0.000
+##  [4,] 0.000    0 0.9993 0.000 0.000 0.000 0.000 0.0000 0.00000 0.000000 0.000  0.00 0.000 0.000  0.00 0.000 0.000 0.000
+##  [5,] 0.000    0 0.0000 0.999 0.000 0.000 0.000 0.0000 0.00000 0.000000 0.000  0.00 0.000 0.000  0.00 0.000 0.000 0.000
+##  [6,] 0.000    0 0.0000 0.000 0.999 0.000 0.000 0.0000 0.00000 0.000000 0.000  0.00 0.000 0.000  0.00 0.000 0.000 0.000
+##  [7,] 0.000    0 0.0000 0.000 0.000 0.998 0.000 0.0000 0.00000 0.000000 0.000  0.00 0.000 0.000  0.00 0.000 0.000 0.000
+##  [8,] 0.000    0 0.0000 0.000 0.000 0.000 0.997 0.0000 0.00000 0.000000 0.000  0.00 0.000 0.000  0.00 0.000 0.000 0.000
+##  [9,] 0.000    0 0.0000 0.000 0.000 0.000 0.000 0.9953 0.00000 0.000000 0.000  0.00 0.000 0.000  0.00 0.000 0.000 0.000
+## [10,] 0.000    0 0.0000 0.000 0.000 0.000 0.000 0.0000 0.99218 0.000000 0.000  0.00 0.000 0.000  0.00 0.000 0.000 0.000
+## [11,] 0.000    0 0.0000 0.000 0.000 0.000 0.000 0.0000 0.00000 0.987777 0.000  0.00 0.000 0.000  0.00 0.000 0.000 0.000
+## [12,] 0.000    0 0.0000 0.000 0.000 0.000 0.000 0.0000 0.00000 0.000000 0.982  0.00 0.000 0.000  0.00 0.000 0.000 0.000
+## [13,] 0.000    0 0.0000 0.000 0.000 0.000 0.000 0.0000 0.00000 0.000000 0.000  0.97 0.000 0.000  0.00 0.000 0.000 0.000
+## [14,] 0.000    0 0.0000 0.000 0.000 0.000 0.000 0.0000 0.00000 0.000000 0.000  0.00 0.953 0.000  0.00 0.000 0.000 0.000
+## [15,] 0.000    0 0.0000 0.000 0.000 0.000 0.000 0.0000 0.00000 0.000000 0.000  0.00 0.000 0.923  0.00 0.000 0.000 0.000
+## [16,] 0.000    0 0.0000 0.000 0.000 0.000 0.000 0.0000 0.00000 0.000000 0.000  0.00 0.000 0.000  0.87 0.000 0.000 0.000
+## [17,] 0.000    0 0.0000 0.000 0.000 0.000 0.000 0.0000 0.00000 0.000000 0.000  0.00 0.000 0.000  0.00 0.775 0.000 0.000
+## [18,] 0.000    0 0.0000 0.000 0.000 0.000 0.000 0.0000 0.00000 0.000000 0.000  0.00 0.000 0.000  0.00 0.000 0.518 0.518</code></pre></figure>
+
+<p>Note that the last survival ratio is repeated in the last column (0.518). This is because the estimation of the open-ended survival ratio is:</p>
+
+<script type="math/tex; mode=display">(N_{80} + N_{85}) \times \frac{T_{85}}{T_{80}}</script>
+
+<h3 id="now-lets-do-some-projections">Now, let’s do some projections</h3>
+
+<p>Using the R multiplication operator for matrices, I do a 5-year projection  by simply multiplying the Leslie matrix by the population vector (remember that matrix multiplication is not commutative).</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">m</span><span class="w"> </span><span class="o">%*%</span><span class="w"> </span><span class="n">Nf</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">##         [,1]
+##  [1,] 293574
+##  [2,] 293189
+##  [3,] 248251
+##  [4,] 239833
+##  [5,] 261015
+##  [6,] 284787
+##  [7,] 313782
+##  [8,] 280463
+##  [9,] 285576
+## [10,] 301731
+## [11,] 320974
+## [12,] 243039
+## [13,] 205109
+## [14,] 204944
+## [15,] 204793
+## [16,] 194419
+## [17,] 142324
+## [18,] 131768</code></pre></figure>
+
+<p>I obtain the same results of the book. Raising this multiplication I can get the projected population of subsequent periods. Because R doesn’t have a power operator for matrices, I define a function called <em>mp</em> to raise matrices (it is not very efficient, but for this example it’s still useful).</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">mp</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="k">function</span><span class="p">(</span><span class="n">mat</span><span class="p">,</span><span class="w"> </span><span class="n">pow</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="n">ans</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">mat</span><span class="w">
+    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="p">(</span><span class="n">pow</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="m">1</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="n">ans</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">mat</span><span class="w"> </span><span class="o">%*%</span><span class="w"> </span><span class="n">ans</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+    </span><span class="nf">return</span><span class="p">(</span><span class="n">ans</span><span class="p">)</span><span class="w">
+</span><span class="p">}</span></code></pre></figure>
+
+<p>Let’s project the initial population for two periods (10 years):</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="p">(</span><span class="n">mp</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="m">2</span><span class="p">)</span><span class="w"> </span><span class="o">%*%</span><span class="w"> </span><span class="n">Nf</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">##         [,1]
+##  [1,] 280121
+##  [2,] 293368
+##  [3,] 293049
+##  [4,] 248066
+##  [5,] 239529
+##  [6,] 260629
+##  [7,] 284238
+##  [8,] 312859
+##  [9,] 279147
+## [10,] 283344
+## [11,] 298043
+## [12,] 315045
+## [13,] 235861
+## [14,] 195388
+## [15,] 189260
+## [16,] 178141
+## [17,] 150666
+## [18,] 141960</code></pre></figure>
+
+<p>Again, I get the same result of the book. The nice thing of all this is that estimating eigenvalues and eigenvectors, I can obtain the intrinsic growth rate and age-distribution of the “stable equivalent” population. Using the <em>eigen</em> function in R, I can identify the dominant eigenvalue (higher absolute number), and the corresponding eigenvector:</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">e</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">eigen</span><span class="p">(</span><span class="n">m</span><span class="p">)</span><span class="w">
+
+</span><span class="c1"># intrinsic growth rate</span><span class="w">
+</span><span class="p">(</span><span class="nf">max</span><span class="p">(</span><span class="nf">abs</span><span class="p">(</span><span class="n">e</span><span class="o">$</span><span class="n">values</span><span class="p">))</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="m">1</span><span class="p">)</span><span class="o">/</span><span class="m">5</span><span class="w">  </span><span class="c1"># 5-year-projection</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## [1] 0.000223</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1"># intrinsic proportionate age distribution</span><span class="w">
+</span><span class="nf">as.numeric</span><span class="p">(</span><span class="n">e</span><span class="o">$</span><span class="n">vector</span><span class="p">[,</span><span class="w"> </span><span class="m">1</span><span class="p">]</span><span class="o">/</span><span class="nf">sum</span><span class="p">(</span><span class="n">e</span><span class="o">$</span><span class="n">vector</span><span class="p">[,</span><span class="w"> </span><span class="m">1</span><span class="p">]))</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">##  [1] 0.0619 0.0618 0.0617 0.0616 0.0614 0.0613 0.0611 0.0608 0.0605 0.0600 0.0592 0.0580 0.0562 0.0535 0.0494 0.0429
+## [17] 0.0332 0.0356</code></pre></figure>
+
+<p>The population is growing but little.</p>
+
+<h3 id="what-about-the-population-momentum">What about the population momentum?</h3>
+
+<p>The population momentum corresponds to the growth of a population after imposing replacement fertility conditions, that is, NRR=1. Thus, the first thing we have to do is to estimate NRR.</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1"># calculating NRR</span><span class="w">
+</span><span class="p">(</span><span class="n">NRR</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="n">f</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">Lf</span><span class="o">/</span><span class="m">100000</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="m">1</span><span class="o">/</span><span class="p">(</span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">1.05</span><span class="p">)),</span><span class="w"> </span><span class="n">na.rm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">))</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## [1] 1.01</code></pre></figure>
+
+<p>We can quickly estimate the intrinsic growth rate using NRR:</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1"># quick estimation of the intrinsic growth rate</span><span class="w">
+</span><span class="nf">log</span><span class="p">(</span><span class="n">NRR</span><span class="p">)</span><span class="o">/</span><span class="m">27</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## [1] 0.000237</code></pre></figure>
+
+<p>Very close to our estimation using cohort component projection. To impose the replacement condition, I just have to divide the first row of the Leslie matrix by NRR.</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">m</span><span class="p">[</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">m</span><span class="p">[</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="p">]</span><span class="o">/</span><span class="n">NRR</span></code></pre></figure>
+
+<p>To get the population momentum we have to project the initial population until the growth is zero (here I raised the matrix 100 times), and then to compute the ratio between the initial population and the non-growing population (stationary).</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1"># population momentum</span><span class="w">
+</span><span class="nf">sum</span><span class="p">(</span><span class="n">mp</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="m">100</span><span class="p">)</span><span class="w"> </span><span class="o">%*%</span><span class="w"> </span><span class="n">Nf</span><span class="p">)</span><span class="o">/</span><span class="nf">sum</span><span class="p">(</span><span class="n">Nf</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## [1] 1.01</code></pre></figure>
+
+<p>After imposing the replacement condition, the population grew 1%.</p>
+
+  </article>
+
+  
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      var disqus_shortname  = 'sdaza';
+      var disqus_identifier = '/blog/2013/projections';
+      var disqus_title      = "Cohort component projection";
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  
+
+</div>
+
+      </div>
+    </div>
+
+    <footer>
+
+  <div class="wrapper">
+    &copy; Copyright 2019 Sebastian Daza.
+    Powered by <a href="http://jekyllrb.com/" target="_blank">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio">al-folio</a> theme. Hosted by <a href="https://pages.github.com/" target="_blank">GitHub Pages</a>.
+
+    
+  </div>
+
+</footer>
+
+
+    <!-- Load jQuery -->
+<script src="//code.jquery.com/jquery-1.12.4.min.js"></script>
+
+<!-- Load Common JS -->
+<script src="/assets/js/common.js"></script>
+
+
+<!-- Load KaTeX -->
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0/katex.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0/katex.min.js"></script>
+<script src="/assets/js/katex.js"></script>
+
+
+
+<!-- Load Anchor JS -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/anchor-js/3.2.2/anchor.min.js"></script>
+<script>
+  anchors.options.visible = 'always';
+  anchors.add('article h2, article h3, article h4, article h5, article h6');
+</script>
+
+
+<!-- Include custom icon fonts -->
+<link rel="stylesheet" href="/assets/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/assets/css/academicons.min.css">
+
+<!-- Google Analytics -->
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-34554402-2', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+  </body>
+
+</html>
