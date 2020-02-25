@@ -6,14 +6,14 @@
   <meta name="viewport" content="width=device-width initial-scale=1" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-  <title>Sebastian Daza</title>
+  <title>Sebastian Daza | Looking for variables in R</title>
   <meta name="description" content="Sebastian Daza Website. Based on [*folio](https://github.com/bogoli/-folio) design.
 ">
 
   <link rel="shortcut icon" href="/assets/img/favicon.ico">
 
   <link rel="stylesheet" href="/assets/css/main.css">
-  <link rel="canonical" href="/blog/">
+  <link rel="canonical" href="/blog/2013/lookvar/">
 </head>
 
 
@@ -111,56 +111,64 @@
 
     <div class="page-content">
       <div class="wrapper">
-        <div class="header-bar">
-  <h1>posts</h1>
-  <h2>learnings, comments, stats, examples</h2>
+        <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Looking for variables in R</h1>
+    <p class="post-meta">January 29, 2013 • Sebastian Daza</p>
+  </header>
+
+  <article class="post-content">
+    <p>Recently, I have been working with big databases. After reading their codebooks (usually very long pdf files),
+I thought it would be useful to have a function to find variable names in R. I wrote a simply function
+that looks for variable names in <strong>data.frame</strong> and <strong>data.table</strong> objects.</p>
+
+<p>Here an example:</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">library</span><span class="p">(</span><span class="n">devtools</span><span class="p">);</span><span class="w"> </span><span class="n">source_gist</span><span class="p">(</span><span class="s2">"4661324"</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">library</span><span class="p">(</span><span class="n">data.table</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">dat</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">data.table</span><span class="p">(</span><span class="n">infert</span><span class="p">)</span><span class="w">
+</span><span class="p">(</span><span class="n">var</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">lookvar</span><span class="p">(</span><span class="n">dat</span><span class="p">,</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"par"</span><span class="p">,</span><span class="w"> </span><span class="s2">"spon"</span><span class="p">)))</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## [1] "parity"      "spontaneous"</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">dat</span><span class="p">[,</span><span class="w"> </span><span class="n">var</span><span class="p">,</span><span class="w"> </span><span class="n">with</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">]</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">##      parity spontaneous
+##   1:      6           2
+##   2:      1           0
+##   3:      6           0
+##   4:      4           0
+##   5:      3           1
+##  ---
+## 244:      1           1
+## 245:      1           0
+## 246:      2           0
+## 247:      1           1
+## 248:      1           1</code></pre></figure>
+
+<p>Pretty useful, at least for me. You can also use <em>regular expressions</em> to get variables, for instance, something like <code class="language-plaintext highlighter-rouge">lookvar(dat, "p5[0-2]_[a-z]+_2")</code>.</p>
+
+  </article>
+
+  
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      var disqus_shortname  = 'sdaza';
+      var disqus_identifier = '/blog/2013/lookvar';
+      var disqus_title      = "Looking for variables in R";
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  
+
 </div>
-
-
-<ul class="post-list">
-  
-    <li>
-      <h2><a class="post-title" href="/blog/2016/readMortalityData/">Reading CDC mortality files using R</a></h2>
-      <p class="post-meta">October 5, 2016 — 00:00</p>
-      <p></p>
-    </li>
-  
-    <li>
-      <h2><a class="post-title" href="/blog/2016/acsr/">R package to compute statistics from the American Community Survey (ACS) and Decennial US Census</a></h2>
-      <p class="post-meta">July 6, 2016 — 00:00</p>
-      <p></p>
-    </li>
-  
-    <li>
-      <h2><a class="post-title" href="/blog/2015/imputation_parcels/">Imputing scales using parcels of items as auxiliary variables</a></h2>
-      <p class="post-meta">October 14, 2015 — 00:00</p>
-      <p></p>
-    </li>
-  
-    <li>
-      <h2><a class="post-title" href="/blog/2015/sampler/">Simple R package to define sample sizes and MOEs</a></h2>
-      <p class="post-meta">September 30, 2015 — 00:00</p>
-      <p></p>
-    </li>
-  
-</ul>
-
-
-<div class="pagination clearfix mb1 mt4">
-  <div class="left">
-    
-      <span class="pagination-item disabled">Newer</span>
-    
-  </div>
-  <div class="right">
-    
-      <a class="pagination-item" href="/blog/page2/">Older</a>
-    
-  </div>
-  <div class="pagination-meta">Page 1 of 3</div>
-</div>
-
-
 
       </div>
     </div>
