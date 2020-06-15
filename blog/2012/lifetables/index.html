@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <title>Sebastian Daza | Life tables: A super brief introduction</title>
+  <meta name="description" content="Sebastian Daza
+">
+
+  <link rel="shortcut icon" href="https://sdaza.com//assets/img/favicon.ico">
+
+  <link rel="stylesheet" href="https://sdaza.com//assets/css/main.css">
+  <link rel="canonical" href="https://sdaza.com//blog/2012/lifetables/">
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    
+    <span class="site-title">
+        
+        <strong>Sebastian</strong> Daza
+    </span>
+    
+
+    <nav class="site-nav">
+      <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+              <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+              <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+      <div class="trigger">
+        <!-- About -->
+        <a class="page-link" href="https://sdaza.com//">about</a>
+
+        <!-- Blog -->
+        <a class="page-link" href="https://sdaza.com//blog/">blog</a>
+
+        <!-- cv -->
+        <a class="page-link" href="https://sdaza.com//cv/">cv</a>
+
+        <!-- projects -->
+        <a class="page-link" href="https://sdaza.com//projects/">projects</a>
+
+        <!-- publications -->
+        <a class="page-link" href="https://sdaza.com//publications/">publications</a>
+
+        <!-- Pages -->
+<!--         
+          
+        
+          
+            <a class="page-link" href="https://sdaza.com//cv/">cv</a>
+          
+        
+          
+        
+          
+        
+          
+            <a class="page-link" href="https://sdaza.com//projects/">projects</a>
+          
+        
+          
+            <a class="page-link" href="https://sdaza.com//publications/">publications</a>
+          
+        
+          
+        
+          
+            <a class="page-link" href="https://sdaza.com//assets/presentations/reveal.js-3.6.0/plugin/markdown/example/">Markdown Demo</a>
+          
+        
+          
+            <a class="page-link" href="https://sdaza.com//assets/presentations/reveal.js-3.6.0/test/simple/">Slide 1.1</a>
+          
+        
+          
+            <a class="page-link" href="https://sdaza.com//assets/presentations/reveal.js-3.6.0/css/theme/">Dependencies</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+         -->
+
+        <!-- CV link -->
+        <!-- <a class="page-link" href="https://sdaza.com//assets/pdf/CV.pdf">vitae</a> -->
+
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Life tables: A super brief introduction</h1>
+    <p class="post-meta">August 28, 2012 • Sebastian Daza</p>
+  </header>
+
+  <article class="post-content">
+    <p>A <em>life table</em> is just one way of summarizing a cohort’s mortality experience. Below a simple way to build a life table using R.</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">dat</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">read.csv</span><span class="p">(</span><span class="s2">"frmales85.csv"</span><span class="p">,</span><span class="w"> </span><span class="n">sep</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">","</span><span class="p">,</span><span class="w"> </span><span class="n">header</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">T</span><span class="p">)</span><span class="w">
+</span><span class="c1"># length of intervals</span><span class="w">
+</span><span class="n">dat</span><span class="o">$</span><span class="n">n</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="n">diff</span><span class="p">(</span><span class="n">dat</span><span class="o">$</span><span class="n">x</span><span class="p">),</span><span class="w"> </span><span class="kc">NA</span><span class="p">)</span><span class="w">
+</span><span class="c1"># number of intervals</span><span class="w">
+</span><span class="n">max</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">length</span><span class="p">(</span><span class="n">dat</span><span class="o">$</span><span class="n">x</span><span class="p">)</span><span class="w">
+</span><span class="c1"># age 85 is an open interval</span><span class="w">
+</span><span class="n">dat</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">##     x     nNx   nDx   nax  n
+## 1   0  379985  3741 0.087  1
+## 2   1 1559722   770 1.500  4
+## 3   5 1896295   532 2.500  5
+## 4  10 2160190   673 2.966  5
+## 5  15 2179837  2138 2.769  5
+## 6  20 2159556  3432 2.574  5
+## 7  25 2106750  3291 2.512  5
+## 8  30 2147845  3657 2.586  5
+## 9  35 2165387  4956 2.657  5
+## 10 40 1516952  5269 2.697  5
+## 11 45 1498630  8654 2.695  5
+## 12 50 1552746 14490 2.663  5
+## 13 55 1476770 20831 2.625  5
+## 14 60 1350479 26805 2.601  5
+## 15 65  722430 20233 2.615  5
+## 16 70  842589 38315 2.598  5
+## 17 75  636848 46903 2.538  5
+## 18 80  372059 44443 2.466  5
+## 19 85  175169 37759 4.639 NA</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1"># age-specific mortality rates assuming $_nM_x=_nm_x$</span><span class="w">
+</span><span class="n">dat</span><span class="o">$</span><span class="n">nmx</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">dat</span><span class="o">$</span><span class="n">nDx</span><span class="o">/</span><span class="n">dat</span><span class="o">$</span><span class="n">nNx</span><span class="w">
+</span><span class="c1"># age-specific probability to die</span><span class="w">
+</span><span class="n">dat</span><span class="o">$</span><span class="n">nqx</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="p">(</span><span class="n">dat</span><span class="o">$</span><span class="n">n</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">dat</span><span class="o">$</span><span class="n">nmx</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="n">dat</span><span class="o">$</span><span class="n">n</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">dat</span><span class="o">$</span><span class="n">nax</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">dat</span><span class="o">$</span><span class="n">nmx</span><span class="p">)</span><span class="w">
+</span><span class="n">dat</span><span class="o">$</span><span class="n">nqx</span><span class="p">[</span><span class="n">max</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">1</span><span class="w">
+</span><span class="n">dat</span><span class="o">$</span><span class="n">npx</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">dat</span><span class="o">$</span><span class="n">nqx</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1"># definition of radix</span><span class="w">
+</span><span class="n">radix</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">100000</span><span class="w">
+</span><span class="c1"># easy way to get lx without a loop</span><span class="w">
+</span><span class="n">dat</span><span class="o">$</span><span class="n">lx</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">radix</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="nf">cumprod</span><span class="p">(</span><span class="n">dat</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="n">max</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="s2">"npx"</span><span class="p">]))</span><span class="w">
+</span><span class="n">dat</span><span class="o">$</span><span class="n">ndx</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">dat</span><span class="o">$</span><span class="n">lx</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">dat</span><span class="o">$</span><span class="n">nqx</span><span class="w">
+</span><span class="n">dat</span><span class="p">[,</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">-2</span><span class="p">,</span><span class="w"> </span><span class="m">-3</span><span class="p">)]</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">##     x   nax  n      nmx     nqx   npx     lx   ndx
+## 1   0 0.087  1 0.009845 0.00976 0.990 100000   976
+## 2   1 1.500  4 0.000494 0.00197 0.998  99024   195
+## 3   5 2.500  5 0.000281 0.00140 0.999  98829   139
+## 4  10 2.966  5 0.000312 0.00156 0.998  98690   154
+## 5  15 2.769  5 0.000981 0.00489 0.995  98537   482
+## 6  20 2.574  5 0.001589 0.00792 0.992  98055   776
+## 7  25 2.512  5 0.001562 0.00778 0.992  97278   757
+## 8  30 2.586  5 0.001703 0.00848 0.992  96522   818
+## 9  35 2.657  5 0.002289 0.01138 0.989  95703  1089
+## 10 40 2.697  5 0.003473 0.01723 0.983  94614  1630
+## 11 45 2.695  5 0.005775 0.02849 0.972  92984  2649
+## 12 50 2.663  5 0.009332 0.04566 0.954  90334  4125
+## 13 55 2.625  5 0.014106 0.06824 0.932  86209  5883
+## 14 60 2.601  5 0.019849 0.09473 0.905  80326  7609
+## 15 65 2.615  5 0.028007 0.13127 0.869  72717  9545
+## 16 70 2.598  5 0.045473 0.20498 0.795  63171 12949
+## 17 75 2.538  5 0.073649 0.31172 0.688  50223 15656
+## 18 80 2.466  5 0.119451 0.45848 0.542  34567 15848
+## 19 85 4.639 NA 0.215558 1.00000 0.000  18719 18719</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1"># Lx for the open interval</span><span class="w">
+</span><span class="n">dat</span><span class="o">$</span><span class="n">nLx</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">dat</span><span class="o">$</span><span class="n">lx</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">dat</span><span class="o">$</span><span class="n">n</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">(</span><span class="n">dat</span><span class="o">$</span><span class="n">n</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">dat</span><span class="o">$</span><span class="n">nax</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">dat</span><span class="o">$</span><span class="n">ndx</span><span class="w">
+</span><span class="n">dat</span><span class="o">$</span><span class="n">nLx</span><span class="p">[</span><span class="n">max</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">dat</span><span class="o">$</span><span class="n">lx</span><span class="p">[</span><span class="n">max</span><span class="p">]</span><span class="o">/</span><span class="n">dat</span><span class="o">$</span><span class="n">nmx</span><span class="p">[</span><span class="n">max</span><span class="p">]</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">dat</span><span class="o">$</span><span class="n">Tx</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">rev</span><span class="p">(</span><span class="nf">cumsum</span><span class="p">(</span><span class="n">rev</span><span class="p">(</span><span class="n">dat</span><span class="o">$</span><span class="n">nLx</span><span class="p">)))</span><span class="w">
+</span><span class="n">dat</span><span class="o">$</span><span class="n">ex</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">dat</span><span class="o">$</span><span class="n">Tx</span><span class="o">/</span><span class="n">dat</span><span class="o">$</span><span class="n">lx</span><span class="w">
+</span><span class="n">dat</span><span class="p">[,</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">-2</span><span class="o">:</span><span class="m">-6</span><span class="p">)]</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">##     x     nqx   npx     lx   ndx    nLx      Tx    ex
+## 1   0 0.00976 0.990 100000   976  99109 7131028 71.31
+## 2   1 0.00197 0.998  99024   195 395609 7031919 71.01
+## 3   5 0.00140 0.999  98829   139 493798 6636310 67.15
+## 4  10 0.00156 0.998  98690   154 493140 6142512 62.24
+## 5  15 0.00489 0.995  98537   482 491608 5649372 57.33
+## 6  20 0.00792 0.992  98055   776 488390 5157764 52.60
+## 7  25 0.00778 0.992  97278   757 484509 4669374 48.00
+## 8  30 0.00848 0.992  96522   818 480632 4184865 43.36
+## 9  35 0.01138 0.989  95703  1089 475964 3704232 38.71
+## 10 40 0.01723 0.983  94614  1630 469315 3228268 34.12
+## 11 45 0.02849 0.972  92984  2649 458812 2758953 29.67
+## 12 50 0.04566 0.954  90334  4125 442031 2300141 25.46
+## 13 55 0.06824 0.932  86209  5883 417074 1858110 21.55
+## 14 60 0.09473 0.905  80326  7609 383376 1441035 17.94
+## 15 65 0.13127 0.869  72717  9545 340818 1057660 14.54
+## 16 70 0.20498 0.795  63171 12949 284755  716841 11.35
+## 17 75 0.31172 0.688  50223 15656 212570  432087  8.60
+## 18 80 0.45848 0.542  34567 15848 132677  219516  6.35
+## 19 85 1.00000 0.000  18719 18719  86839   86839  4.64</code></pre></figure>
+
+
+  </article>
+
+  
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      var disqus_shortname  = 'sdaza';
+      var disqus_identifier = '/blog/2012/lifetables';
+      var disqus_title      = "Life tables: A super brief introduction";
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  
+
+</div>
+
+      </div>
+    </div>
+
+    <footer>
+
+  <div class="wrapper">
+    &copy; Copyright 2020 Sebastian Daza.
+    Powered by <a href="http://jekyllrb.com/" target="_blank">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio">al-folio</a> theme. Hosted by <a href="https://pages.github.com/" target="_blank">GitHub Pages</a>.
+
+    
+  </div>
+
+</footer>
+
+
+    <!-- Load jQuery -->
+<script src="//code.jquery.com/jquery-1.12.4.min.js"></script>
+
+<!-- Load Common JS -->
+<script src="https://sdaza.com//assets/js/common.js"></script>
+
+
+<!-- Load KaTeX -->
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0/katex.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0/katex.min.js"></script>
+<script src="https://sdaza.com//assets/js/katex.js"></script>
+
+
+
+<!-- Load Anchor JS -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/anchor-js/3.2.2/anchor.min.js"></script>
+<script>
+  anchors.options.visible = 'always';
+  anchors.add('article h2, article h3, article h4, article h5, article h6');
+</script>
+
+
+<!-- Include custom icon fonts -->
+<link rel="stylesheet" href="https://sdaza.com//assets/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="https://sdaza.com//assets/css/academicons.min.css">
+
+<!-- Google Analytics -->
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-34554402-2', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+  </body>
+
+</html>

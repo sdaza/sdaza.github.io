@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <title>Sebastian Daza | R package to compute statistics from the American Community Survey (ACS) and Decennial US Census</title>
+  <meta name="description" content="Sebastian Daza
+">
+
+  <link rel="shortcut icon" href="https://sdaza.com//assets/img/favicon.ico">
+
+  <link rel="stylesheet" href="https://sdaza.com//assets/css/main.css">
+  <link rel="canonical" href="https://sdaza.com//blog/2016/acsr/">
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    
+    <span class="site-title">
+        
+        <strong>Sebastian</strong> Daza
+    </span>
+    
+
+    <nav class="site-nav">
+      <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+              <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+              <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+      <div class="trigger">
+        <!-- About -->
+        <a class="page-link" href="https://sdaza.com//">about</a>
+
+        <!-- Blog -->
+        <a class="page-link" href="https://sdaza.com//blog/">blog</a>
+
+        <!-- cv -->
+        <a class="page-link" href="https://sdaza.com//cv/">cv</a>
+
+        <!-- projects -->
+        <a class="page-link" href="https://sdaza.com//projects/">projects</a>
+
+        <!-- publications -->
+        <a class="page-link" href="https://sdaza.com//publications/">publications</a>
+
+        <!-- Pages -->
+<!--         
+          
+        
+          
+            <a class="page-link" href="https://sdaza.com//cv/">cv</a>
+          
+        
+          
+        
+          
+        
+          
+            <a class="page-link" href="https://sdaza.com//projects/">projects</a>
+          
+        
+          
+            <a class="page-link" href="https://sdaza.com//publications/">publications</a>
+          
+        
+          
+        
+          
+            <a class="page-link" href="https://sdaza.com//assets/presentations/reveal.js-3.6.0/plugin/markdown/example/">Markdown Demo</a>
+          
+        
+          
+            <a class="page-link" href="https://sdaza.com//assets/presentations/reveal.js-3.6.0/test/simple/">Slide 1.1</a>
+          
+        
+          
+            <a class="page-link" href="https://sdaza.com//assets/presentations/reveal.js-3.6.0/css/theme/">Dependencies</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+         -->
+
+        <!-- CV link -->
+        <!-- <a class="page-link" href="https://sdaza.com//assets/pdf/CV.pdf">vitae</a> -->
+
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">R package to compute statistics from the American Community Survey (ACS) and Decennial US Census</h1>
+    <p class="post-meta">July 6, 2016 • Sebastian Daza</p>
+  </header>
+
+  <article class="post-content">
+    <p>The <code class="language-plaintext highlighter-rouge">acsr</code> package helps extracting variables and computing statistics using the America Community Survey and Decennial US Census. It was created for the <a href="http://www.apl.wisc.edu/">Applied Population Laboratory</a> (APL) at the University of Wisconsin-Madison.</p>
+
+<h2 class="section-heading">Installation</h2>
+
+<p>The functions depend on the <code class="language-plaintext highlighter-rouge">acs</code> and <code class="language-plaintext highlighter-rouge">data.table</code> packages, so it is necessary to install then before using <code class="language-plaintext highlighter-rouge">acsr</code>. The <code class="language-plaintext highlighter-rouge">acsr</code> package is hosted on a github repository and can be installed using <code class="language-plaintext highlighter-rouge">devtools</code>:</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">devtools</span><span class="o">::</span><span class="n">install_github</span><span class="p">(</span><span class="s2">"sdaza/acsr"</span><span class="p">)</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">acsr</span><span class="p">)</span></code></pre></figure>
+
+<p>Remember to set the ACS API key, to check the help documentation and the default values of the <code class="language-plaintext highlighter-rouge">acsr</code> functions.</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">api.key.install</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s2">"*"</span><span class="p">)</span><span class="w">
+</span><span class="o">?</span><span class="n">sumacs</span><span class="w">
+</span><span class="o">?</span><span class="n">acsdata</span></code></pre></figure>
+
+<p>The default dataset is <code class="language-plaintext highlighter-rouge">acs</code>, the level is <code class="language-plaintext highlighter-rouge">state</code> (Wisconsin, <code class="language-plaintext highlighter-rouge">state = "WI"</code>), the <code class="language-plaintext highlighter-rouge">endyear</code> is 2014, and the confidence level to compute margins of error (MOEs) is 90%.</p>
+
+<h2 class="section-heading">Levels</h2>
+
+<p>The <code class="language-plaintext highlighter-rouge">acsr</code> functions can extract all the levels available in the <code class="language-plaintext highlighter-rouge">acs</code> package. The table below shows the summary and required levels when using the <code class="language-plaintext highlighter-rouge">acsdata</code> and <code class="language-plaintext highlighter-rouge">sumacs</code> functions:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>summary number</th>
+      <th>levels</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>010</td>
+      <td>us</td>
+    </tr>
+    <tr>
+      <td>020</td>
+      <td>region</td>
+    </tr>
+    <tr>
+      <td>030</td>
+      <td>division</td>
+    </tr>
+    <tr>
+      <td>040</td>
+      <td>state</td>
+    </tr>
+    <tr>
+      <td>050</td>
+      <td>state, county</td>
+    </tr>
+    <tr>
+      <td>060</td>
+      <td>state, county, county.subdivision</td>
+    </tr>
+    <tr>
+      <td>140</td>
+      <td>state, county, tract</td>
+    </tr>
+    <tr>
+      <td>150</td>
+      <td>state, county, tract, block.group</td>
+    </tr>
+    <tr>
+      <td>160</td>
+      <td>state, place</td>
+    </tr>
+    <tr>
+      <td>250</td>
+      <td>american.indian.area</td>
+    </tr>
+    <tr>
+      <td>320</td>
+      <td>state, msa</td>
+    </tr>
+    <tr>
+      <td>340</td>
+      <td>state, csa</td>
+    </tr>
+    <tr>
+      <td>350</td>
+      <td>necta</td>
+    </tr>
+    <tr>
+      <td>400</td>
+      <td>urban.area</td>
+    </tr>
+    <tr>
+      <td>500</td>
+      <td>state, congressional.district</td>
+    </tr>
+    <tr>
+      <td>610</td>
+      <td>state, state.legislative.district.upper</td>
+    </tr>
+    <tr>
+      <td>620</td>
+      <td>state, state.legislative.district.lower</td>
+    </tr>
+    <tr>
+      <td>795</td>
+      <td>state, puma</td>
+    </tr>
+    <tr>
+      <td>860</td>
+      <td>zip.code</td>
+    </tr>
+    <tr>
+      <td>950</td>
+      <td>state, school.district.elementary</td>
+    </tr>
+    <tr>
+      <td>960</td>
+      <td>state, school.district.secondary</td>
+    </tr>
+    <tr>
+      <td>970</td>
+      <td>state, school.district.unified</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 class="section-heading">Getting variables and statistics</h2>
+
+<p>We can use the <code class="language-plaintext highlighter-rouge">sumacs</code> function to extract variable and statistics. We have to specify the corresponding method (e.g., <em>proportion</em> or just <em>variable</em>), and the name of the statistic or variable to be included in the output.</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">sumacs</span><span class="p">(</span><span class="n">formula</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"(b16004_004 + b16004_026 + b16004_048 / b16004_001)"</span><span class="p">,</span><span class="w"> </span><span class="s2">"b16004_026"</span><span class="p">),</span><span class="w">
+        </span><span class="n">varname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"mynewvar"</span><span class="p">,</span><span class="w"> </span><span class="s2">"myvar"</span><span class="p">),</span><span class="w">
+        </span><span class="n">method</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"prop"</span><span class="p">,</span><span class="w"> </span><span class="s2">"variable"</span><span class="p">),</span><span class="w">
+        </span><span class="n">level</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"division"</span><span class="p">))</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## [1] "Extracting data from: acs 2014"
+## [1] ". . . . . .  ACS/Census variables : 4"
+## [1] ". . . . . .  Levels : 1"
+## [1] ". . . . . .  New variables : 2"
+## [1] ". . . . . .  Getting division data"
+## [1] ". . . . . .  Creating variables"
+## [1] ". . . . . .  50%"
+## [1] ". . . . . .  100%"
+## [1] ". . . . . .  Formatting output"</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">##    sumlevel geoid division mynewvar_est mynewvar_moe myvar_est myvar_moe
+## 1:      030    NA        1       0.0762     0.000347    770306      3490
+## 2:      030    NA        2       0.1182     0.000278   3332150      9171
+## 3:      030    NA        3       0.0599     0.000196   1819417      7209
+## 4:      030    NA        4       0.0411     0.000277    547577      4461
+## 5:      030    NA        5       0.1108     0.000246   4526480     11869
+## 6:      030    NA        6       0.0320     0.000265    402475      3781
+## 7:      030    NA        7       0.2203     0.000469   5318126     13044
+## 8:      030    NA        8       0.1582     0.000602   2279303     10746
+## 9:      030    NA        9       0.2335     0.000501   7765838     20289</code></pre></figure>
+
+<p>To download the data can be slow, especially when many levels are being used (e.g., blockgroup). A better approach in those cases is, first, download the data using the function <code class="language-plaintext highlighter-rouge">acsdata</code> , and then use them as input.</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">mydata</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">acsdata</span><span class="p">(</span><span class="n">formula</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"(b16004_004 + b16004_026 + b16004_048 /  b16004_001)"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"b16004_026"</span><span class="p">),</span><span class="w">
+        </span><span class="n">level</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"division"</span><span class="p">))</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## [1] ". . . . . .  Getting division data"</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">sumacs</span><span class="p">(</span><span class="n">formula</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"(b16004_004 + b16004_026 + b16004_048 / b16004_001)"</span><span class="p">,</span><span class="w"> </span><span class="s2">"b16004_026"</span><span class="p">),</span><span class="w">
+        </span><span class="n">varname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"mynewvar"</span><span class="p">,</span><span class="w"> </span><span class="s2">"myvar"</span><span class="p">),</span><span class="w">
+        </span><span class="n">method</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"prop"</span><span class="p">,</span><span class="w"> </span><span class="s2">"variable"</span><span class="p">),</span><span class="w">
+        </span><span class="n">level</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"division"</span><span class="p">),</span><span class="w">
+        </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mydata</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## [1] "Extracting data from: acs 2014"
+## [1] ". . . . . .  ACS/Census variables : 4"
+## [1] ". . . . . .  Levels : 1"
+## [1] ". . . . . .  New variables : 2"
+## [1] ". . . . . .  Creating variables"
+## [1] ". . . . . .  50%"
+## [1] ". . . . . .  100%"
+## [1] ". . . . . .  Formatting output"</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">##    sumlevel geoid division mynewvar_est mynewvar_moe myvar_est myvar_moe
+## 1:      030    NA        1       0.0762     0.000347    770306      3490
+## 2:      030    NA        2       0.1182     0.000278   3332150      9171
+## 3:      030    NA        3       0.0599     0.000196   1819417      7209
+## 4:      030    NA        4       0.0411     0.000277    547577      4461
+## 5:      030    NA        5       0.1108     0.000246   4526480     11869
+## 6:      030    NA        6       0.0320     0.000265    402475      3781
+## 7:      030    NA        7       0.2203     0.000469   5318126     13044
+## 8:      030    NA        8       0.1582     0.000602   2279303     10746
+## 9:      030    NA        9       0.2335     0.000501   7765838     20289</code></pre></figure>
+
+<h2 class="section-heading">Standard errors</h2>
+
+<p>When computing statistics there are two ways to define the standard errors:</p>
+
+<ul>
+  <li>Including all standard errors of the variables used to compute a statistic (<code class="language-plaintext highlighter-rouge">one.zero = FALSE</code>)</li>
+  <li>Include all standard errors except those of variables that are equal to zero. Only the maximum standard error of the variables equal to zero is included  (<code class="language-plaintext highlighter-rouge">one.zero = TRUE</code>)</li>
+  <li>The default value is <code class="language-plaintext highlighter-rouge">one.zero = TRUE</code></li>
+</ul>
+
+<p>For more details about how standard errors are computed for proportions, ratios and aggregations look at <a href="https://www.census.gov/content/dam/Census/library/publications/2008/acs/ACSGeneralHandbook.pdf">A Compass for Understanding and Using American Community Survey Data</a>.</p>
+
+<p>Below an example when estimating proportions and using <code class="language-plaintext highlighter-rouge">one.zero = FALSE</code>:</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">sumacs</span><span class="p">(</span><span class="n">formula</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"(b16004_004 + b16004_026 + b16004_048) / b16004_001"</span><span class="p">,</span><span class="w">
+            </span><span class="n">varname</span><span class="w"> </span><span class="o">=</span><span class="w">  </span><span class="s2">"mynewvar"</span><span class="p">,</span><span class="w">
+            </span><span class="n">method</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"prop"</span><span class="p">,</span><span class="w">
+            </span><span class="n">level</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"tract"</span><span class="p">,</span><span class="w">
+            </span><span class="n">county</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="p">,</span><span class="w">
+            </span><span class="n">tract</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">950501</span><span class="p">,</span><span class="w">
+            </span><span class="n">endyear</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">2013</span><span class="p">,</span><span class="w">
+            </span><span class="n">one.zero</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## [1] "Extracting data from: acs 2013"
+## [1] ". . . . . .  ACS/Census variables : 4"
+## [1] ". . . . . .  Levels : 1"
+## [1] ". . . . . .  New variables : 1"
+## [1] ". . . . . .  Getting tract data"
+## [1] ". . . . . .  Creating variables"
+## [1] ". . . . . .  100%"
+## [1] ". . . . . .  Formatting output"</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">##    sumlevel       geoid st_fips cnty_fips tract_fips mynewvar_est mynewvar_moe
+## 1:      140 55001950501      55         1     950501       0.0226       0.0252</code></pre></figure>
+
+<script type="math/tex; mode=display">SE = \sqrt{ \frac{(5.47 ^ 2 + 22.49 ^ 2 + 5.47 ^ 2) - ( 0.02 ^ 2 \times 102.13 ^ 2)}{1546} } \times 1.645 = 0.0252</script>
+
+<p>When <code class="language-plaintext highlighter-rouge">one.zero = TRUE</code>:</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">sumacs</span><span class="p">(</span><span class="n">formula</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"(b16004_004 + b16004_026 + b16004_048) / b16004_001"</span><span class="p">,</span><span class="w">
+            </span><span class="n">varname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"mynewvar"</span><span class="p">,</span><span class="w">
+            </span><span class="n">method</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"prop"</span><span class="p">,</span><span class="w">
+            </span><span class="n">level</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"tract"</span><span class="p">,</span><span class="w">
+            </span><span class="n">county</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="p">,</span><span class="w">
+            </span><span class="n">tract</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">950501</span><span class="p">,</span><span class="w">
+            </span><span class="n">endyear</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">2013</span><span class="p">,</span><span class="w">
+            </span><span class="n">one.zero</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## [1] "Extracting data from: acs 2013"
+## [1] ". . . . . .  ACS/Census variables : 4"
+## [1] ". . . . . .  Levels : 1"
+## [1] ". . . . . .  New variables : 1"
+## [1] ". . . . . .  Getting tract data"
+## [1] ". . . . . .  Creating variables"
+## [1] ". . . . . .  100%"
+## [1] ". . . . . .  Formatting output"</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">##    sumlevel       geoid st_fips cnty_fips tract_fips mynewvar_est mynewvar_moe
+## 1:      140 55001950501      55         1     950501       0.0226       0.0245</code></pre></figure>
+
+<script type="math/tex; mode=display">SE_{\text{ one.zero}} \sqrt{ \frac{(5.47 ^ 2 + 22.49 ^ 2) - ( 0.02 ^ 2  \times 102.13 ^ 2)}{1546} }  \times 1.645 = 0.0245</script>
+
+<p>When the square root value in the standard error formula doesn’t exist (e.g., the square root of a negative number), the ratio formula is instead used. The ratio adjustment is done <strong>variable by variable</strong> .</p>
+
+<p>It can  also be that the <code class="language-plaintext highlighter-rouge">one.zero</code> option makes the square root undefinable. In those cases, the function uses again the <strong>ratio</strong> formula to compute standard errors. There is also a possibility that the standard error estimates using the <strong>ratio</strong> formula are higher than the <strong>proportion</strong> estimates without the <code class="language-plaintext highlighter-rouge">one.zero</code> option.</p>
+
+<h2 class="section-heading">Decennial Data from the US Census</h2>
+
+<p>Let’s get the African American and Hispanic population by state. In this case, we don’t have any estimation of margin of error.</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">sumacs</span><span class="p">(</span><span class="n">formula</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"p0080004"</span><span class="p">,</span><span class="w"> </span><span class="s2">"p0090002"</span><span class="p">),</span><span class="w">
+            </span><span class="n">method</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"variable"</span><span class="p">,</span><span class="w">
+            </span><span class="n">dataset</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"sf1"</span><span class="p">,</span><span class="w">
+            </span><span class="n">level</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"state"</span><span class="p">,</span><span class="w">
+            </span><span class="n">state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"*"</span><span class="p">,</span><span class="w">
+            </span><span class="n">endyear</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">2010</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## [1] "Extracting data from: sf1 2010"
+## [1] ". . . . . .  ACS/Census variables : 2"
+## [1] ". . . . . .  Levels : 1"
+## [1] ". . . . . .  New variables : 2"
+## [1] ". . . . . .  Getting state data"
+## [1] ". . . . . .  Creating variables"
+## [1] ". . . . . .  50%"
+## [1] ". . . . . .  100%"
+## [1] ". . . . . .  Formatting output"</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">##     sumlevel geoid st_fips p0080004 p0090002
+##  1:      040    01      01  1251311   185602
+##  2:      040    02      02    23263    39249
+##  3:      040    04      04   259008  1895149
+##  4:      040    05      05   449895   186050
+##  5:      040    06      06  2299072 14013719
+##  6:      040    08      08   201737  1038687
+##  7:      040    09      09   362296   479087
+##  8:      040    10      10   191814    73221
+##  9:      040    11      11   305125    54749
+## 10:      040    12      12  2999862  4223806
+## 11:      040    13      13  2950435   853689
+## 12:      040    15      15    21424   120842
+## 13:      040    16      16     9810   175901
+## 14:      040    17      17  1866414  2027578
+## 15:      040    18      18   591397   389707
+## 16:      040    19      19    89148   151544
+## 17:      040    20      20   167864   300042
+## 18:      040    21      21   337520   132836
+## 19:      040    22      22  1452396   192560
+## 20:      040    23      23    15707    16935
+## 21:      040    24      24  1700298   470632
+## 22:      040    25      25   434398   627654
+## 23:      040    26      26  1400362   436358
+## 24:      040    27      27   274412   250258
+## 25:      040    28      28  1098385    81481
+## 26:      040    29      29   693391   212470
+## 27:      040    30      30     4027    28565
+## 28:      040    31      31    82885   167405
+## 29:      040    32      32   218626   716501
+## 30:      040    33      33    15035    36704
+## 31:      040    34      34  1204826  1555144
+## 32:      040    35      35    42550   953403
+## 33:      040    36      36  3073800  3416922
+## 34:      040    37      37  2048628   800120
+## 35:      040    38      38     7960    13467
+## 36:      040    39      39  1407681   354674
+## 37:      040    40      40   277644   332007
+## 38:      040    41      41    69206   450062
+## 39:      040    42      42  1377689   719660
+## 40:      040    44      44    60189   130655
+## 41:      040    45      45  1290684   235682
+## 42:      040    46      46    10207    22119
+## 43:      040    47      47  1057315   290059
+## 44:      040    48      48  2979598  9460921
+## 45:      040    49      49    29287   358340
+## 46:      040    50      50     6277     9208
+## 47:      040    51      51  1551399   631825
+## 48:      040    53      53   240042   755790
+## 49:      040    54      54    63124    22268
+## 50:      040    55      55   359148   336056
+## 51:      040    56      56     4748    50231
+## 52:      040    72      72   461498  3688455
+##     sumlevel geoid st_fips p0080004 p0090002</code></pre></figure>
+
+<h2 class="section-heading">Output</h2>
+
+<p>The output can be formatted using a wide or long format:</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">sumacs</span><span class="p">(</span><span class="n">formula</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"(b16004_004 + b16004_026 + b16004_048 / b16004_001)"</span><span class="p">,</span><span class="w">
+            </span><span class="n">varname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"mynewvar"</span><span class="p">,</span><span class="w">
+            </span><span class="n">method</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"prop"</span><span class="p">,</span><span class="w">
+            </span><span class="n">level</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"division"</span><span class="p">,</span><span class="w">
+            </span><span class="n">format.out</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"long"</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## [1] "Extracting data from: acs 2014"
+## [1] ". . . . . .  ACS/Census variables : 4"
+## [1] ". . . . . .  Levels : 1"
+## [1] ". . . . . .  New variables : 1"
+## [1] ". . . . . .  Getting division data"
+## [1] ". . . . . .  Creating variables"
+## [1] ". . . . . .  100%"
+## [1] ". . . . . .  Formatting output"</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">##    geoid sumlevel division var_name    est      moe
+## 1:    NA      030        1 mynewvar 0.0762 0.000347
+## 2:    NA      030        2 mynewvar 0.1182 0.000278
+## 3:    NA      030        3 mynewvar 0.0599 0.000196
+## 4:    NA      030        4 mynewvar 0.0411 0.000277
+## 5:    NA      030        5 mynewvar 0.1108 0.000246
+## 6:    NA      030        6 mynewvar 0.0320 0.000265
+## 7:    NA      030        7 mynewvar 0.2203 0.000469
+## 8:    NA      030        8 mynewvar 0.1582 0.000602
+## 9:    NA      030        9 mynewvar 0.2335 0.000501</code></pre></figure>
+
+<p>And it can also be exported to a csv file:</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">sumacs</span><span class="p">(</span><span class="n">formula</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"(b16004_004 + b16004_026 + b16004_048 / b16004_001)"</span><span class="p">,</span><span class="w">
+            </span><span class="n">varname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"mynewvar"</span><span class="p">,</span><span class="w">
+            </span><span class="n">method</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"prop"</span><span class="p">,</span><span class="w">
+            </span><span class="n">level</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"division"</span><span class="p">,</span><span class="w">
+            </span><span class="n">file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"myfile.out"</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## [1] "Extracting data from: acs 2014"
+## [1] ". . . . . .  ACS/Census variables : 4"
+## [1] ". . . . . .  Levels : 1"
+## [1] ". . . . . .  New variables : 1"
+## [1] ". . . . . .  Getting division data"
+## [1] ". . . . . .  Creating variables"
+## [1] ". . . . . .  100%"
+## [1] ". . . . . .  Formatting output"
+## [1] "Data exported to a CSV file! "</code></pre></figure>
+
+<h2 class="section-heading">Combining geographic levels</h2>
+
+<p>We can combine geographic levels using two methods: (1) <code class="language-plaintext highlighter-rouge">sumacs</code> and (2) <code class="language-plaintext highlighter-rouge">combine.output</code>. The first one allows only single combinations, the second multiple ones.</p>
+
+<p>If I want to combine two states (e.g., Wisconsin and Minnesota) I can use:</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">sumacs</span><span class="p">(</span><span class="s2">"(b16004_004 + b16004_026 + b16004_048 / b16004_001)"</span><span class="p">,</span><span class="w">
+    </span><span class="n">varname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"mynewvar"</span><span class="p">,</span><span class="w">
+    </span><span class="n">method</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"prop"</span><span class="p">,</span><span class="w">
+    </span><span class="n">level</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"state"</span><span class="p">,</span><span class="w">
+    </span><span class="n">state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span><span class="s2">"WI"</span><span class="p">,</span><span class="w"> </span><span class="s2">"MN"</span><span class="p">),</span><span class="w">
+    </span><span class="n">combine</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">,</span><span class="w">
+    </span><span class="n">print.levels</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## [1] "Extracting data from: acs 2014"
+## [1] ". . . . . .  ACS/Census variables : 4"
+## [1] ". . . . . .  Levels : 1"
+## [1] ". . . . . .  New variables : 1"
+## [1] ". . . . . .  Getting combined data"
+## [1] ". . . . . .  Creating variables"
+## [1] ". . . . . .  100%"
+## [1] ". . . . . .  Formatting output"</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">##    geoid combined_group mynewvar_est mynewvar_moe
+## 1:    NA      aggregate        0.042     0.000331</code></pre></figure>
+
+<p>If I want to put together multiple combinations (e.g., groups of states):</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">combine.output</span><span class="p">(</span><span class="s2">"(b16004_004 + b16004_026 + b16004_048 / b16004_001)"</span><span class="p">,</span><span class="w">
+    </span><span class="n">varname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"mynewvar"</span><span class="p">,</span><span class="w">
+    </span><span class="n">method</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"prop"</span><span class="p">,</span><span class="w">
+    </span><span class="n">level</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span><span class="s2">"state"</span><span class="p">,</span><span class="w"> </span><span class="s2">"state"</span><span class="p">),</span><span class="w">
+    </span><span class="n">state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span><span class="s2">"WI"</span><span class="p">,</span><span class="w"> </span><span class="s2">"MN"</span><span class="p">),</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span><span class="s2">"CA"</span><span class="p">,</span><span class="w"> </span><span class="s2">"OR"</span><span class="p">)),</span><span class="w"> </span><span class="c1"># nested list</span><span class="w">
+    </span><span class="n">combine.names</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"WI+MN"</span><span class="p">,</span><span class="w"> </span><span class="s2">"CA+OR"</span><span class="p">),</span><span class="w">
+    </span><span class="n">print.levels</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## [1] ". . . . . .  Defining WI+MN"
+## [1] "Extracting data from: acs 2014"
+## [1] ". . . . . .  ACS/Census variables : 4"
+## [1] ". . . . . .  Levels : 1"
+## [1] ". . . . . .  New variables : 1"
+## [1] ". . . . . .  Getting combined data"
+## [1] ". . . . . .  Creating variables"
+## [1] ". . . . . .  100%"
+## [1] ". . . . . .  Formatting output"
+## [1] ". . . . . .  Defining CA+OR"
+## [1] "Extracting data from: acs 2014"
+## [1] ". . . . . .  ACS/Census variables : 4"
+## [1] ". . . . . .  Levels : 1"
+## [1] ". . . . . .  New variables : 1"
+## [1] ". . . . . .  Getting combined data"
+## [1] ". . . . . .  Creating variables"
+## [1] ". . . . . .  100%"
+## [1] ". . . . . .  Formatting output"</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">##    combined_group mynewvar_est mynewvar_moe
+## 1:          WI+MN        0.042     0.000331
+## 2:          CA+OR        0.269     0.000565</code></pre></figure>
+
+<h2 class="section-heading">A map?</h2>
+
+<p>Let’s color a map using poverty by county:</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">pov</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">sumacs</span><span class="p">(</span><span class="n">formula</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"b17001_002 / b17001_001 * 100"</span><span class="p">,</span><span class="w">
+        </span><span class="n">varname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"pov"</span><span class="p">),</span><span class="w">
+        </span><span class="n">method</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"prop"</span><span class="p">),</span><span class="w">
+        </span><span class="n">level</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"county"</span><span class="p">),</span><span class="w">
+        </span><span class="n">state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"*"</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## [1] "Extracting data from: acs 2014"
+## [1] ". . . . . .  ACS/Census variables : 2"
+## [1] ". . . . . .  Levels : 1"
+## [1] ". . . . . .  New variables : 1"
+## [1] ". . . . . .  Getting county data"
+## [1] ". . . . . .  Creating variables"
+## [1] ". . . . . .  100%"
+## [1] ". . . . . .  Formatting output"</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">library</span><span class="p">(</span><span class="n">choroplethr</span><span class="p">)</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">choroplethrMaps</span><span class="p">)</span><span class="w">
+</span><span class="n">pov</span><span class="p">[,</span><span class="w"> </span><span class="n">region</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nf">as.numeric</span><span class="p">(</span><span class="n">geoid</span><span class="p">)]</span><span class="w">
+</span><span class="n">setnames</span><span class="p">(</span><span class="n">pov</span><span class="p">,</span><span class="w"> </span><span class="s2">"pov_est"</span><span class="p">,</span><span class="w"> </span><span class="s2">"value"</span><span class="p">)</span><span class="w">
+</span><span class="n">county_choropleth</span><span class="p">(</span><span class="n">pov</span><span class="p">,</span><span class="w"> </span><span class="n">num_colors</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">5</span><span class="p">)</span></code></pre></figure>
+
+<p><img src="/assets/img/2016-07-06-acsr/unnamed-chunk-15-1.png" alt="center" /></p>
+
+<p>In sum, the <code class="language-plaintext highlighter-rouge">acsr</code> package:</p>
+
+<ul>
+  <li>Reads formulas directly and extracts any ACS/Census variable</li>
+  <li>Provides an automatized and tailored way to obtain indicators and MOEs</li>
+  <li>Allows different outputs’ formats (wide and long, csv)</li>
+  <li>Provides an easy way to adjust MOEs to different confidence levels</li>
+  <li>Includes a variable-by-variable ratio adjustment of standard errors</li>
+  <li>Includes the zero-option when computing standard errors for proportions, ratios, and aggregations</li>
+  <li>Combines geographic levels flexibly</li>
+</ul>
+
+<p><br />
+<em>Last Update: 02/07/2016</em></p>
+
+
+  </article>
+
+  
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      var disqus_shortname  = 'sdaza';
+      var disqus_identifier = '/blog/2016/acsr';
+      var disqus_title      = "R package to compute statistics from the American Community Survey (ACS) and Decennial US Census";
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  
+
+</div>
+
+      </div>
+    </div>
+
+    <footer>
+
+  <div class="wrapper">
+    &copy; Copyright 2020 Sebastian Daza.
+    Powered by <a href="http://jekyllrb.com/" target="_blank">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio">al-folio</a> theme. Hosted by <a href="https://pages.github.com/" target="_blank">GitHub Pages</a>.
+
+    
+  </div>
+
+</footer>
+
+
+    <!-- Load jQuery -->
+<script src="//code.jquery.com/jquery-1.12.4.min.js"></script>
+
+<!-- Load Common JS -->
+<script src="https://sdaza.com//assets/js/common.js"></script>
+
+
+<!-- Load KaTeX -->
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0/katex.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0/katex.min.js"></script>
+<script src="https://sdaza.com//assets/js/katex.js"></script>
+
+
+
+<!-- Load Anchor JS -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/anchor-js/3.2.2/anchor.min.js"></script>
+<script>
+  anchors.options.visible = 'always';
+  anchors.add('article h2, article h3, article h4, article h5, article h6');
+</script>
+
+
+<!-- Include custom icon fonts -->
+<link rel="stylesheet" href="https://sdaza.com//assets/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="https://sdaza.com//assets/css/academicons.min.css">
+
+<!-- Google Analytics -->
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-34554402-2', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+  </body>
+
+</html>
