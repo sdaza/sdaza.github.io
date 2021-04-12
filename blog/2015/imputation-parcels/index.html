@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<title>Sebastian  Daza | Imputing scales using parcels of items as auxiliary variables</title>
+<meta name="description" content="Sebastian Daza
+">
+
+<!-- Open Graph -->
+
+
+<!-- Bootstrap & MDB -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" integrity="sha512-MoRNloxbStBcD8z3M/2BmnT+rg4IsMxPkXaGh2zD6LGNNFE80W3onsAhRcMAMrSoyWL9xD7Ert0men7vR8LUZg==" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" integrity="sha512-RO38pBRxYH3SoOprtPTD86JFOclM51/XTIdEPh5j8sj4tp8jmQIx26twG52UaLi//hQldfrh7e51WzP9wuP32Q==" crossorigin="anonymous" />
+
+<!-- Fonts & Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"  integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.0/css/academicons.min.css" integrity="sha512-W4yqoT1+8NLkinBLBZko+dFB2ZbHsYLDdr50VElllRcNt2Q4/GSs6u71UHKxB7S6JEMCp5Ve4xjh3eGQl/HRvg==" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons">
+
+<!-- Code Syntax Highlighting -->
+<link rel="stylesheet" href="https://gitcdn.link/repo/jwarby/jekyll-pygments-themes/master/github.css" />
+
+<!-- Styles -->
+<link rel="shortcut icon" href="/assets/img/favicon.ico">
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<link rel="canonical" href="/blog/2015/imputation-parcels/">
+
+<!-- Theming-->
+
+
+    
+
+<!-- MathJax -->
+<script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.1.2/es5/tex-mml-chtml.js"></script>
+<script defer src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
+<script>
+    MathJax = {
+        options: {
+            renderActions: {
+                find: [10, function (doc) {
+                    for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                        const display = !!node.type.match(/; *mode=display/);
+                        const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                        const text = document.createTextNode('');
+                        node.parentNode.replaceChild(text, node);
+                        math.start = { node: text, delim: '', n: 0 };
+                        math.end = { node: text, delim: '', n: 0 };
+                        doc.math.push(math);
+                    }
+                }, '']
+            }
+        }
+    };
+</script>
+
+
+
+
+
+  </head>
+
+  <body class="fixed-top-nav ">
+
+    <!-- Header -->
+
+    <header>
+
+    <!-- Nav Bar -->
+    <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top">
+    <div class="container">
+      
+      <a class="navbar-brand title font-weight-lighter" href="/">
+       <span class="font-weight-bold">Sebastian</span>   Daza
+      </a>
+      
+      <!-- Navbar Toogle -->
+      <button class="navbar-toggler collapsed ml-auto" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar top-bar"></span>
+        <span class="icon-bar middle-bar"></span>
+        <span class="icon-bar bottom-bar"></span>
+      </button>
+      <div class="collapse navbar-collapse text-right" id="navbarNav">
+        <ul class="navbar-nav ml-auto flex-nowrap">
+          <!-- About -->
+          <li class="nav-item ">
+            <a class="nav-link" href="/">
+              about
+              
+            </a>
+          </li>
+          
+          <!-- Blog -->
+          <li class="nav-item active">
+            <a class="nav-link" href="/blog/">
+              blog
+              
+            </a>
+          </li>
+          
+          <!-- Other pages -->
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          <li class="nav-item ">
+              <a class="nav-link" href="/cv/">
+                cv
+                
+              </a>
+          </li>
+          
+          
+          
+          <li class="nav-item ">
+              <a class="nav-link" href="/projects/">
+                projects
+                
+              </a>
+          </li>
+          
+          
+          
+          <li class="nav-item ">
+              <a class="nav-link" href="/publications/">
+                publications
+                
+              </a>
+          </li>
+          
+          
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+</header>
+
+
+    <!-- Content -->
+
+    <div class="container mt-5">
+      
+
+<div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Imputing scales using parcels of items as auxiliary variables</h1>
+    <p class="post-meta">October 14, 2015 • Sebastian Daza</p>
+  </header>
+
+  <article class="post-content">
+    <p>Multiple imputation of scales generated by several items can be challenging. Fortunately, to impute every single item is not the only solution to the missing data problem. Some practical and <em>theoretically</em> attractive alternative have already been proposed. In this post, I show a simple implementation of what Enders (2010) calls <strong>duplicated-scale imputation</strong>, a method orginally suggested by Eekhout et al. (2011). By the way, thanks <a href="http://www.iriseekhout.com">Iris Eekhout</a> for replying my e-mails!</p>
+
+<h2 id="procedure">Procedure</h2>
+
+<p>For each scale, I define a number or proportion of items (let’s say <strong>p</strong>) to create parcels (i.e., average of items although not the whole scale). These parcels are, then, used as auxiliary variables to <em>impute</em> the original scales. There are different ways to define parcels. I implemented a solution in my R package <a href="http://github.com/sdaza/sdazar">sdazar</a>, see the function <code class="language-plaintext highlighter-rouge">rowscore</code> for more details.</p>
+
+<p>The function <code class="language-plaintext highlighter-rouge">rowscore</code> selects <strong>p</strong> items with the least missing data. For each case (row), it computes the parcels using the available information of the selected items. If only one item has information, only that one will be used. If there are more than one item with valid data, it will average all the selected items. If there are no items available in my initial selection, it picks <strong>p</strong> items from the rest of unselected items to impute the original scale. In this particular example, I create parcels using half of the items:</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">rowscore</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="n">items</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="o">/</span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"parcel"</span><span class="p">)</span></code></pre></figure>
+
+<p>The reason for using a proportion of the original items is to include as much information as possible, but preventing strong linear dependencies between variables. Ideally, parcels are complete (no missing values). However, in some cases all the items are missing, so parcels can still have missing records (although less than the original scales).</p>
+
+<p><strong>Why not just to use the average of the available items?</strong> That solution would implicitly assume that items perfectly correlate with the scale. We know that’s not a good assumption. That is why we worry about creating scales in the first place, right? Using parcels takes advantage of the available information (items with complete information) and the relationship between a portion of items and the scale.</p>
+
+<p>Here I show a simple example using the <a href="http://www.cpc.unc.edu/projects/addhealth">National Longitudinal Study of Adolescent to Adult Health (Add Health)</a>. First, let’s look some descriptives of the variables included in the imputation. I am using information from Wave 1 and 2. The scales/scores I am imputing are depression (19 items) and GPA (4 items). Variables ending with  <code class="language-plaintext highlighter-rouge">.p</code> are parcels with 1/2 of the items of the original scale.</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="nf">dim</span><span class="p">(</span><span class="n">dats</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## [1] 12976    14</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">str</span><span class="p">(</span><span class="n">dats</span><span class="p">[,</span><span class="w"> </span><span class="n">nvars</span><span class="p">,</span><span class="w"> </span><span class="n">with</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">])</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## Classes 'data.table' and 'data.frame':	12976 obs. of  14 variables:
+##  $ female   : Factor w/ 2 levels "0","1": 1 1 1 2 1 1 1 1 1 1 ...
+##  $ age      : int  16 16 14 13 14 17 14 17 17 14 ...
+##  $ race     : Factor w/ 5 levels "white","black",..: 2 1 1 1 2 1 3 3 3 2 ...
+##  $ publicass: Factor w/ 2 levels "0","1": 1 1 1 1 1 1 1 1 1 NA ...
+##  $ bmi      : num  27.4 16.3 22.2 18.2 21.9 ...
+##  $ gpa1     : num  2 3.25 3.75 3.25 2.25 1 NA 2.25 NA 2.5 ...
+##  $ gpa2     : num  2.5 2.5 4 3.75 1.75 1.5 NA 3 1 4 ...
+##  $ gpa1.p   : num  2.5 3.5 3.5 3 2.5 1 3.5 3 1 3.5 ...
+##  $ gpa2.p   : num  2.5 2.5 4 3.5 1.5 2 1.5 3 1 4 ...
+##  $ dep1.p   : num  0.2 0.7 0 0.3 0.4 0.4 0.1 1 0.6 1.2 ...
+##  $ dep1     : num  0.263 0.789 0 0.211 0.474 ...
+##  $ dep2.p   : num  0.6 0.6 0.1 0.3 0.4 0.6 0.2 1.1 0.8 0.5 ...
+##  $ dep2     : num  0.6316 0.5263 0.0526 0.1579 0.3684 ...
+##  $ ppvt     : int  101 75 121 96 79 97 103 89 82 120 ...
+##  - attr(*, ".internal.selfref")=&lt;externalptr&gt;</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1"># create summary table using package tables</span><span class="w">
+</span><span class="n">missing</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="k">function</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="nf">sum</span><span class="p">(</span><span class="nf">is.na</span><span class="p">(</span><span class="n">x</span><span class="p">))}</span><span class="w">
+</span><span class="n">tabular</span><span class="p">(</span><span class="w">
+  </span><span class="p">(</span><span class="w"> </span><span class="n">dep2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">dep2.p</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">dep1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">dep1.p</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">gpa2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">gpa2.p</span><span class="w"> </span><span class="o">+</span><span class="w">
+    </span><span class="n">gpa1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">gpa1.p</span><span class="w">  </span><span class="o">+</span><span class="w"> </span><span class="n">age</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">bmi</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ppvt</span><span class="w"> </span><span class="p">)</span><span class="w">
+   </span><span class="o">~</span><span class="w">  </span><span class="p">(</span><span class="n">Format</span><span class="p">(</span><span class="n">digit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">2</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">Heading</span><span class="p">(</span><span class="s2">"Mean"</span><span class="p">)</span><span class="w">
+   	</span><span class="o">*</span><span class="w"> </span><span class="n">sdazar</span><span class="o">::</span><span class="n">Mean</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Heading</span><span class="p">(</span><span class="s2">"SD"</span><span class="p">)</span><span class="w">
+   	</span><span class="o">*</span><span class="w"> </span><span class="n">sdazar</span><span class="o">::</span><span class="n">Sd</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Heading</span><span class="p">(</span><span class="s2">"Min"</span><span class="p">)</span><span class="w">
+   	</span><span class="o">*</span><span class="w"> </span><span class="n">sdazar</span><span class="o">::</span><span class="n">Min</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Heading</span><span class="p">(</span><span class="s2">"Max"</span><span class="p">)</span><span class="w">
+   	</span><span class="o">*</span><span class="w"> </span><span class="n">sdazar</span><span class="o">::</span><span class="n">Max</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="n">Heading</span><span class="p">(</span><span class="s2">"Missing"</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">missing</span><span class="w"> </span><span class="p">))),</span><span class="w">
+  </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dats</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">##
+##         Mean    SD      Min     Max     Missing
+##  dep2      0.58    0.39    0.00    2.95   68.00
+##  dep2.p    0.58    0.43    0.00    3.00    6.00
+##  dep1      0.58    0.39    0.00    2.84   81.00
+##  dep1.p    0.62    0.44    0.00    3.00   18.00
+##  gpa2      2.86    0.74    1.00    4.00 4710.00
+##  gpa2.p    2.76    0.84    1.00    4.00 1238.00
+##  gpa1      2.82    0.76    1.00    4.00 2788.00
+##  gpa1.p    2.74    0.85    1.00    4.00  342.00
+##  age      15.28    1.61   11.00   21.00    9.00
+##  bmi      22.37    4.42   11.47   63.47  353.00
+##  ppvt    100.17   15.00   13.00  146.00  568.00</code></pre></figure>
+
+<p>As expected, the correlation between the scales and parcels is high. GPA has most of the problems. Note that parcels <code class="language-plaintext highlighter-rouge">.p</code> still have missing records, although much less than the original scales.</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">cor</span><span class="p">(</span><span class="n">dats</span><span class="p">[,</span><span class="w"> </span><span class="n">.</span><span class="p">(</span><span class="n">dep1</span><span class="p">,</span><span class="w"> </span><span class="n">dep1.p</span><span class="p">)],</span><span class="w"> </span><span class="n">use</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"complete"</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">##         dep1 dep1.p
+## dep1   1.000  0.947
+## dep1.p 0.947  1.000</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">cor</span><span class="p">(</span><span class="n">dats</span><span class="p">[,</span><span class="w"> </span><span class="n">.</span><span class="p">(</span><span class="n">dep2</span><span class="p">,</span><span class="w"> </span><span class="n">dep2.p</span><span class="p">)],</span><span class="w"> </span><span class="n">use</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"complete"</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">##         dep2 dep2.p
+## dep2   1.000  0.948
+## dep2.p 0.948  1.000</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">cor</span><span class="p">(</span><span class="n">dats</span><span class="p">[,</span><span class="w"> </span><span class="n">.</span><span class="p">(</span><span class="n">gpa1</span><span class="p">,</span><span class="w"> </span><span class="n">gpa1.p</span><span class="p">)],</span><span class="w"> </span><span class="n">use</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"complete"</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">##         gpa1 gpa1.p
+## gpa1   1.000  0.888
+## gpa1.p 0.888  1.000</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">cor</span><span class="p">(</span><span class="n">dats</span><span class="p">[,</span><span class="w"> </span><span class="n">.</span><span class="p">(</span><span class="n">gpa2</span><span class="p">,</span><span class="w"> </span><span class="n">gpa2.p</span><span class="p">)],</span><span class="w"> </span><span class="n">use</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"complete"</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">##         gpa2 gpa2.p
+## gpa2   1.000  0.885
+## gpa2.p 0.885  1.000</code></pre></figure>
+
+<p>Let’s now impute the scales/scores using the R package <em>MICE</em>.</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">ini</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">mice</span><span class="p">(</span><span class="n">dats</span><span class="p">[,</span><span class="w"> </span><span class="n">nvars</span><span class="p">,</span><span class="w"> </span><span class="n">with</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">],</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">maxit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="p">)</span><span class="w">
+
+</span><span class="c1"># get methods</span><span class="w">
+</span><span class="p">(</span><span class="n">meth</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">ini</span><span class="o">$</span><span class="n">meth</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">##    female       age      race publicass       bmi      gpa1      gpa2    gpa1.p    gpa2.p    dep1.p      dep1    dep2.p      dep2      ppvt
+##        ""     "pmm"        ""  "logreg"     "pmm"     "pmm"     "pmm"     "pmm"     "pmm"     "pmm"     "pmm"     "pmm"     "pmm"     "pmm"</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1"># get predictor matrix</span><span class="w">
+</span><span class="n">pred</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">ini</span><span class="o">$</span><span class="n">pred</span></code></pre></figure>
+
+<p>I adjust the predictor matrix to avoid feedbacks during the imputation (circularity between variables). The trick is to use only complete variables when imputing <em>parcels</em>.</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1"># predict parcels only with complete variables to avoid feedbacks</span><span class="w">
+</span><span class="n">pred</span><span class="p">[</span><span class="s2">"gpa1.p"</span><span class="p">,</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">0</span><span class="w">
+</span><span class="n">pred</span><span class="p">[</span><span class="s2">"gpa2.p"</span><span class="p">,</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">0</span><span class="w">
+</span><span class="n">pred</span><span class="p">[</span><span class="s2">"dep1.p"</span><span class="p">,</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">0</span><span class="w">
+</span><span class="n">pred</span><span class="p">[</span><span class="s2">"dep2.p"</span><span class="p">,</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">0</span><span class="w">
+
+</span><span class="n">pred</span><span class="p">[</span><span class="s2">"gpa1.p"</span><span class="p">,</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"female"</span><span class="p">,</span><span class="w"> </span><span class="s2">"race"</span><span class="p">)]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">1</span><span class="w">
+</span><span class="n">pred</span><span class="p">[</span><span class="s2">"gpa2.p"</span><span class="p">,</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"female"</span><span class="p">,</span><span class="w"> </span><span class="s2">"race"</span><span class="p">)]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">1</span><span class="w">
+</span><span class="n">pred</span><span class="p">[</span><span class="s2">"dep1.p"</span><span class="p">,</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"female"</span><span class="p">,</span><span class="w"> </span><span class="s2">"race"</span><span class="p">)]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">1</span><span class="w">
+</span><span class="n">pred</span><span class="p">[</span><span class="s2">"dep2.p"</span><span class="p">,</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"female"</span><span class="p">,</span><span class="w"> </span><span class="s2">"race"</span><span class="p">)]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">1</span><span class="w">
+
+</span><span class="c1"># predict scales using parcels</span><span class="w">
+</span><span class="n">pred</span><span class="p">[,</span><span class="w"> </span><span class="s2">"gpa1.p"</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">0</span><span class="w">
+</span><span class="n">pred</span><span class="p">[,</span><span class="w"> </span><span class="s2">"gpa2.p"</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">0</span><span class="w">
+</span><span class="n">pred</span><span class="p">[,</span><span class="w"> </span><span class="s2">"dep1.p"</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">0</span><span class="w">
+</span><span class="n">pred</span><span class="p">[,</span><span class="w"> </span><span class="s2">"dep2.p"</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">0</span><span class="w">
+
+</span><span class="n">pred</span><span class="p">[</span><span class="s2">"gpa1"</span><span class="p">,</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"gpa1.p"</span><span class="p">)]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">1</span><span class="w">
+</span><span class="n">pred</span><span class="p">[</span><span class="s2">"gpa2"</span><span class="p">,</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"gpa2.p"</span><span class="p">)]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">1</span><span class="w">
+</span><span class="n">pred</span><span class="p">[</span><span class="s2">"dep1"</span><span class="p">,</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"dep1.p"</span><span class="p">)]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">1</span><span class="w">
+</span><span class="n">pred</span><span class="p">[</span><span class="s2">"dep2"</span><span class="p">,</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"dep2.p"</span><span class="p">)]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">1</span></code></pre></figure>
+
+<p>Here the adjusted predictor matrix:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">##           female age race publicass bmi gpa1 gpa2 gpa1.p gpa2.p dep1.p dep1 dep2.p dep2 ppvt
+## female         0   0    0         0   0    0    0      0      0      0    0      0    0    0
+## age            1   0    1         1   1    1    1      0      0      0    1      0    1    1
+## race           0   0    0         0   0    0    0      0      0      0    0      0    0    0
+## publicass      1   1    1         0   1    1    1      0      0      0    1      0    1    1
+## bmi            1   1    1         1   0    1    1      0      0      0    1      0    1    1
+## gpa1           1   1    1         1   1    0    1      1      0      0    1      0    1    1
+## gpa2           1   1    1         1   1    1    0      0      1      0    1      0    1    1
+## gpa1.p         1   0    1         0   0    0    0      0      0      0    0      0    0    0
+## gpa2.p         1   0    1         0   0    0    0      0      0      0    0      0    0    0
+## dep1.p         1   0    1         0   0    0    0      0      0      0    0      0    0    0
+## dep1           1   1    1         1   1    1    1      0      0      1    0      0    1    1
+## dep2.p         1   0    1         0   0    0    0      0      0      0    0      0    0    0
+## dep2           1   1    1         1   1    1    1      0      0      0    1      1    0    1
+## ppvt           1   1    1         1   1    1    1      0      0      0    1      0    1    0</code></pre></figure>
+
+<p>Let’s impute the data!</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">imp</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">mice</span><span class="p">(</span><span class="n">dats</span><span class="p">[,</span><span class="w"> </span><span class="n">nvars</span><span class="p">,</span><span class="w"> </span><span class="n">with</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">],</span><span class="w"> </span><span class="n">pred</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pred</span><span class="p">,</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">5</span><span class="p">,</span><span class="w"> </span><span class="n">maxit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">10</span><span class="p">)</span></code></pre></figure>
+
+<p>Below some plots to explore how the imputation goes.</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">plot</span><span class="p">(</span><span class="n">imp</span><span class="p">,</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"gpa1"</span><span class="p">,</span><span class="w"> </span><span class="s2">"gpa2"</span><span class="p">,</span><span class="w"> </span><span class="s2">"dep1"</span><span class="p">,</span><span class="w"> </span><span class="s2">"dep2"</span><span class="p">))</span></code></pre></figure>
+
+<p><img src="/assets/img/2015-10-14-imputation_parcels/unnamed-chunk-12-1.png" alt="center" /><img src="/assets/img/2015-10-14-imputation_parcels/unnamed-chunk-12-2.png" alt="center" /></p>
+
+<p>I don’t see any problematic pattern. It seems I get a proper solution. The distribution of the variables also looks right.</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">densityplot</span><span class="p">(</span><span class="n">imp</span><span class="p">,</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">gpa1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">gpa2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">dep1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">dep2</span><span class="p">)</span></code></pre></figure>
+
+<p><img src="/assets/img/2015-10-14-imputation_parcels/unnamed-chunk-13-1.png" alt="center" /></p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">bwplot</span><span class="p">(</span><span class="n">imp</span><span class="p">,</span><span class="w"> </span><span class="n">gpa1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">gpa2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">dep1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">dep2</span><span class="w">  </span><span class="o">~</span><span class="w"> </span><span class="n">.imp</span><span class="p">)</span></code></pre></figure>
+
+<p><img src="/assets/img/2015-10-14-imputation_parcels/unnamed-chunk-13-2.png" alt="center" /></p>
+
+<p><strong>Last Update: 06/02/2017</strong></p>
+
+<hr />
+
+<h3 id="references">References</h3>
+
+<p>Enders, Craig K. 2010. <em>Applied Missing Data Analysis</em>. The Guilford Press.</p>
+
+<p>Eekhout, Iris, Craig K. Enders, Jos W. R. Twisk, Michiel R. de Boer, Henrica
+C. W. de Vet, and Martijn W. Heymans. 2015. “Analyzing Incomplete Item Scores
+in Longitudinal Data by Including Item Score Information as Auxiliary
+Variables.” <em>Structural Equation Modeling: A Multidisciplinary Journal</em> 22
+(4):588-602.</p>
+
+
+  </article>
+
+  
+    <br><br><br><br>
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      var disqus_shortname  = 'sdaza';
+      var disqus_identifier = '/blog/2015/imputation-parcels';
+      var disqus_title      = "Imputing scales using parcels of items as auxiliary variables";
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  
+
+</div>
+
+    </div>
+
+    <!-- Footer -->
+
+    
+<footer class="fixed-bottom">
+  <div class="container mt-0">
+    &copy; Copyright 2021 Sebastian  Daza.
+    Powered by <a href="http://jekyllrb.com/" target="_blank">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio">al-folio</a> theme. Hosted by <a href="https://pages.github.com/" target="_blank">GitHub Pages</a>.
+
+    
+    Last updated: April 12, 2021.
+    
+  </div>
+</footer>
+
+
+
+  </body>
+
+  <!-- jQuery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+
+  <!-- Bootsrap & MDB scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.4.4/umd/popper.min.js" integrity="sha512-eUQ9hGdLjBjY3F41CScH3UX+4JDSI9zXeroz7hJ+RteoCaY+GP/LDoM8AO+Pt+DRFw3nXqsjh9Zsts8hnYv8/A==" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha512-M5KW3ztuIICmVIhjSqXe01oV2bpe248gOxqmlcYrEzAvws7Pw3z6BK0iGbrwvdrUQUhi3eXgtxp5I8PDo9YfjQ==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js" integrity="sha512-Mug9KHKmroQFMLm93zGrjhibM2z2Obg9l6qFG2qKjXEXkMp/VDkI4uju9m4QKPjWSwQ6O2qzZEnJDEeCw0Blcw==" crossorigin="anonymous"></script>
+
+  
+<!-- Mansory & imagesLoaded -->
+<script defer src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+<script defer src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
+<script defer src="/assets/js/mansory.js" type="text/javascript"></script>
+
+
+  
+
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-34554402-2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+
+  gtag('config', 'UA-34554402-2');
+</script>
+
+
+<!-- Load Common JS -->
+<script src="/assets/js/common.js"></script>
+
+<!-- Load DarkMode JS -->
+<script src="/assets/js/dark_mode.js"></script>
+
+
+</html>

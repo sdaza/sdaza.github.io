@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<title>Sebastian  Daza | Simple R package to define sample sizes and MOEs</title>
+<meta name="description" content="Sebastian Daza
+">
+
+<!-- Open Graph -->
+
+
+<!-- Bootstrap & MDB -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" integrity="sha512-MoRNloxbStBcD8z3M/2BmnT+rg4IsMxPkXaGh2zD6LGNNFE80W3onsAhRcMAMrSoyWL9xD7Ert0men7vR8LUZg==" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" integrity="sha512-RO38pBRxYH3SoOprtPTD86JFOclM51/XTIdEPh5j8sj4tp8jmQIx26twG52UaLi//hQldfrh7e51WzP9wuP32Q==" crossorigin="anonymous" />
+
+<!-- Fonts & Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"  integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.0/css/academicons.min.css" integrity="sha512-W4yqoT1+8NLkinBLBZko+dFB2ZbHsYLDdr50VElllRcNt2Q4/GSs6u71UHKxB7S6JEMCp5Ve4xjh3eGQl/HRvg==" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons">
+
+<!-- Code Syntax Highlighting -->
+<link rel="stylesheet" href="https://gitcdn.link/repo/jwarby/jekyll-pygments-themes/master/github.css" />
+
+<!-- Styles -->
+<link rel="shortcut icon" href="/assets/img/favicon.ico">
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<link rel="canonical" href="/blog/2015/sampler/">
+
+<!-- Theming-->
+
+
+    
+
+<!-- MathJax -->
+<script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.1.2/es5/tex-mml-chtml.js"></script>
+<script defer src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
+<script>
+    MathJax = {
+        options: {
+            renderActions: {
+                find: [10, function (doc) {
+                    for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                        const display = !!node.type.match(/; *mode=display/);
+                        const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                        const text = document.createTextNode('');
+                        node.parentNode.replaceChild(text, node);
+                        math.start = { node: text, delim: '', n: 0 };
+                        math.end = { node: text, delim: '', n: 0 };
+                        doc.math.push(math);
+                    }
+                }, '']
+            }
+        }
+    };
+</script>
+
+
+
+
+
+  </head>
+
+  <body class="fixed-top-nav ">
+
+    <!-- Header -->
+
+    <header>
+
+    <!-- Nav Bar -->
+    <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top">
+    <div class="container">
+      
+      <a class="navbar-brand title font-weight-lighter" href="/">
+       <span class="font-weight-bold">Sebastian</span>   Daza
+      </a>
+      
+      <!-- Navbar Toogle -->
+      <button class="navbar-toggler collapsed ml-auto" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar top-bar"></span>
+        <span class="icon-bar middle-bar"></span>
+        <span class="icon-bar bottom-bar"></span>
+      </button>
+      <div class="collapse navbar-collapse text-right" id="navbarNav">
+        <ul class="navbar-nav ml-auto flex-nowrap">
+          <!-- About -->
+          <li class="nav-item ">
+            <a class="nav-link" href="/">
+              about
+              
+            </a>
+          </li>
+          
+          <!-- Blog -->
+          <li class="nav-item active">
+            <a class="nav-link" href="/blog/">
+              blog
+              
+            </a>
+          </li>
+          
+          <!-- Other pages -->
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          <li class="nav-item ">
+              <a class="nav-link" href="/cv/">
+                cv
+                
+              </a>
+          </li>
+          
+          
+          
+          <li class="nav-item ">
+              <a class="nav-link" href="/projects/">
+                projects
+                
+              </a>
+          </li>
+          
+          
+          
+          <li class="nav-item ">
+              <a class="nav-link" href="/publications/">
+                publications
+                
+              </a>
+          </li>
+          
+          
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+</header>
+
+
+    <!-- Content -->
+
+    <div class="container mt-5">
+      
+
+<div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Simple R package to define sample sizes and MOEs</h1>
+    <p class="post-meta">September 30, 2015 • Sebastian Daza</p>
+  </header>
+
+  <article class="post-content">
+    <p>I present a simple R package called <a href="https://github.com/sdaza/sampler"><strong>sampler</strong></a>. The package defines <strong>sample sizes</strong> and <strong>margins of error (MOE)</strong> for proportions, as usually it is needed when designing public opinion surveys. <a href="/survey/2014/01/19/samplesize/">In a previous post</a>, I showed some functions that do mostly the same thing. This new package, though, includes some new features that can be useful when allocating a sample.</p>
+
+<h2 id="installation">Installation</h2>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1"># you have to install devtools first</span><span class="w">
+</span><span class="n">devtools</span><span class="o">::</span><span class="n">install_github</span><span class="p">(</span><span class="s2">"sdaza/sampler"</span><span class="p">)</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">sampler</span><span class="p">)</span></code></pre></figure>
+
+<h2 id="functions">Functions</h2>
+
+<p>The packages contains four functions:</p>
+
+<ul>
+  <li><strong>ssize</strong>: computes sample size.</li>
+  <li><strong>serr</strong>: computes MOE.</li>
+  <li><strong>astrata</strong>: assigns sample sizes to strata.</li>
+  <li><strong>serrst</strong>: computes MOE for stratified samples.</li>
+</ul>
+
+<h2 id="define-sample-size-ssize">Define sample size: <em>ssize</em></h2>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">ssize</span><span class="p">(</span><span class="m">.05</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## [1] 384</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1"># design effect (deff) and response rate (rr)</span><span class="w">
+</span><span class="n">ssize</span><span class="p">(</span><span class="m">.05</span><span class="p">,</span><span class="w"> </span><span class="n">deff</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1.2</span><span class="p">,</span><span class="w"> </span><span class="n">rr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">.90</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## [1] 512</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1"># finite population correction</span><span class="w">
+</span><span class="n">ssize</span><span class="p">(</span><span class="m">.05</span><span class="p">,</span><span class="w"> </span><span class="n">deff</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1.2</span><span class="p">,</span><span class="w"> </span><span class="n">rr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">.90</span><span class="p">,</span><span class="w"> </span><span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1000</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## [1] 370</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1"># warning message</span><span class="w">
+</span><span class="n">ssize</span><span class="p">(</span><span class="m">.05</span><span class="p">,</span><span class="w"> </span><span class="n">deff</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1.2</span><span class="p">,</span><span class="w"> </span><span class="n">rr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">.90</span><span class="p">,</span><span class="w"> </span><span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">100</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## n is bigger than N in some rows: n = N</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## [1] 100</code></pre></figure>
+
+<h2 id="define-sampling-error-serr">Define sampling error: <em>serr</em></h2>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">serr</span><span class="p">(</span><span class="m">384</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## [1] 0.05</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">serr</span><span class="p">(</span><span class="m">512</span><span class="p">,</span><span class="w"> </span><span class="n">deff</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1.2</span><span class="p">,</span><span class="w"> </span><span class="n">rr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">.90</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## [1] 0.05</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">serr</span><span class="p">(</span><span class="m">370</span><span class="p">,</span><span class="w"> </span><span class="n">deff</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1.2</span><span class="p">,</span><span class="w"> </span><span class="n">rr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">.90</span><span class="p">,</span><span class="w"> </span><span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1000</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## [1] 0.05</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1"># we still get an answer</span><span class="w">
+</span><span class="n">serr</span><span class="p">(</span><span class="m">100</span><span class="p">,</span><span class="w"> </span><span class="n">deff</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1.2</span><span class="p">,</span><span class="w"> </span><span class="n">rr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">.90</span><span class="p">,</span><span class="w"> </span><span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">100</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## [1] 0.0569</code></pre></figure>
+
+<h2 id="strata-allocation-astrata">Strata allocation: <em>astrata</em></h2>
+
+<p>These examples show how to allocate a sample size into strata. Look at <em>?astrata</em> in <strong>R</strong> for definitions of the allocation procedures that are available.</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1"># I will use data.table</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">data.table</span><span class="p">)</span><span class="w">
+</span><span class="n">chile</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">data.table</span><span class="p">(</span><span class="n">chile</span><span class="p">)</span><span class="w">
+</span><span class="n">chile</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">##     reg     pob  pr
+##  1:   1  328782 0.3
+##  2:   2  613328 0.4
+##  3:   3  308247 0.5
+##  4:   4  759228 0.5
+##  5:   5 1808300 0.5
+##  6:   6  910577 0.6
+##  7:   7 1035593 0.3
+##  8:   8 2100494 0.1
+##  9:   9  983499 0.2
+## 10:  10  834714 0.5
+## 11:  11  107334 0.5
+## 12:  12  163748 0.4
+## 13:  13 7228581 0.6
+## 14:  14  401548 0.2
+## 15:  15  235081 0.3</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1"># proportional for a sample of 1000</span><span class="w">
+</span><span class="n">chile</span><span class="p">[,</span><span class="w"> </span><span class="n">aprop</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">astrata</span><span class="p">(</span><span class="m">1000</span><span class="p">,</span><span class="w"> </span><span class="n">wp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pob</span><span class="p">)]</span><span class="w">
+
+</span><span class="c1"># fixed (same number by stratum)</span><span class="w">
+</span><span class="n">chile</span><span class="p">[,</span><span class="w"> </span><span class="n">afixed</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">astrata</span><span class="p">(</span><span class="m">1000</span><span class="p">,</span><span class="w"> </span><span class="n">wp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pob</span><span class="p">)]</span><span class="w">
+
+</span><span class="c1"># 40% proportional, 60% fixed</span><span class="w">
+</span><span class="n">chile</span><span class="p">[,</span><span class="w"> </span><span class="n">a40</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">astrata</span><span class="p">(</span><span class="m">1000</span><span class="p">,</span><span class="w"> </span><span class="n">wp</span><span class="w"> </span><span class="o">=</span><span class="m">.4</span><span class="p">,</span><span class="w"> </span><span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pob</span><span class="p">)]</span><span class="w">
+
+</span><span class="c1"># 60% proportional, 40% fixed</span><span class="w">
+</span><span class="n">chile</span><span class="p">[,</span><span class="w"> </span><span class="n">a60</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">astrata</span><span class="p">(</span><span class="m">1000</span><span class="p">,</span><span class="w"> </span><span class="n">wp</span><span class="w"> </span><span class="o">=</span><span class="m">.6</span><span class="p">,</span><span class="w"> </span><span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pob</span><span class="p">)]</span><span class="w">
+
+</span><span class="c1"># square-root</span><span class="w">
+</span><span class="n">chile</span><span class="p">[,</span><span class="w"> </span><span class="n">aroot</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">astrata</span><span class="p">(</span><span class="m">1000</span><span class="p">,</span><span class="w"> </span><span class="n">method</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"root"</span><span class="p">,</span><span class="w"> </span><span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pob</span><span class="p">)]</span><span class="w">
+
+</span><span class="c1"># neyman</span><span class="w">
+</span><span class="n">chile</span><span class="p">[,</span><span class="w"> </span><span class="n">aneyman</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">astrata</span><span class="p">(</span><span class="m">1000</span><span class="p">,</span><span class="w"> </span><span class="n">method</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"neyman"</span><span class="p">,</span><span class="w"> </span><span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pob</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pr</span><span class="p">)]</span><span class="w">
+
+</span><span class="c1"># standard deviation</span><span class="w">
+</span><span class="n">chile</span><span class="p">[,</span><span class="w"> </span><span class="n">astdev</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">astrata</span><span class="p">(</span><span class="m">1000</span><span class="p">,</span><span class="w"> </span><span class="n">method</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"stdev"</span><span class="p">,</span><span class="w"> </span><span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pob</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pr</span><span class="p">)]</span><span class="w">
+
+</span><span class="c1"># error</span><span class="w">
+</span><span class="n">chile</span><span class="p">[,</span><span class="w"> </span><span class="n">aerr</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">astrata</span><span class="p">(</span><span class="n">e</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">.11</span><span class="p">,</span><span class="w"> </span><span class="n">method</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"error"</span><span class="p">,</span><span class="w"> </span><span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pob</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pr</span><span class="p">)]</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">##     reg     pob  pr aprop afixed a40 a60 aroot aneyman astdev aerr
+##  1:   1  328782 0.3    18     67  47  38    41      18     66   67
+##  2:   2  613328 0.4    34     67  54  47    56      37     71   76
+##  3:   3  308247 0.5    17     67  47  37    40      19     72   79
+##  4:   4  759228 0.5    43     67  57  53    62      46     72   79
+##  5:   5 1808300 0.5   101     67  81  87    96     110     72   79
+##  6:   6  910577 0.6    51     67  61  57    68      54     71   76
+##  7:   7 1035593 0.3    58     67  63  62    73      58     66   67
+##  8:   8 2100494 0.1   118     67  87  98   104      77     43   29
+##  9:   9  983499 0.2    55     67  62  60    71      48     58   51
+## 10:  10  834714 0.5    47     67  59  55    65      51     72   79
+## 11:  11  107334 0.5     6     67  43  30    23       7     72   79
+## 12:  12  163748 0.4     9     67  44  32    29      10     71   76
+## 13:  13 7228581 0.6   406     67 203 270   192     432     71   76
+## 14:  14  401548 0.2    23     67  49  41    45      20     58   51
+## 15:  15  235081 0.3    13     67  45  35    35      13     66   67</code></pre></figure>
+
+<h2 id="getting-sampling-error-from-a-stratified-sample-serrst">Getting sampling error from a stratified sample: <em>serrst</em></h2>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1"># the second most efficient allocation</span><span class="w">
+</span><span class="n">serrst</span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">chile</span><span class="o">$</span><span class="n">aprop</span><span class="p">,</span><span class="w"> </span><span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">chile</span><span class="o">$</span><span class="n">pob</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">chile</span><span class="o">$</span><span class="n">pr</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## [1] 0.0288</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1"># the worst solution</span><span class="w">
+</span><span class="n">serrst</span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">chile</span><span class="o">$</span><span class="n">afixed</span><span class="p">,</span><span class="w"> </span><span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">chile</span><span class="o">$</span><span class="n">pob</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">chile</span><span class="o">$</span><span class="n">pr</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## [1] 0.0518</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">serrst</span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">chile</span><span class="o">$</span><span class="n">a40</span><span class="p">,</span><span class="w"> </span><span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">chile</span><span class="o">$</span><span class="n">pob</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">chile</span><span class="o">$</span><span class="n">pr</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## [1] 0.0339</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">serrst</span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">chile</span><span class="o">$</span><span class="n">a60</span><span class="p">,</span><span class="w"> </span><span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">chile</span><span class="o">$</span><span class="n">pob</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">chile</span><span class="o">$</span><span class="n">pr</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## [1] 0.0311</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">serrst</span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">chile</span><span class="o">$</span><span class="n">aroot</span><span class="p">,</span><span class="w"> </span><span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">chile</span><span class="o">$</span><span class="n">pob</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">chile</span><span class="o">$</span><span class="n">pr</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## [1] 0.0339</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1"># the most efficient allocation</span><span class="w">
+</span><span class="n">serrst</span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">chile</span><span class="o">$</span><span class="n">aneyman</span><span class="p">,</span><span class="w"> </span><span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">chile</span><span class="o">$</span><span class="n">pob</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">chile</span><span class="o">$</span><span class="n">pr</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## [1] 0.0285</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">serrst</span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">chile</span><span class="o">$</span><span class="n">astdev</span><span class="p">,</span><span class="w"> </span><span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">chile</span><span class="o">$</span><span class="n">pob</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">chile</span><span class="o">$</span><span class="n">pr</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## [1] 0.0508</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">serrst</span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">chile</span><span class="o">$</span><span class="n">aerr</span><span class="p">,</span><span class="w"> </span><span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">chile</span><span class="o">$</span><span class="n">pob</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">chile</span><span class="o">$</span><span class="n">pr</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## [1] 0.0498</code></pre></figure>
+
+<h2 id="combining-criteria">Combining criteria</h2>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1"># get error for 60% proportional / 40% fixed allocation for each strata</span><span class="w">
+</span><span class="n">chile</span><span class="p">[,</span><span class="w"> </span><span class="n">error_a60</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">serr</span><span class="p">(</span><span class="n">a60</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pr</span><span class="p">)]</span><span class="w">
+
+</span><span class="c1"># assign sample sizes assuming 13% error for each strata</span><span class="w">
+</span><span class="n">chile</span><span class="p">[,</span><span class="w"> </span><span class="n">serr13</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">astrata</span><span class="p">(</span><span class="n">e</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">.13</span><span class="p">,</span><span class="w"> </span><span class="n">method</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"error"</span><span class="p">,</span><span class="w"> </span><span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pob</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pr</span><span class="p">)]</span><span class="w">
+
+</span><span class="c1"># total error, not that good!</span><span class="w">
+</span><span class="n">serrst</span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">chile</span><span class="o">$</span><span class="n">serr13</span><span class="p">,</span><span class="w"> </span><span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">chile</span><span class="o">$</span><span class="n">pob</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">chile</span><span class="o">$</span><span class="n">pr</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## [1] 0.0586</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">chile</span><span class="p">[,</span><span class="w"> </span><span class="n">.</span><span class="p">(</span><span class="n">reg</span><span class="p">,</span><span class="w"> </span><span class="n">pob</span><span class="p">,</span><span class="w"> </span><span class="n">pr</span><span class="p">,</span><span class="w"> </span><span class="n">a60</span><span class="p">,</span><span class="w"> </span><span class="n">error_a60</span><span class="p">,</span><span class="w"> </span><span class="n">serr13</span><span class="p">)]</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">##     reg     pob  pr a60 error_a60 serr13
+##  1:   1  328782 0.3  38    0.1457     48
+##  2:   2  613328 0.4  47    0.1401     55
+##  3:   3  308247 0.5  37    0.1611     57
+##  4:   4  759228 0.5  53    0.1346     57
+##  5:   5 1808300 0.5  87    0.1051     57
+##  6:   6  910577 0.6  57    0.1272     55
+##  7:   7 1035593 0.3  62    0.1141     48
+##  8:   8 2100494 0.1  98    0.0594     20
+##  9:   9  983499 0.2  60    0.1012     36
+## 10:  10  834714 0.5  55    0.1321     57
+## 11:  11  107334 0.5  30    0.1789     57
+## 12:  12  163748 0.4  32    0.1697     55
+## 13:  13 7228581 0.6 270    0.0584     55
+## 14:  14  401548 0.2  41    0.1224     36
+## 15:  15  235081 0.3  35    0.1518     48</code></pre></figure>
+
+<p>We can adjust a bit more:</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1"># when error is higher than .13, use serr13</span><span class="w">
+</span><span class="n">chile</span><span class="p">[,</span><span class="w"> </span><span class="n">sfinal</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">ifelse</span><span class="p">(</span><span class="n">error_a60</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="m">.13</span><span class="p">,</span><span class="w"> </span><span class="n">serr13</span><span class="p">,</span><span class="w"> </span><span class="n">a60</span><span class="p">)]</span><span class="w">
+
+</span><span class="c1"># new error by stratum</span><span class="w">
+</span><span class="n">chile</span><span class="p">[,</span><span class="w"> </span><span class="n">error_sfinal</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">serr</span><span class="p">(</span><span class="n">sfinal</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pr</span><span class="p">)]</span><span class="w">
+
+</span><span class="c1"># total error, much better!</span><span class="w">
+</span><span class="n">serrst</span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">chile</span><span class="o">$</span><span class="n">sfinal</span><span class="p">,</span><span class="w"> </span><span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">chile</span><span class="o">$</span><span class="n">pob</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">chile</span><span class="o">$</span><span class="n">pr</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## [1] 0.0309</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1"># although the total sample size is now bigger</span><span class="w">
+</span><span class="nf">sum</span><span class="p">(</span><span class="n">chile</span><span class="o">$</span><span class="n">sfinal</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## [1] 1109</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">##     reg     pob  pr sfinal error_sfinal
+##  1:   1  328782 0.3     48       0.1296
+##  2:   2  613328 0.4     55       0.1295
+##  3:   3  308247 0.5     57       0.1298
+##  4:   4  759228 0.5     57       0.1298
+##  5:   5 1808300 0.5     87       0.1051
+##  6:   6  910577 0.6     57       0.1272
+##  7:   7 1035593 0.3     62       0.1141
+##  8:   8 2100494 0.1     98       0.0594
+##  9:   9  983499 0.2     60       0.1012
+## 10:  10  834714 0.5     57       0.1298
+## 11:  11  107334 0.5     57       0.1298
+## 12:  12  163748 0.4     55       0.1295
+## 13:  13 7228581 0.6    270       0.0584
+## 14:  14  401548 0.2     41       0.1224
+## 15:  15  235081 0.3     48       0.1296</code></pre></figure>
+
+<p>That’s it. A simple package to do simple calculations.</p>
+
+
+  </article>
+
+  
+    <br><br><br><br>
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      var disqus_shortname  = 'sdaza';
+      var disqus_identifier = '/blog/2015/sampler';
+      var disqus_title      = "Simple R package to define sample sizes and MOEs";
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  
+
+</div>
+
+    </div>
+
+    <!-- Footer -->
+
+    
+<footer class="fixed-bottom">
+  <div class="container mt-0">
+    &copy; Copyright 2021 Sebastian  Daza.
+    Powered by <a href="http://jekyllrb.com/" target="_blank">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio">al-folio</a> theme. Hosted by <a href="https://pages.github.com/" target="_blank">GitHub Pages</a>.
+
+    
+    Last updated: April 12, 2021.
+    
+  </div>
+</footer>
+
+
+
+  </body>
+
+  <!-- jQuery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+
+  <!-- Bootsrap & MDB scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.4.4/umd/popper.min.js" integrity="sha512-eUQ9hGdLjBjY3F41CScH3UX+4JDSI9zXeroz7hJ+RteoCaY+GP/LDoM8AO+Pt+DRFw3nXqsjh9Zsts8hnYv8/A==" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha512-M5KW3ztuIICmVIhjSqXe01oV2bpe248gOxqmlcYrEzAvws7Pw3z6BK0iGbrwvdrUQUhi3eXgtxp5I8PDo9YfjQ==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js" integrity="sha512-Mug9KHKmroQFMLm93zGrjhibM2z2Obg9l6qFG2qKjXEXkMp/VDkI4uju9m4QKPjWSwQ6O2qzZEnJDEeCw0Blcw==" crossorigin="anonymous"></script>
+
+  
+<!-- Mansory & imagesLoaded -->
+<script defer src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+<script defer src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
+<script defer src="/assets/js/mansory.js" type="text/javascript"></script>
+
+
+  
+
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-34554402-2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+
+  gtag('config', 'UA-34554402-2');
+</script>
+
+
+<!-- Load Common JS -->
+<script src="/assets/js/common.js"></script>
+
+<!-- Load DarkMode JS -->
+<script src="/assets/js/dark_mode.js"></script>
+
+
+</html>

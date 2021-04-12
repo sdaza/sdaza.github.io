@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-<title>Sebastian  Daza | blog</title>
+<title>Sebastian  Daza | Looking for variables in R</title>
 <meta name="description" content="Sebastian Daza
 ">
 
@@ -29,7 +29,7 @@
 <link rel="shortcut icon" href="/assets/img/favicon.ico">
 <link rel="stylesheet" href="/assets/css/main.css">
 
-<link rel="canonical" href="/blog/">
+<link rel="canonical" href="/blog/2013/lookvar/">
 
 <!-- Theming-->
 
@@ -102,8 +102,6 @@
             <a class="nav-link" href="/blog/">
               blog
               
-              <span class="sr-only">(current)</span>
-              
             </a>
           </li>
           
@@ -165,70 +163,65 @@
     <!-- Content -->
 
     <div class="container mt-5">
-      <div class="post">
+      
 
-  <div class="header-bar">
-    <h1>posts</h1>
-    <h2>learnings, comments, sociology, stats, examples</h2>
-  </div>
+<div class="post">
 
+  <header class="post-header">
+    <h1 class="post-title">Looking for variables in R</h1>
+    <p class="post-meta">January 29, 2013 • Sebastian Daza</p>
+  </header>
 
-  <ul class="post-list">
-    
-      <li>
-        <h3><a class="post-title" href="/blog/2020/anylogic-database/">From database to CSV using Anylogic</a></h3>
-        <p class="post-meta">November 3, 2020</p>
-        <p></p>
-      </li>
-    
-      <li>
-        <h3><a class="post-title" href="/blog/2020/descriptive-tables/">Oh, descriptive tables (R + Latex)!</a></h3>
-        <p class="post-meta">May 12, 2020</p>
-        <p>How to create latex descriptive tables in R</p>
-      </li>
-    
-      <li>
-        <h3><a class="post-title" href="/blog/2016/read-mortality-data/">Reading CDC mortality files using R</a></h3>
-        <p class="post-meta">October 5, 2016</p>
-        <p></p>
-      </li>
-    
-      <li>
-        <h3><a class="post-title" href="/blog/2016/acsr/">R package to compute statistics from the American Community Survey (ACS) and Decennial US Census</a></h3>
-        <p class="post-meta">July 6, 2016</p>
-        <p></p>
-      </li>
-    
-      <li>
-        <h3><a class="post-title" href="/blog/2015/imputation-parcels/">Imputing scales using parcels of items as auxiliary variables</a></h3>
-        <p class="post-meta">October 14, 2015</p>
-        <p></p>
-      </li>
-    
-  </ul>
+  <article class="post-content">
+    <p>Recently, I have been working with big databases. After reading their codebooks (usually very long pdf files),
+I thought it would be useful to have a function to find variable names in R. I wrote a simply function
+that looks for variable names in <strong>data.frame</strong> and <strong>data.table</strong> objects.</p>
+
+<p>Here an example:</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">library</span><span class="p">(</span><span class="n">devtools</span><span class="p">);</span><span class="w"> </span><span class="n">source_gist</span><span class="p">(</span><span class="s2">"4661324"</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">library</span><span class="p">(</span><span class="n">data.table</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">dat</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">data.table</span><span class="p">(</span><span class="n">infert</span><span class="p">)</span><span class="w">
+</span><span class="p">(</span><span class="n">var</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">lookvar</span><span class="p">(</span><span class="n">dat</span><span class="p">,</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"par"</span><span class="p">,</span><span class="w"> </span><span class="s2">"spon"</span><span class="p">)))</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## [1] "parity"      "spontaneous"</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">dat</span><span class="p">[,</span><span class="w"> </span><span class="n">var</span><span class="p">,</span><span class="w"> </span><span class="n">with</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">]</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">##      parity spontaneous
+##   1:      6           2
+##   2:      1           0
+##   3:      6           0
+##   4:      4           0
+##   5:      3           1
+##  ---
+## 244:      1           1
+## 245:      1           0
+## 246:      2           0
+## 247:      1           1
+## 248:      1           1</code></pre></figure>
+
+<p>Pretty useful, at least for me. You can also use <em>regular expressions</em> to get variables, for instance, something like <code class="language-plaintext highlighter-rouge">lookvar(dat, "p5[0-2]_[a-z]+_2")</code>.</p>
+
+  </article>
 
   
-<nav aria-label="Blog page naviation">
-  <ul class="pagination pagination-lg justify-content-center">
-    <li class="page-item disabled">
-      <a class="page-link" href="" tabindex="-1" aria-disabled="">Newer</a>
-    </li>
-    
-      
-        <li class="page-item active"><a class="page-link" href="/blog/index.html" title="blog">1</a></li>
-      
-        <li class="page-item "><a class="page-link" href="/blog/page/2/index.html" title="blog - page 2">2</a></li>
-      
-        <li class="page-item "><a class="page-link" href="/blog/page/3/index.html" title="blog - page 3">3</a></li>
-      
-    
-    <li class="page-item ">
-      <a class="page-link" href="/blog/page/2/">Older</a>
-    </li>
-  </ul>
-</nav>
-
-
+    <br><br><br><br>
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      var disqus_shortname  = 'sdaza';
+      var disqus_identifier = '/blog/2013/lookvar';
+      var disqus_title      = "Looking for variables in R";
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  
 
 </div>
 

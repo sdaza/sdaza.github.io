@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<title>Sebastian  Daza | Raking weights with R</title>
+<meta name="description" content="Sebastian Daza
+">
+
+<!-- Open Graph -->
+
+
+<!-- Bootstrap & MDB -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" integrity="sha512-MoRNloxbStBcD8z3M/2BmnT+rg4IsMxPkXaGh2zD6LGNNFE80W3onsAhRcMAMrSoyWL9xD7Ert0men7vR8LUZg==" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" integrity="sha512-RO38pBRxYH3SoOprtPTD86JFOclM51/XTIdEPh5j8sj4tp8jmQIx26twG52UaLi//hQldfrh7e51WzP9wuP32Q==" crossorigin="anonymous" />
+
+<!-- Fonts & Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"  integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.0/css/academicons.min.css" integrity="sha512-W4yqoT1+8NLkinBLBZko+dFB2ZbHsYLDdr50VElllRcNt2Q4/GSs6u71UHKxB7S6JEMCp5Ve4xjh3eGQl/HRvg==" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons">
+
+<!-- Code Syntax Highlighting -->
+<link rel="stylesheet" href="https://gitcdn.link/repo/jwarby/jekyll-pygments-themes/master/github.css" />
+
+<!-- Styles -->
+<link rel="shortcut icon" href="/assets/img/favicon.ico">
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<link rel="canonical" href="/blog/2012/raking/">
+
+<!-- Theming-->
+
+
+    
+
+<!-- MathJax -->
+<script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.1.2/es5/tex-mml-chtml.js"></script>
+<script defer src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
+<script>
+    MathJax = {
+        options: {
+            renderActions: {
+                find: [10, function (doc) {
+                    for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                        const display = !!node.type.match(/; *mode=display/);
+                        const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                        const text = document.createTextNode('');
+                        node.parentNode.replaceChild(text, node);
+                        math.start = { node: text, delim: '', n: 0 };
+                        math.end = { node: text, delim: '', n: 0 };
+                        doc.math.push(math);
+                    }
+                }, '']
+            }
+        }
+    };
+</script>
+
+
+
+
+
+  </head>
+
+  <body class="fixed-top-nav ">
+
+    <!-- Header -->
+
+    <header>
+
+    <!-- Nav Bar -->
+    <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top">
+    <div class="container">
+      
+      <a class="navbar-brand title font-weight-lighter" href="/">
+       <span class="font-weight-bold">Sebastian</span>   Daza
+      </a>
+      
+      <!-- Navbar Toogle -->
+      <button class="navbar-toggler collapsed ml-auto" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar top-bar"></span>
+        <span class="icon-bar middle-bar"></span>
+        <span class="icon-bar bottom-bar"></span>
+      </button>
+      <div class="collapse navbar-collapse text-right" id="navbarNav">
+        <ul class="navbar-nav ml-auto flex-nowrap">
+          <!-- About -->
+          <li class="nav-item ">
+            <a class="nav-link" href="/">
+              about
+              
+            </a>
+          </li>
+          
+          <!-- Blog -->
+          <li class="nav-item active">
+            <a class="nav-link" href="/blog/">
+              blog
+              
+            </a>
+          </li>
+          
+          <!-- Other pages -->
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          <li class="nav-item ">
+              <a class="nav-link" href="/cv/">
+                cv
+                
+              </a>
+          </li>
+          
+          
+          
+          <li class="nav-item ">
+              <a class="nav-link" href="/projects/">
+                projects
+                
+              </a>
+          </li>
+          
+          
+          
+          <li class="nav-item ">
+              <a class="nav-link" href="/publications/">
+                publications
+                
+              </a>
+          </li>
+          
+          
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+</header>
+
+
+    <!-- Content -->
+
+    <div class="container mt-5">
+      
+
+<div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Raking weights with R</h1>
+    <p class="post-meta">August 25, 2012 • Sebastian Daza</p>
+  </header>
+
+  <article class="post-content">
+    <p>When I was working with public opinion surveys, I usually had to adjust the data according to population parameters such as sex, age, socioeconomic status, or region. There are several ways to do this. One of them is <em>raking</em>. Using the package <a href="http://cran.r-project.org/web/packages/anesrake/index.html">anesrake</a> by <a href="http://joshpasek.com">Josh Pasek</a> is easy to compute raking weights in R. I show a brief and straightforward raking example in this post.</p>
+
+<hr />
+
+<h3 id="what-is-raking">What is raking?</h3>
+
+<p>It is common to find differences between the population and sample distribution in some key demographic variables when analyzing surveys. These differences might be due to the sampling design, non-coverage issues or non-response. To avoid biases of point estimates, we generally adjust those differences using weights so that the marginal totals agree (at least in part) with the population. These adjustments can be done using different methods: post-stratification or cell-weighting, raking, general regression estimator GREG (Battaglia et al. 2004, Valliant et al. 2013). Here I will show an example for raking adjustment. Raking  has some advantages over cell-weighting:</p>
+
+<ol>
+  <li>We have to know only the population totals of the specific variables, not all cells of the cross-classification.</li>
+  <li>It is more flexible feasible when we use several variables at once.</li>
+</ol>
+
+<p>It is important to note that raking adjustments are useful when we want to estimate a proportion or mean from a population, but they are not necessarily the best when modeling (see Gelman 2007). In that case, model specification (i.e., inclusion of all the key variables and interactions) may be a better solution. It is important to note that the raking procedure may affect the <em>dependence structure</em> of variables, what eventually may bias model estimates.</p>
+
+<hr />
+
+<h3 id="some-rules-of-thumb">Some rules of thumb</h3>
+
+<p>DeBell and Krosnick (2009) provide useful recommendations regarding variable selection when implementing <em>raking</em>:</p>
+
+<ul>
+  <li>Identify a set of variable likely to be measured with little error and a low item nonresponse rate (less than 5%), and compare them with <em>reliable</em> data sources (e.g., Census). Some typical variables are age groups, gender, race, SES, census region.</li>
+  <li>Implement weighting when substantive demography discrepancies are observed. For instance, differences higher than five percentage points. When differences are less than two percentage points this adjustment would not be necessary.</li>
+  <li>When selected variables have categories with less than 5% in the sample, it would be recommended to collapse them.</li>
+</ul>
+
+<p>Remember, however, that the ultimate goal of raking is to calibrate and improve the efficiency of our estimates (reduce standard errors). In general, there is trade-off between these two objectives. Anyway, weight adjustments should be variable-dependent: they should explore how different key variables of our survey behave after adjusting. In this post I only show how to implement <em>raking</em>. A more complete analysis will be surely necessary.</p>
+
+<p>Once the raking procedure is implemented, it is a good idea to follow these steps in an iterative fashion:</p>
+
+<ul>
+  <li>Identify extreme weights and truncate them. For example, those greater than five times the mean of weights.</li>
+  <li>Truncate large values, but not small ones (i.e., those near zero). While large values increase the effect of outliers and are more likely to inflate variance, low values do not.</li>
+  <li>Examine the design effect using the new weights. If the <em>new design effect</em> is greater than the <em>old design effect</em> by more than 0.5, it is a good idea to review the raking adjustment. In other words, calibration may cost too much in terms of efficiency (standard errors).</li>
+</ul>
+
+<p>Three things can be done to improve the weighting procedure:</p>
+
+<ul>
+  <li>Collapse categories of the variables</li>
+  <li>Eliminate or replace weighting variables</li>
+  <li>Increase the weight truncation criterion ( &gt; 5 )</li>
+</ul>
+
+<hr />
+
+<h3 id="raking-using-r">Raking using R</h3>
+
+<p>In this example I use data from Chile to estimate the <strong>presidential approval</strong> (<a href="http://www.cepchile.cl/bannerscep/bdatos_encuestas_cep/base_datos.php">Opinion Public Survey CEP, July-August 2012</a>). Below, you can see the characteristics of the dataset:</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">dat</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">read.csv</span><span class="p">(</span><span class="s2">"cep.csv"</span><span class="p">)</span><span class="w">
+</span><span class="n">str</span><span class="p">(</span><span class="n">dat</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## 'data.frame':	1512 obs. of  12 variables:
+##  $ fnu     : int  1580 1579 890 871 1031 104 1103 263 924 105 ...
+##  $ area    : int  1 1 2 1 1 1 1 1 1 1 ...
+##  $ region  : int  13 13 9 9 10 2 13 5 9 2 ...
+##  $ comuna  : int  13123 13123 9110 9102 10202 2201 13101 5106 9201 2201 ...
+##  $ sex     : int  1 1 2 1 1 1 2 1 2 1 ...
+##  $ age     : int  30 60 28 72 55 35 33 25 73 43 ...
+##  $ ses     : int  2 2 3 3 4 3 2 3 4 2 ...
+##  $ phone   : int  1 1 9 2 2 2 2 1 2 1 ...
+##  $ edu     : int  4 4 4 1 2 3 4 4 2 4 ...
+##  $ pond    : num  1.977 1.243 0.514 0.421 0.526 ...
+##  $ agecat  : int  2 5 2 5 5 3 2 2 5 3 ...
+##  $ approval: int  2 1 2 1 1 2 2 2 2 2 ...</code></pre></figure>
+
+<p>I use five variables to define raking weights: <code class="language-plaintext highlighter-rouge">sex</code>, <code class="language-plaintext highlighter-rouge">agecat</code>, <code class="language-plaintext highlighter-rouge">ses</code>, <code class="language-plaintext highlighter-rouge">region</code>, and  <code class="language-plaintext highlighter-rouge">area</code>. I get relative frequencies of these variables using the package <code class="language-plaintext highlighter-rouge">weights</code> . Most of the variables have more than five percent in each category, with the exception of <code class="language-plaintext highlighter-rouge">region</code> and <code class="language-plaintext highlighter-rouge">ses</code>. For illustrative purposes, I will use those variables without collapsing their categories.</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">library</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span><span class="w">
+</span><span class="c1"># sex: 1 male, 2 female</span><span class="w">
+</span><span class="n">wpct</span><span class="p">(</span><span class="n">dat</span><span class="o">$</span><span class="n">sex</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">##     1     2
+## 0.407 0.593</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1"># agecat: 1 18-24, 2 25-34, 3 35-44, 4 45-54, 5 55+</span><span class="w">
+</span><span class="n">wpct</span><span class="p">(</span><span class="n">dat</span><span class="o">$</span><span class="n">agecat</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">##     1     2     3     4     5
+## 0.124 0.159 0.177 0.194 0.346</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1"># ses: 1 abc1, 2 c2, 3 c3, 4 d, 5 e</span><span class="w">
+</span><span class="n">wpct</span><span class="p">(</span><span class="n">dat</span><span class="o">$</span><span class="n">ses</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">##      1      2      3      4      5
+## 0.0390 0.1078 0.3651 0.4484 0.0397</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1"># region: 1 to 15</span><span class="w">
+</span><span class="n">wpct</span><span class="p">(</span><span class="n">dat</span><span class="o">$</span><span class="n">region</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">##       1       2       3       4       5       6       7       8       9      10      11      12      13      14      15
+## 0.01323 0.04233 0.01389 0.04167 0.09921 0.05489 0.06151 0.13095 0.06349 0.04894 0.00397 0.01058 0.37632 0.02579 0.01323</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1"># area: 1 urban, 2 rural</span><span class="w">
+</span><span class="n">wpct</span><span class="p">(</span><span class="n">dat</span><span class="o">$</span><span class="n">area</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">##     1     2
+## 0.837 0.163</code></pre></figure>
+
+<p>The next step is to specify the population distribution of the selected variables in a target <em>list</em>. I use two sources to obtain population values: the Chilean Census 2002, and the <em>Bicentenario</em> Survey 2009. It is hard to find reliable SES population parameters. The <em>Bicentenario</em> data provide, at least, an approximation.</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1"># chilean census 2002</span><span class="w">
+</span><span class="n">sex</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">.49</span><span class="p">,</span><span class="m">.51</span><span class="p">)</span><span class="w">
+</span><span class="n">agecat</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">.163</span><span class="p">,</span><span class="w"> </span><span class="m">.203</span><span class="p">,</span><span class="w"> </span><span class="m">.195</span><span class="p">,</span><span class="w"> </span><span class="m">.187</span><span class="p">,</span><span class="w"> </span><span class="m">.253</span><span class="p">)</span><span class="w">
+</span><span class="n">region</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">0.015</span><span class="p">,</span><span class="w"> </span><span class="m">0.031</span><span class="p">,</span><span class="w"> </span><span class="m">0.016</span><span class="p">,</span><span class="w"> </span><span class="m">0.039</span><span class="p">,</span><span class="w"> </span><span class="m">0.102</span><span class="p">,</span><span class="w"> </span><span class="m">0.051</span><span class="p">,</span><span class="w"> </span><span class="m">0.059</span><span class="p">,</span><span class="w"> </span><span class="m">0.123</span><span class="p">,</span><span class="w">
+            </span><span class="m">0.056</span><span class="p">,</span><span class="w"> </span><span class="m">0.046</span><span class="p">,</span><span class="w"> </span><span class="m">0.006</span><span class="p">,</span><span class="w"> </span><span class="m">0.010</span><span class="p">,</span><span class="w"> </span><span class="m">0.408</span><span class="p">,</span><span class="w"> </span><span class="m">0.023</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="m">0.013</span><span class="p">)</span><span class="w">
+</span><span class="n">area</span><span class="w">  </span><span class="o">&lt;-</span><span class="w">  </span><span class="nf">c</span><span class="p">(</span><span class="m">.869</span><span class="p">,</span><span class="w"> </span><span class="m">.131</span><span class="p">)</span><span class="w">
+
+</span><span class="c1"># bicentenario survey 2009</span><span class="w">
+</span><span class="n">ses</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">.109</span><span class="p">,</span><span class="w"> </span><span class="m">.184</span><span class="p">,</span><span class="w"> </span><span class="m">.261</span><span class="p">,</span><span class="w"> </span><span class="m">.364</span><span class="p">,</span><span class="w"> </span><span class="m">.083</span><span class="p">)</span><span class="w">
+
+</span><span class="c1"># definitions of target list</span><span class="w">
+</span><span class="n">targets</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span><span class="n">sex</span><span class="p">,</span><span class="w"> </span><span class="n">agecat</span><span class="p">,</span><span class="n">ses</span><span class="p">,</span><span class="w"> </span><span class="n">region</span><span class="p">,</span><span class="w"> </span><span class="n">area</span><span class="p">)</span><span class="w">
+</span><span class="c1"># important: to use the same variable names of the dataset</span><span class="w">
+</span><span class="nf">names</span><span class="p">(</span><span class="n">targets</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"sex"</span><span class="p">,</span><span class="w"> </span><span class="s2">"agecat"</span><span class="p">,</span><span class="w"> </span><span class="s2">"ses"</span><span class="p">,</span><span class="w"> </span><span class="s2">"region"</span><span class="p">,</span><span class="w"> </span><span class="s2">"area"</span><span class="p">)</span><span class="w">
+</span><span class="c1"># id variable</span><span class="w">
+</span><span class="n">dat</span><span class="o">$</span><span class="n">caseid</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="nf">length</span><span class="p">(</span><span class="n">dat</span><span class="o">$</span><span class="n">sex</span><span class="p">)</span></code></pre></figure>
+
+<p>The output shows that some distributions do not sum one. This is because of rounding. We can force any proportion distribution to sum one using <code class="language-plaintext highlighter-rouge">force1 = TRUE</code>. The differences between the population and the sample distribution are all greater than five percentage points. This meets the variable selection criterion discussed above.</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="nf">sum</span><span class="p">(</span><span class="n">region</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## [1] 0.998</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">library</span><span class="p">(</span><span class="n">anesrake</span><span class="p">)</span><span class="w">
+</span><span class="n">anesrakefinder</span><span class="p">(</span><span class="n">targets</span><span class="p">,</span><span class="w"> </span><span class="n">dat</span><span class="p">,</span><span class="w"> </span><span class="n">choosemethod</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"total"</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">##    sex agecat    ses region   area
+## 0.1652 0.2017 0.3780 0.0828 0.0634</code></pre></figure>
+
+<p>I apply the <em>anesrake</em> function as follows:</p>
+
+<ul>
+  <li>The maximum weight value is five, weights greater than five will be truncated (<code class="language-plaintext highlighter-rouge">cap = 5</code>).</li>
+  <li>The total differences between population and sample have to be greater than 0.05 so that to include a variable  (<code class="language-plaintext highlighter-rouge">pctlim = .05</code>).</li>
+  <li>The maximum number of variables included in the raking procedure is five (<code class="language-plaintext highlighter-rouge">nlim = 5</code>).</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">outsave</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">anesrake</span><span class="p">(</span><span class="n">targets</span><span class="p">,</span><span class="w"> </span><span class="n">dat</span><span class="p">,</span><span class="w"> </span><span class="n">caseid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dat</span><span class="o">$</span><span class="n">caseid</span><span class="p">,</span><span class="w">
+  </span><span class="n">verbose</span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">,</span><span class="w"> </span><span class="n">cap</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">5</span><span class="p">,</span><span class="w"> </span><span class="n">choosemethod</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"total"</span><span class="p">,</span><span class="w">
+  </span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"pctlim"</span><span class="p">,</span><span class="w"> </span><span class="n">pctlim</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">.05</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">nlim</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">5</span><span class="p">,</span><span class="w">
+  </span><span class="n">iterate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">force1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">summary</span><span class="p">(</span><span class="n">outsave</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## $convergence
+## [1] "Complete convergence was achieved after 48 iterations"
+##
+## $raking.variables
+## [1] "sex"    "agecat" "ses"    "region" "area"
+##
+## $weight.summary
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.
+##    0.33    0.62    0.80    1.00    1.10    4.30
+##
+## $selection.method
+## [1] "variable selection conducted using _pctlim_ - discrepancies selected using _total_."
+##
+## $general.design.effect
+## [1] 1.38
+##
+## $sex
+##   Target Unweighted N Unweighted % Wtd N Wtd % Change in % Resid. Disc. Orig. Disc.
+## 1   0.49          616        0.407   741  0.49      0.0826            0      0.0826
+## 2   0.51          896        0.593   771  0.51     -0.0826            0     -0.0826
+##
+## $agecat
+##   Target Unweighted N Unweighted % Wtd N Wtd % Change in % Resid. Disc. Orig. Disc.
+## 1  0.163          187        0.124   246 0.163     0.03916     2.78e-17     0.03916
+## 2  0.203          240        0.159   307 0.203     0.04407    -2.78e-17     0.04407
+## 3  0.195          268        0.177   295 0.195     0.01756     0.00e+00     0.01756
+## 4  0.187          294        0.194   282 0.187    -0.00763    -2.78e-17    -0.00763
+## 5  0.253          523        0.346   382 0.253    -0.09315     0.00e+00    -0.09315
+##
+## $ses
+##   Target Unweighted N Unweighted % Wtd N  Wtd % Change in % Resid. Disc. Orig. Disc.
+## 1 0.1089           59       0.0390   165 0.1089      0.0699     1.39e-17      0.0699
+## 2 0.1838          163       0.1078   278 0.1838      0.0760     2.78e-17      0.0760
+## 3 0.2607          552       0.3651   394 0.2607     -0.1043     5.55e-17     -0.1043
+## 4 0.3636          678       0.4484   550 0.3636     -0.0848     5.55e-17     -0.0848
+## 5 0.0829           60       0.0397   125 0.0829      0.0432     1.39e-17      0.0432
+##
+## $region
+##     Target Unweighted N Unweighted %  Wtd N   Wtd % Change in % Resid. Disc. Orig. Disc.
+## 1  0.01503           20      0.01323  22.73 0.01503    0.001803     0.00e+00    0.001803
+## 2  0.03106           64      0.04233  46.97 0.03106   -0.011266     0.00e+00   -0.011266
+## 3  0.01603           21      0.01389  24.24 0.01603    0.002143     0.00e+00    0.002143
+## 4  0.03908           63      0.04167  59.09 0.03908   -0.002589     0.00e+00   -0.002589
+## 5  0.10220          150      0.09921 154.53 0.10220    0.002998    -2.78e-17    0.002998
+## 6  0.05110           83      0.05489  77.27 0.05110   -0.003792    -6.94e-18   -0.003792
+## 7  0.05912           93      0.06151  89.39 0.05912   -0.002390     0.00e+00   -0.002390
+## 8  0.12325          198      0.13095 186.35 0.12325   -0.007706     0.00e+00   -0.007706
+## 9  0.05611           96      0.06349  84.84 0.05611   -0.007380     0.00e+00   -0.007380
+## 10 0.04609           74      0.04894  69.69 0.04609   -0.002850     0.00e+00   -0.002850
+## 11 0.00601            6      0.00397   9.09 0.00601    0.002044     0.00e+00    0.002044
+## 12 0.01002           16      0.01058  15.15 0.01002   -0.000562     0.00e+00   -0.000562
+## 13 0.40882          569      0.37632 618.13 0.40882    0.032495    -5.55e-17    0.032495
+## 14 0.02305           39      0.02579  34.85 0.02305   -0.002748     0.00e+00   -0.002748
+## 15 0.01303           20      0.01323  19.70 0.01303   -0.000201    -3.47e-18   -0.000201
+##
+## $area
+##   Target Unweighted N Unweighted % Wtd N Wtd % Change in % Resid. Disc. Orig. Disc.
+## 1  0.869         1266        0.837  1314 0.869      0.0317     1.11e-16      0.0317
+## 2  0.131          246        0.163   198 0.131     -0.0317     0.00e+00     -0.0317</code></pre></figure>
+
+<p>The procedure reaches good convergence, weights lower than 5, and very small differences between the sample and population distribution. In addition, the design effect is 1.38. This gives us an idea of the weighting loss due to the raking procedure. The weighting loss (\(L_w\)) is the inflation in the variance of sample estimates that can be attributed to weighting (Heeringa et. al. 2010). A simple approximation is:</p>
+
+\[L_w(\bar{y}) \approx \frac{\sigma^{2}(w)}{\bar{w}^2} = \Bigg( \frac{\sum\limits_{i=1}^n w_i^2}{\big(\sum\limits_{i=1}^n w_i\big)^2} \cdot n \Bigg) - 1\]
+
+<p>This simple formula was introduced by Kish (1965) in the context of proportionated stratified sampling. It represents the proportional increase in the variances of means and proportions, ignoring any clustering that may be included in the sample plan. It assumes that:</p>
+
+<ul>
+  <li>Proportionate allocation is the optimal stratified design, i.e., variances of \(y\) are approximately equal in all strata.</li>
+  <li>Weights are uncorrelated with the values of the random variable \(y\).</li>
+</ul>
+
+<p>Thus, values from this formula only represents an approximation to weighting loss provided that model assumptions are met. As can be seen in the <code class="language-plaintext highlighter-rouge">anesrake</code> output, the design effect is 1.38. That value is equal to \(1 + L_w\).</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1"># add weights to the dataset</span><span class="w">
+</span><span class="n">dat</span><span class="o">$</span><span class="n">weightvec</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">unlist</span><span class="p">(</span><span class="n">outsave</span><span class="p">[</span><span class="m">1</span><span class="p">])</span><span class="w">
+</span><span class="n">n</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">length</span><span class="p">(</span><span class="n">dat</span><span class="o">$</span><span class="n">region</span><span class="p">)</span><span class="w">
+
+</span><span class="c1"># weighting loss</span><span class="w">
+</span><span class="p">((</span><span class="nf">sum</span><span class="p">(</span><span class="n">dat</span><span class="o">$</span><span class="n">weightvec</span><span class="w"> </span><span class="o">^</span><span class="w"> </span><span class="m">2</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="nf">sum</span><span class="p">(</span><span class="n">dat</span><span class="o">$</span><span class="n">weightvec</span><span class="p">))</span><span class="w"> </span><span class="o">^</span><span class="w"> </span><span class="m">2</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="m">1</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## [1] 0.38</code></pre></figure>
+
+<p>For a more precise estimation of the design effect it would be necessary to use a package such as <a href="http://cran.fhcrc.org/web/packages/survey/index.html">survey</a>, specifying the characteristics of the sample design. Unfortunately, I do not have enough information to specify the sample design and to estimate the design effect of the presidential approval. There are also no cluster variables or replicate weights in the CEP dataset.</p>
+
+<p>Anyway, the weighting loss approximation denotes an increase in the design effect lower than .5, what meets the recommendations mentioned above. However, it is important to keep in mind that this weighting procedure does not take into account any clustering effect associated with the sample design.</p>
+
+<p>Finally, we can estimate the presidential approval with and without weights:</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">unweighted</span><span class="w"> </span><span class="o">&lt;-</span><span class="w">  </span><span class="n">wpct</span><span class="p">(</span><span class="n">dat</span><span class="o">$</span><span class="n">approval</span><span class="p">)</span><span class="w">
+</span><span class="n">weighted</span><span class="w">  </span><span class="o">&lt;-</span><span class="w">  </span><span class="n">wpct</span><span class="p">(</span><span class="n">dat</span><span class="o">$</span><span class="n">approval</span><span class="p">,</span><span class="w"> </span><span class="n">dat</span><span class="o">$</span><span class="n">weightvec</span><span class="p">)</span><span class="w">
+</span><span class="n">tab</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">data.frame</span><span class="p">(</span><span class="n">unweighted</span><span class="p">,</span><span class="w"> </span><span class="n">weighted</span><span class="p">)</span><span class="w">
+</span><span class="n">rownames</span><span class="p">(</span><span class="n">tab</span><span class="p">)</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"approve"</span><span class="p">,</span><span class="w"> </span><span class="s2">"disapprove"</span><span class="p">,</span><span class="w"> </span><span class="s2">"unsure"</span><span class="p">,</span><span class="w"> </span><span class="s2">"dk"</span><span class="p">)</span><span class="w">
+</span><span class="n">tab</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">##            unweighted weighted
+## approve        0.2864   0.2983
+## disapprove     0.5119   0.5206
+## unsure         0.1779   0.1609
+## dk             0.0238   0.0201</code></pre></figure>
+
+<p>The difference between the weighted and unweighted presidential approval is not big, only 0.041 percentage points.</p>
+
+<hr />
+
+<h3 id="raking-using-given-survey-weights">Raking using given survey weights</h3>
+
+<p>The CEP dataset includes its own weights (variable named <code class="language-plaintext highlighter-rouge">pond</code>). Unfortunately, there is no detailed information about the weighting construction in the methodological documentation of this survey (“Survey weighting is a mess”, Gelman 2007). For illustrative purposes, however, I will show how to estimate raking weights using previous weights.</p>
+
+<p>Exploring the <code class="language-plaintext highlighter-rouge">pond</code> variable, we can see that there are some big weights (e.g., 17.6). This makes me think that they are just scaled design weights, probably with some non-response adjustment, but I am not really sure.</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">summary</span><span class="p">(</span><span class="n">dat</span><span class="o">$</span><span class="n">pond</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.
+##    0.02    0.46    0.79    1.00    1.24   17.60</code></pre></figure>
+
+<p>The weighting loss associated with the pond weights is relatively high, denoting a design effect of 2.09.</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1"># weighting loss</span><span class="w">
+</span><span class="p">((</span><span class="nf">sum</span><span class="p">(</span><span class="n">dat</span><span class="o">$</span><span class="n">pond</span><span class="w"> </span><span class="o">^</span><span class="w"> </span><span class="m">2</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="nf">sum</span><span class="p">(</span><span class="n">dat</span><span class="o">$</span><span class="n">pond</span><span class="p">))</span><span class="w"> </span><span class="o">^</span><span class="w"> </span><span class="m">2</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="m">1</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## [1] 1.09</code></pre></figure>
+
+<p>We can explore the total differences between the sample and population distributions using <code class="language-plaintext highlighter-rouge">pond</code> weights. Only <strong>ses</strong> and <strong>region</strong> meet the criterion of total differences greater than 5 percentage points. However, I will keep all the variables used in the previous section and specify that total differences between the population and sample should be greater than .05 (<code class="language-plaintext highlighter-rouge">pctlim = .05</code>).</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">anesrakefinder</span><span class="p">(</span><span class="n">targets</span><span class="p">,</span><span class="w"> </span><span class="n">dat</span><span class="p">,</span><span class="w"> </span><span class="n">weightvec</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dat</span><span class="o">$</span><span class="n">pond</span><span class="p">,</span><span class="w"> </span><span class="n">choosemethod</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"total"</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">##      sex   agecat      ses   region     area
+## 0.000405 0.014836 0.317979 0.169910 0.001149</code></pre></figure>
+
+<p>In order to get raking weights using previous weights, I only have to add <code class="language-plaintext highlighter-rouge">weightvec = dat$pond</code> to the <code class="language-plaintext highlighter-rouge">anesrake</code> command.</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">outsave</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">anesrake</span><span class="p">(</span><span class="n">targets</span><span class="p">,</span><span class="w"> </span><span class="n">dat</span><span class="p">,</span><span class="w"> </span><span class="n">caseid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dat</span><span class="o">$</span><span class="n">caseid</span><span class="p">,</span><span class="w">
+  </span><span class="n">weightvec</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dat</span><span class="o">$</span><span class="n">pond</span><span class="p">,</span><span class="w">  </span><span class="n">verbose</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">,</span><span class="w"> </span><span class="n">cap</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">5</span><span class="p">,</span><span class="w">
+  </span><span class="n">choosemethod</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"total"</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"pctlim"</span><span class="p">,</span><span class="w">
+  </span><span class="n">pctlim</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">.05</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">nlim</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">5</span><span class="p">,</span><span class="w"> </span><span class="n">iterate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">,</span><span class="w"> </span><span class="n">force1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">summary</span><span class="p">(</span><span class="n">outsave</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">## $convergence
+## [1] "Complete convergence was achieved after 50 iterations"
+##
+## $raking.variables
+## [1] "ses"    "region"
+##
+## $weight.summary
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.
+##    0.01    0.41    0.71    1.00    1.23    5.00
+##
+## $selection.method
+## [1] "variable selection conducted using _pctlim_ - discrepancies selected using _total_."
+##
+## $general.design.effect
+## [1] 1.91
+##
+## $sex
+##   Target Old Weights N Old Weights % Wtd N Wtd % Change in % Resid. Disc. Orig. Disc.
+## 1   0.49           741          0.49   763 0.504      0.0147      -0.0145    0.000202
+## 2   0.51           771          0.51   749 0.496     -0.0147       0.0145   -0.000202
+##
+## $agecat
+##   Target Old Weights N Old Weights % Wtd N Wtd % Change in % Resid. Disc. Orig. Disc.
+## 1  0.163           242         0.160   230 0.152    -0.00768      0.01049    0.002815
+## 2  0.203           309         0.204   314 0.208     0.00388     -0.00521   -0.001321
+## 3  0.195           289         0.191   297 0.197     0.00565     -0.00193    0.003715
+## 4  0.187           281         0.186   267 0.176    -0.00956      0.01041    0.000843
+## 5  0.253           391         0.259   403 0.267     0.00771     -0.01376   -0.006053
+##
+## $ses
+##   Target Old Weights N Old Weights % Wtd N  Wtd % Change in % Resid. Disc. Orig. Disc.
+## 1 0.1089          77.1        0.0510   165 0.1089      0.0579     1.39e-17      0.0579
+## 2 0.1838         209.7        0.1387   278 0.1838      0.0451     2.78e-17      0.0451
+## 3 0.2607         588.5        0.3892   394 0.2607     -0.1284     5.55e-17     -0.1284
+## 4 0.3636         596.3        0.3943   550 0.3636     -0.0307     5.55e-17     -0.0307
+## 5 0.0829          40.5        0.0268   125 0.0829      0.0561     1.39e-17      0.0561
+##
+## $region
+##     Target Old Weights N Old Weights %  Wtd N   Wtd % Change in % Resid. Disc. Orig. Disc.
+## 1  0.01503         31.70       0.02097  22.73 0.01503    -0.00594     0.00e+00    -0.00594
+## 2  0.03106         99.85       0.06604  46.97 0.03106    -0.03497     3.47e-18    -0.03497
+## 3  0.01603         19.56       0.01293  24.24 0.01603     0.00310     0.00e+00     0.00310
+## 4  0.03908         72.79       0.04814  59.09 0.03908    -0.00906     6.94e-18    -0.00906
+## 5  0.10220        206.06       0.13627 154.53 0.10220    -0.03407     0.00e+00    -0.03407
+## 6  0.05110         69.77       0.04614  77.27 0.05110     0.00496     6.94e-18     0.00496
+## 7  0.05912         74.20       0.04907  89.39 0.05912     0.01005     0.00e+00     0.01005
+## 8  0.12325        163.69       0.10826 186.35 0.12325     0.01499     0.00e+00     0.01499
+## 9  0.05611         79.51       0.05258  84.84 0.05611     0.00353    -6.94e-18     0.00353
+## 10 0.04609         67.87       0.04489  69.69 0.04609     0.00121     0.00e+00     0.00121
+## 11 0.00601          5.33       0.00352   9.09 0.00601     0.00249     8.67e-19     0.00249
+## 12 0.01002         11.90       0.00787  15.15 0.01002     0.00215     0.00e+00     0.00215
+## 13 0.40882        559.46       0.36999 618.13 0.40882     0.03883     0.00e+00     0.03883
+## 14 0.02305         28.42       0.01879  34.85 0.02305     0.00425     0.00e+00     0.00425
+## 15 0.01303         21.99       0.01454  19.70 0.01303    -0.00151     0.00e+00    -0.00151
+##
+## $area
+##   Target Old Weights N Old Weights % Wtd N Wtd % Change in % Resid. Disc. Orig. Disc.
+## 1  0.869          1315          0.87  1296 0.857     -0.0124       0.0119   -0.000575
+## 2  0.131           197          0.13   216 0.143      0.0124      -0.0119    0.000575</code></pre></figure>
+
+<p>Only  <strong>ses</strong> and <strong>region</strong> are used in the raking procedure. Some weights were truncated to 5, and the design effect decreased from 2.09 to 1.91. The differences between the sample and population distribution are not big.</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1"># add weights to the dataset</span><span class="w">
+</span><span class="n">dat</span><span class="o">$</span><span class="n">weightvec2</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">unlist</span><span class="p">(</span><span class="n">outsave</span><span class="p">[</span><span class="m">1</span><span class="p">])</span><span class="w">
+</span><span class="n">pond</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">wpct</span><span class="p">(</span><span class="n">dat</span><span class="o">$</span><span class="n">approval</span><span class="p">,</span><span class="w"> </span><span class="n">dat</span><span class="o">$</span><span class="n">pond</span><span class="p">)</span><span class="w">
+</span><span class="n">weighted_pond</span><span class="w"> </span><span class="o">&lt;-</span><span class="w">  </span><span class="n">wpct</span><span class="p">(</span><span class="n">dat</span><span class="o">$</span><span class="n">approval</span><span class="p">,</span><span class="w"> </span><span class="n">dat</span><span class="o">$</span><span class="n">weightvec2</span><span class="p">)</span><span class="w">
+</span><span class="n">tab</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">data.frame</span><span class="p">(</span><span class="n">unweighted</span><span class="p">,</span><span class="w"> </span><span class="n">pond</span><span class="p">,</span><span class="w"> </span><span class="n">weighted</span><span class="p">,</span><span class="w"> </span><span class="n">weighted_pond</span><span class="p">)</span><span class="w">
+</span><span class="n">rownames</span><span class="p">(</span><span class="n">tab</span><span class="p">)</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"approve"</span><span class="p">,</span><span class="w"> </span><span class="s2">"disapprove"</span><span class="p">,</span><span class="w"> </span><span class="s2">"unsure"</span><span class="p">,</span><span class="w"> </span><span class="s2">"dk"</span><span class="p">)</span><span class="w">
+</span><span class="n">tab</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">##            unweighted   pond weighted weighted_pond
+## approve        0.2864 0.2739   0.2983        0.2945
+## disapprove     0.5119 0.5231   0.5206        0.5310
+## unsure         0.1779 0.1758   0.1609        0.1520
+## dk             0.0238 0.0272   0.0201        0.0224</code></pre></figure>
+
+<p>There are no great differences between the estimates <code class="language-plaintext highlighter-rouge">weighted</code> and <code class="language-plaintext highlighter-rouge">weighted_pond</code> (0.025). There are greater discrepancies between <code class="language-plaintext highlighter-rouge">pond</code> and <code class="language-plaintext highlighter-rouge">weighted</code> estimates (0.049). This reveals the importance of the socioeconomic status in the presidential approval.</p>
+
+<p><strong>Last Update: 7/30/15</strong></p>
+
+<hr />
+
+<h3 id="references">References</h3>
+
+<p>Battaglia, M., D. Izrael, D. C. Hoaglin, and M. Frankel. 2004. “Tips and Tricks for Raking Survey Data (Aka Sample Balancing).” American Association of Public Opinion Research.</p>
+
+<p>DeBell, Matthew and Jon A. Krosnick. 2009. “Computing Weights for American National Election Study Survey Data.” Stanford University.</p>
+
+<p>Gelman, Andrew. 2007. “Struggles with Survey Weighting and Regression Modeling.” Statistical Science 22(2):153-64.</p>
+
+<p>Heeringa, Steven, Brady T. West, and Patricia A. Berglund. 2010. Applied Survey Data Analysis. Boca Raton, FL: Chapman &amp; Hall/CRC.</p>
+
+<p>Valliant, Richard, Jill A. Dever, and Frauke Kreuter. 2013. Practical Tools for Designing and Weighting Survey Samples. New York, NY: Springer New York.</p>
+
+<hr />
+
+  </article>
+
+  
+    <br><br><br><br>
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      var disqus_shortname  = 'sdaza';
+      var disqus_identifier = '/blog/2012/raking';
+      var disqus_title      = "Raking weights with R";
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  
+
+</div>
+
+    </div>
+
+    <!-- Footer -->
+
+    
+<footer class="fixed-bottom">
+  <div class="container mt-0">
+    &copy; Copyright 2021 Sebastian  Daza.
+    Powered by <a href="http://jekyllrb.com/" target="_blank">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio">al-folio</a> theme. Hosted by <a href="https://pages.github.com/" target="_blank">GitHub Pages</a>.
+
+    
+    Last updated: April 12, 2021.
+    
+  </div>
+</footer>
+
+
+
+  </body>
+
+  <!-- jQuery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+
+  <!-- Bootsrap & MDB scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.4.4/umd/popper.min.js" integrity="sha512-eUQ9hGdLjBjY3F41CScH3UX+4JDSI9zXeroz7hJ+RteoCaY+GP/LDoM8AO+Pt+DRFw3nXqsjh9Zsts8hnYv8/A==" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha512-M5KW3ztuIICmVIhjSqXe01oV2bpe248gOxqmlcYrEzAvws7Pw3z6BK0iGbrwvdrUQUhi3eXgtxp5I8PDo9YfjQ==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js" integrity="sha512-Mug9KHKmroQFMLm93zGrjhibM2z2Obg9l6qFG2qKjXEXkMp/VDkI4uju9m4QKPjWSwQ6O2qzZEnJDEeCw0Blcw==" crossorigin="anonymous"></script>
+
+  
+<!-- Mansory & imagesLoaded -->
+<script defer src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+<script defer src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
+<script defer src="/assets/js/mansory.js" type="text/javascript"></script>
+
+
+  
+
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-34554402-2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+
+  gtag('config', 'UA-34554402-2');
+</script>
+
+
+<!-- Load Common JS -->
+<script src="/assets/js/common.js"></script>
+
+<!-- Load DarkMode JS -->
+<script src="/assets/js/dark_mode.js"></script>
+
+
+</html>
