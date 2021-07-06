@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<title>Sebastian  Daza | From database to CSV using Anylogic</title>
+<meta name="description" content="Sebastian Daza
+">
+
+<!-- Open Graph -->
+
+
+<!-- Bootstrap & MDB -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" integrity="sha512-MoRNloxbStBcD8z3M/2BmnT+rg4IsMxPkXaGh2zD6LGNNFE80W3onsAhRcMAMrSoyWL9xD7Ert0men7vR8LUZg==" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" integrity="sha512-RO38pBRxYH3SoOprtPTD86JFOclM51/XTIdEPh5j8sj4tp8jmQIx26twG52UaLi//hQldfrh7e51WzP9wuP32Q==" crossorigin="anonymous" />
+
+<!-- Fonts & Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"  integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.0/css/academicons.min.css" integrity="sha512-W4yqoT1+8NLkinBLBZko+dFB2ZbHsYLDdr50VElllRcNt2Q4/GSs6u71UHKxB7S6JEMCp5Ve4xjh3eGQl/HRvg==" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons">
+
+<!-- Code Syntax Highlighting -->
+<link rel="stylesheet" href="https://gitcdn.link/repo/jwarby/jekyll-pygments-themes/master/github.css" />
+
+<!-- Styles -->
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🤫</text></svg>">
+
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<link rel="canonical" href="/blog/2020/anylogic-database/">
+
+<!-- Theming-->
+
+
+    
+
+<!-- MathJax -->
+<script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.1.2/es5/tex-mml-chtml.js"></script>
+<script defer src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
+<script>
+    MathJax = {
+        options: {
+            renderActions: {
+                find: [10, function (doc) {
+                    for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                        const display = !!node.type.match(/; *mode=display/);
+                        const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                        const text = document.createTextNode('');
+                        node.parentNode.replaceChild(text, node);
+                        math.start = { node: text, delim: '', n: 0 };
+                        math.end = { node: text, delim: '', n: 0 };
+                        doc.math.push(math);
+                    }
+                }, '']
+            }
+        }
+    };
+</script>
+
+
+
+
+
+  </head>
+
+  <body class="fixed-top-nav ">
+
+    <!-- Header -->
+
+    <header>
+
+    <!-- Nav Bar -->
+    <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top">
+    <div class="container">
+      
+      <a class="navbar-brand title font-weight-lighter" href="/">
+       <span class="font-weight-bold">Sebastian</span>   Daza
+      </a>
+      
+      <!-- Navbar Toogle -->
+      <button class="navbar-toggler collapsed ml-auto" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar top-bar"></span>
+        <span class="icon-bar middle-bar"></span>
+        <span class="icon-bar bottom-bar"></span>
+      </button>
+      <div class="collapse navbar-collapse text-right" id="navbarNav">
+        <ul class="navbar-nav ml-auto flex-nowrap">
+          <!-- About -->
+          <li class="nav-item ">
+            <a class="nav-link" href="/">
+              about
+              
+            </a>
+          </li>
+          
+          <!-- Blog -->
+          <li class="nav-item active">
+            <a class="nav-link" href="/blog/">
+              blog
+              
+            </a>
+          </li>
+          
+          <!-- Other pages -->
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          <li class="nav-item ">
+              <a class="nav-link" href="/cv/">
+                cv
+                
+              </a>
+          </li>
+          
+          
+          
+          <li class="nav-item ">
+              <a class="nav-link" href="/projects/">
+                projects
+                
+              </a>
+          </li>
+          
+          
+          
+          <li class="nav-item ">
+              <a class="nav-link" href="/publications/">
+                publications
+                
+              </a>
+          </li>
+          
+          
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+</header>
+
+
+    <!-- Content -->
+
+    <div class="container mt-5">
+      
+
+<div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">From database to CSV using Anylogic</h1>
+    <p class="post-meta">November 3, 2020 • Sebastian Daza</p>
+  </header>
+
+  <article class="post-content">
+    <p>When running a parameter variation experiment, that is, simulating over several iterations and replicates using parallelization, we usually need to collect a huge amount of data and have them in a format that then we can process using Python or R.</p>
+
+<p>The best way to do this in Anylogic would be using a database and then export, read, or connect to the database to process simulation results (although, see the section <strong>update</strong> below). We can do that easily in Anylogic. Every time an experiment finishes, we can export the data (from a database) to an Excel file manually.</p>
+
+<p>The issue with Excel files is, on the one hand, they are Excel files, and on the other, they are not suitable for big data (more than 1 million rows). We can create a function to save all the simulation tables into an Excel file as our experiment finishes. However, we will still have the limit-of-rows limitation (check the Anylogic file linked below for a function to create Excel files from a database).</p>
+
+<p>Here I follow a different approach by exporting an Anylogic database table to a CSV file within Java. The general setup using Anylogic PLE 8.6 would be:</p>
+
+<ul>
+  <li>Create the databases you need for your experiment, and be sure you add the columns iteration and replicate.</li>
+  <li>Create a function to save the data of your simulation runs (e.g., agent’s status, age, etc.)</li>
+  <li>Define a parameter variation experiment.</li>
+  <li>Define a variable to specify where to save the data (i.e., path).</li>
+  <li>Write code in the experiment Java Actions section so that to save data every time you run an experiment.</li>
+  <li>Import functions in the advanced Java section of the experiment.</li>
+</ul>
+
+<h2 id="databases">Databases</h2>
+
+<p>I define two tables (<code class="language-plaintext highlighter-rouge">data1</code> and <code class="language-plaintext highlighter-rouge">data2</code>). Each agent saves its data at a given rate. After 5 years, the simulation will finish.</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">insertInto</span><span class="o">(</span><span class="n">data1</span><span class="o">)</span>
+    <span class="o">.</span><span class="na">columns</span><span class="o">(</span><span class="n">data1</span><span class="o">.</span><span class="na">iteration</span><span class="o">,</span> <span class="n">data1</span><span class="o">.</span><span class="na">replicate</span><span class="o">,</span> <span class="n">data1</span><span class="o">.</span><span class="na">id</span><span class="o">,</span> <span class="n">data1</span><span class="o">.</span><span class="na">dtime</span><span class="o">,</span> <span class="n">data1</span><span class="o">.</span><span class="na">drandom</span><span class="o">)</span>
+    <span class="o">.</span><span class="na">values</span><span class="o">(</span><span class="n">main</span><span class="o">.</span><span class="na">v_iteration</span><span class="o">,</span> <span class="n">main</span><span class="o">.</span><span class="na">v_replicate</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="na">getIndex</span><span class="o">(),</span> <span class="n">time</span><span class="o">(),</span> <span class="n">normal</span><span class="o">(</span><span class="mf">1.0</span><span class="o">))</span>
+    <span class="o">.</span><span class="na">execute</span><span class="o">();</span>
+
+<span class="n">insertInto</span><span class="o">(</span><span class="n">data2</span><span class="o">)</span>
+    <span class="o">.</span><span class="na">columns</span><span class="o">(</span><span class="n">data2</span><span class="o">.</span><span class="na">iteration</span><span class="o">,</span> <span class="n">data2</span><span class="o">.</span><span class="na">replicate</span><span class="o">,</span> <span class="n">data2</span><span class="o">.</span><span class="na">id</span><span class="o">,</span> <span class="n">data2</span><span class="o">.</span><span class="na">dtime</span><span class="o">,</span> <span class="n">data2</span><span class="o">.</span><span class="na">drandom</span><span class="o">)</span>
+    <span class="o">.</span><span class="na">values</span><span class="o">(</span><span class="n">main</span><span class="o">.</span><span class="na">v_iteration</span><span class="o">,</span> <span class="n">main</span><span class="o">.</span><span class="na">v_replicate</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="na">getIndex</span><span class="o">(),</span> <span class="n">time</span><span class="o">(),</span> <span class="n">normal</span><span class="o">(</span><span class="mf">0.3</span><span class="o">))</span>
+    <span class="o">.</span><span class="na">execute</span><span class="o">();</span>
+
+<span class="k">if</span> <span class="o">(</span><span class="n">time</span><span class="o">()</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">finishSimulation</span><span class="o">();</span>
+<span class="o">}</span></code></pre></figure>
+
+<p>The tables include a column with the experiment iteration and replicate, in addition to the agent’s index, time, and a random value from a normal distribution.</p>
+
+<h2 id="from-db-to-csv">From DB to CSV</h2>
+
+<p>The key function to export the data to a CSV file is <code class="language-plaintext highlighter-rouge">f_SQLToCSV</code>. It uses two arguments, a SQL query (<code class="language-plaintext highlighter-rouge">query</code>) and the path to an output file (<code class="language-plaintext highlighter-rouge">filename</code>). For instance, we can write:</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">f_SQLToCSV</span><span class="o">(</span><span class="s">"select * from data1"</span><span class="o">,</span> <span class="s">"output/data1"</span><span class="o">)</span></code></pre></figure>
+
+<p>You can use any query for your data, giving you a lot of flexibility on what to export to a CSV file. The <code class="language-plaintext highlighter-rouge">f_SQLToCSV</code> method is:</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nc">ResultSet</span> <span class="n">rs</span> <span class="o">=</span> <span class="n">selectResultSet</span><span class="o">(</span><span class="n">query</span><span class="o">);</span>
+<span class="k">try</span> <span class="o">{</span>
+    <span class="nc">File</span> <span class="n">file</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">File</span><span class="o">(</span><span class="n">filename</span> <span class="o">+</span> <span class="s">".csv"</span><span class="o">);</span>
+    <span class="n">file</span><span class="o">.</span><span class="na">getParentFile</span><span class="o">().</span><span class="na">mkdirs</span><span class="o">();</span>
+    <span class="nc">FileWriter</span> <span class="n">fw</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">FileWriter</span><span class="o">(</span><span class="n">file</span><span class="o">);</span>
+    <span class="kt">int</span> <span class="n">cols</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="na">getMetaData</span><span class="o">().</span><span class="na">getColumnCount</span><span class="o">();</span>
+    <span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">cols</span><span class="o">;</span> <span class="n">i</span> <span class="o">++){</span>
+        <span class="n">fw</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">rs</span><span class="o">.</span><span class="na">getMetaData</span><span class="o">().</span><span class="na">getColumnLabel</span><span class="o">(</span><span class="n">i</span><span class="o">).</span><span class="na">toLowerCase</span><span class="o">());</span>
+        <span class="k">if</span><span class="o">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">cols</span><span class="o">)</span> <span class="n">fw</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="sc">';'</span><span class="o">);</span>
+        <span class="k">else</span> <span class="n">fw</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="sc">'\n'</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="k">while</span> <span class="o">(</span><span class="n">rs</span><span class="o">.</span><span class="na">next</span><span class="o">())</span> <span class="o">{</span>
+        <span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">cols</span><span class="o">;</span> <span class="n">i</span> <span class="o">++){</span>
+            <span class="n">fw</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">rs</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="n">i</span><span class="o">));</span>
+            <span class="k">if</span><span class="o">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">cols</span><span class="o">)</span> <span class="n">fw</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="sc">';'</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="n">fw</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="sc">'\n'</span><span class="o">);</span>
+     <span class="o">}</span>
+     <span class="n">fw</span><span class="o">.</span><span class="na">flush</span><span class="o">();</span>
+     <span class="n">fw</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+<span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">getEngine</span><span class="o">().</span><span class="na">pause</span><span class="o">();</span>
+    <span class="n">traceln</span><span class="o">(</span><span class="s">"--&gt; An Exception happened, continue? ..."</span><span class="o">);</span>
+    <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+<span class="o">}</span></code></pre></figure>
+
+<p>The next step would be to create an experiment and complete the Java actions accordingly. First, we clear our tables.</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// inital experiment setup</span>
+<span class="n">deleteFrom</span><span class="o">(</span><span class="n">data1</span><span class="o">).</span><span class="na">execute</span><span class="o">();</span>
+<span class="n">deleteFrom</span><span class="o">(</span><span class="n">data2</span><span class="o">).</span><span class="na">execute</span><span class="o">();</span></code></pre></figure>
+
+<p>Then, we collect information on the iteration and replicate of the simulation run:</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// before simulation run</span>
+<span class="n">root</span><span class="o">.</span><span class="na">v_iteration</span> <span class="o">=</span> <span class="n">getCurrentIteration</span><span class="o">();</span>
+<span class="n">root</span><span class="o">.</span><span class="na">v_replicate</span> <span class="o">=</span> <span class="n">getCurrentReplication</span><span class="o">();</span></code></pre></figure>
+
+<p>Finally, at the end of the experiment, we save the data and clear the tables again:</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// after experiment</span>
+<span class="n">f_exportTables</span><span class="o">(</span><span class="n">v_path</span><span class="o">);</span>
+<span class="n">deleteFrom</span><span class="o">(</span><span class="n">data1</span><span class="o">).</span><span class="na">execute</span><span class="o">();</span>
+<span class="n">deleteFrom</span><span class="o">(</span><span class="n">data1</span><span class="o">).</span><span class="na">execute</span><span class="o">();</span></code></pre></figure>
+
+<p>The method <code class="language-plaintext highlighter-rouge">f_exportTables</code> is just a function that goes through each table and export them to a CSV file. <code class="language-plaintext highlighter-rouge">v_tables</code> is string array with the name of the tables I want to export <code class="language-plaintext highlighter-rouge">{"data1", "data2"}</code>:</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nc">ArrayList</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">tables</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;();</span>
+<span class="k">for</span><span class="o">(</span><span class="nc">String</span> <span class="n">tab</span> <span class="o">:</span> <span class="n">v_tables</span><span class="o">)</span> <span class="o">{</span>
+   <span class="n">tables</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">tab</span><span class="o">);</span>
+<span class="o">}</span>
+<span class="k">for</span> <span class="o">(</span><span class="nc">String</span> <span class="n">t</span> <span class="o">:</span> <span class="n">tables</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">f_SQLToCSV</span><span class="o">(</span><span class="s">"select * from "</span> <span class="o">+</span> <span class="n">t</span><span class="o">,</span> <span class="n">path</span> <span class="o">+</span> <span class="n">t</span><span class="o">);</span>
+<span class="o">}</span></code></pre></figure>
+
+<p>Remember to import some functions in the <code class="language-plaintext highlighter-rouge">imports section</code>:</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// imports section</span>
+<span class="kn">import</span> <span class="nn">java.io.BufferedWriter</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.File</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.FileWriter</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.BufferedReader</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.FileReader</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.IOException</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.text.*</span><span class="o">;</span></code></pre></figure>
+
+<p>From there, we can create additional functions to select the tables to be exported. For more details, download the <a href="/assets/files/DBToCSV.zip">Anylogic File here</a>.</p>
+
+<h2 id="update">Update</h2>
+
+<p>When running several replicates of my simulation, saving the information in a database didn’t work as expected. My simulation just crashed, and I was not able to keep the data. I finally decided to follow my previous approach: create many CSV files – one per iteration and replicate – and read them using an R or Python function. I know you end up with a lot of CSV files, but at least the simulation doesn’t crash, and you can recover the output of your simulation as it goes.</p>
+
+
+  </article>
+
+  
+    <br><br><br><br>
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      var disqus_shortname  = 'sdaza';
+      var disqus_identifier = '/blog/2020/anylogic-database';
+      var disqus_title      = "From database to CSV using Anylogic";
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  
+
+</div>
+
+    </div>
+
+    <!-- Footer -->
+
+    
+<footer class="fixed-bottom">
+  <div class="container mt-0">
+    &copy; Copyright 2021 Sebastian  Daza.
+    Powered by <a href="http://jekyllrb.com/" target="_blank">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio">al-folio</a> theme. Hosted by <a href="https://pages.github.com/" target="_blank">GitHub Pages</a>.
+
+    
+    Last updated: July 06, 2021.
+    
+  </div>
+</footer>
+
+
+
+  </body>
+
+  <!-- jQuery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+
+  <!-- Bootsrap & MDB scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.4.4/umd/popper.min.js" integrity="sha512-eUQ9hGdLjBjY3F41CScH3UX+4JDSI9zXeroz7hJ+RteoCaY+GP/LDoM8AO+Pt+DRFw3nXqsjh9Zsts8hnYv8/A==" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha512-M5KW3ztuIICmVIhjSqXe01oV2bpe248gOxqmlcYrEzAvws7Pw3z6BK0iGbrwvdrUQUhi3eXgtxp5I8PDo9YfjQ==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js" integrity="sha512-Mug9KHKmroQFMLm93zGrjhibM2z2Obg9l6qFG2qKjXEXkMp/VDkI4uju9m4QKPjWSwQ6O2qzZEnJDEeCw0Blcw==" crossorigin="anonymous"></script>
+
+  
+<!-- Mansory & imagesLoaded -->
+<script defer src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+<script defer src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
+<script defer src="/assets/js/mansory.js" type="text/javascript"></script>
+
+
+  
+
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-34554402-2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+
+  gtag('config', 'UA-34554402-2');
+</script>
+
+
+<!-- Load Common JS -->
+<script src="/assets/js/common.js"></script>
+
+<!-- Load DarkMode JS -->
+<script src="/assets/js/dark_mode.js"></script>
+
+
+</html>

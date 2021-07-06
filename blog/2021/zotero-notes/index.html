@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<title>Sebastian  Daza | Extracting Zotero's  notes</title>
+<meta name="description" content="Sebastian Daza
+">
+
+<!-- Open Graph -->
+
+
+<!-- Bootstrap & MDB -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" integrity="sha512-MoRNloxbStBcD8z3M/2BmnT+rg4IsMxPkXaGh2zD6LGNNFE80W3onsAhRcMAMrSoyWL9xD7Ert0men7vR8LUZg==" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" integrity="sha512-RO38pBRxYH3SoOprtPTD86JFOclM51/XTIdEPh5j8sj4tp8jmQIx26twG52UaLi//hQldfrh7e51WzP9wuP32Q==" crossorigin="anonymous" />
+
+<!-- Fonts & Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"  integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.0/css/academicons.min.css" integrity="sha512-W4yqoT1+8NLkinBLBZko+dFB2ZbHsYLDdr50VElllRcNt2Q4/GSs6u71UHKxB7S6JEMCp5Ve4xjh3eGQl/HRvg==" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons">
+
+<!-- Code Syntax Highlighting -->
+<link rel="stylesheet" href="https://gitcdn.link/repo/jwarby/jekyll-pygments-themes/master/github.css" />
+
+<!-- Styles -->
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🤫</text></svg>">
+
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<link rel="canonical" href="/blog/2021/zotero-notes/">
+
+<!-- Theming-->
+
+
+    
+
+<!-- MathJax -->
+<script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.1.2/es5/tex-mml-chtml.js"></script>
+<script defer src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
+<script>
+    MathJax = {
+        options: {
+            renderActions: {
+                find: [10, function (doc) {
+                    for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                        const display = !!node.type.match(/; *mode=display/);
+                        const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                        const text = document.createTextNode('');
+                        node.parentNode.replaceChild(text, node);
+                        math.start = { node: text, delim: '', n: 0 };
+                        math.end = { node: text, delim: '', n: 0 };
+                        doc.math.push(math);
+                    }
+                }, '']
+            }
+        }
+    };
+</script>
+
+
+
+
+
+  </head>
+
+  <body class="fixed-top-nav ">
+
+    <!-- Header -->
+
+    <header>
+
+    <!-- Nav Bar -->
+    <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top">
+    <div class="container">
+      
+      <a class="navbar-brand title font-weight-lighter" href="/">
+       <span class="font-weight-bold">Sebastian</span>   Daza
+      </a>
+      
+      <!-- Navbar Toogle -->
+      <button class="navbar-toggler collapsed ml-auto" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar top-bar"></span>
+        <span class="icon-bar middle-bar"></span>
+        <span class="icon-bar bottom-bar"></span>
+      </button>
+      <div class="collapse navbar-collapse text-right" id="navbarNav">
+        <ul class="navbar-nav ml-auto flex-nowrap">
+          <!-- About -->
+          <li class="nav-item ">
+            <a class="nav-link" href="/">
+              about
+              
+            </a>
+          </li>
+          
+          <!-- Blog -->
+          <li class="nav-item active">
+            <a class="nav-link" href="/blog/">
+              blog
+              
+            </a>
+          </li>
+          
+          <!-- Other pages -->
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          <li class="nav-item ">
+              <a class="nav-link" href="/cv/">
+                cv
+                
+              </a>
+          </li>
+          
+          
+          
+          <li class="nav-item ">
+              <a class="nav-link" href="/projects/">
+                projects
+                
+              </a>
+          </li>
+          
+          
+          
+          <li class="nav-item ">
+              <a class="nav-link" href="/publications/">
+                publications
+                
+              </a>
+          </li>
+          
+          
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+</header>
+
+
+    <!-- Content -->
+
+    <div class="container mt-5">
+      
+
+<div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Extracting Zotero's  notes</h1>
+    <p class="post-meta">July 6, 2021 • Sebastian Daza</p>
+  </header>
+
+  <article class="post-content">
+    <p>When reviewing the literature, it’s nice to have the notes linked to Zotero
+references. It would also be great to compare them systematically. The idea
+would be to have your notes in Zotero so that everyone in the group can access
+and edit them and create a data file to explore your notes using, for instance,
+text analysis techniques.</p>
+
+<p>This small package extracts notes from a collection and creates a CSV file that
+can be easily read using Excel. You only need to specify the collection ID. For
+instance, if the location of my collection is
+<code class="language-plaintext highlighter-rouge">https://www.zotero.org/groups/2406179/csic-echo/collections/M8N2VMAP</code>, the
+collection ID would be <code class="language-plaintext highlighter-rouge">M8N2VMAP</code>. We also need the Zotero API’s credentials.</p>
+
+<p>To create a clean CSV, notes’ headers would need a suitable separator. The
+default is <code class="language-plaintext highlighter-rouge">#</code>. In this case, the text between headings mustn’t include <code class="language-plaintext highlighter-rouge">#</code>.
+Below an example:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Research question
+
+Estimates interaction effects between PGS of obesity and cohorts using HRS.
+
+# Data
+
+HRS
+
+# Methods
+
+Uses a HLM whereby they estimate effects of age and cohorts while making the
+intercepts and slopes a function of individual factors.
+</code></pre></div></div>
+
+<h2 id="installation">Installation</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pip install git+https://github.com/sdaza/zotnote.git
+</code></pre></div></div>
+
+<h2 id="credentials">Credentials</h2>
+
+<p>You can save your Zotero API credentials in a <code class="language-plaintext highlighter-rouge">config.py</code> and load them using
+<code class="language-plaintext highlighter-rouge">import config</code>:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s">library_id = "0000000"</span>
+<span class="s">api_key = "key"</span>
+<span class="s">library_type = "group"</span>
+</code></pre></div></div>
+
+<h2 id="example">Example</h2>
+
+<p>Let’s try to extract some notes and read them using Pandas:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="n">pd</span>
+<span class="kn">import</span> <span class="nn">config</span>
+<span class="kn">import</span> <span class="nn">zotnote</span> <span class="k">as</span> <span class="n">zn</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">zn</span><span class="p">.</span><span class="n">exportNotes</span><span class="p">(</span><span class="n">collection</span> <span class="o">=</span> <span class="s">"M8N2VMAP"</span><span class="p">,</span> 
+    <span class="n">library_id</span> <span class="o">=</span> <span class="n">config</span><span class="p">.</span><span class="n">library_id</span><span class="p">,</span> <span class="n">api_key</span> <span class="o">=</span> <span class="n">config</span><span class="p">.</span><span class="n">api_key</span><span class="p">)</span></code></pre></figure>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Notes saved in zotero-notes.csv
+</code></pre></div></div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">pd</span><span class="p">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s">"zotero-notes.csv"</span><span class="p">)</span></code></pre></figure>
+
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>id</th>
+      <th>citation</th>
+      <th>tags</th>
+      <th>title</th>
+      <th>reviewer</th>
+      <th>research_question</th>
+      <th>model</th>
+      <th>data</th>
+      <th>methods</th>
+      <th>conclusions</th>
+      <th>the_good</th>
+      <th>limitations</th>
+      <th>results</th>
+      <th>context</th>
+      <th>next</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>4ESWAPZY</td>
+      <td>van Dijk et al. 2015</td>
+      <td>NaN</td>
+      <td>Recent developments on the role of epigenetics...</td>
+      <td>Elena</td>
+      <td>Knowledge about epigenetic marks related to ob...</td>
+      <td>Human and animal</td>
+      <td>Review</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Good summary tables of studies carried out in ...</td>
+      <td>So far, a causal role of epigenetics in the de...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>5JNF33U8</td>
+      <td>Fernandez-Twinn et al. 2019</td>
+      <td>intrauterine effects, epigenetics</td>
+      <td>Intrauterine programming of obesity and type 2...</td>
+      <td>Elena</td>
+      <td>Which are the relevant exposures related to th...</td>
+      <td>Human and also murine models</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>-          The main exposures involved: fetal ...</td>
+      <td>NaN</td>
+      <td>limited evidence for  a causal role for epigen...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>S8FZS32L</td>
+      <td>Ling 2019</td>
+      <td>Elena</td>
+      <td>Epigenetics in Human Obesity and Type 2 Diabetes</td>
+      <td>Elena</td>
+      <td>Summarizes epigenetic signatures from human ti...</td>
+      <td>NaN</td>
+      <td>Human</td>
+      <td>Different large-scale methylation studies usin...</td>
+      <td>NaN</td>
+      <td>Also covers diet (methyl donnors) and epigenet...</td>
+      <td>In epigenetic studies it’s important to unders...</td>
+      <td>1) Evidence for DNA methylation sites that con...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>QY3Y7V6X</td>
+      <td>Sharp et al. 2017</td>
+      <td>Must read</td>
+      <td>Maternal BMI at the start of pregnancy and off...</td>
+      <td>Elena</td>
+      <td>Is maternal bmi related with changes in the of...</td>
+      <td>NaN</td>
+      <td>meta-analysis across 19 cohorts using 450k ill...</td>
+      <td>2 models: primary análisis used continous bmi ...</td>
+      <td>They found evicence for a causal intrauterine ...</td>
+      <td>Large sample size n=7523. Strong confounder co...</td>
+      <td>Effects sizes were very small, les tan a 0.15%...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>5AMCHQMB</td>
+      <td>Sulc et al. 2020</td>
+      <td>NaN</td>
+      <td>Quantification of the overall contribution of ...</td>
+      <td>Sebastian</td>
+      <td>Can we use a method to estimate GxE without me...</td>
+      <td>NaN</td>
+      <td>Simulation and application to complex traits f...</td>
+      <td>Detect GxE based on the variance heterogeneity...</td>
+      <td>NaN</td>
+      <td>Interesting approach to GxE and GxG. The metho...</td>
+      <td>The interaction effect estimates may depend to...</td>
+      <td>Simulation results seem to show the method is ...</td>
+      <td>GxE are challenging, E is not measured accurat...</td>
+      <td>What would be the implications of these result...</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>U4MNK7QT</td>
+      <td>Walter et al. 2016</td>
+      <td>Genomics, HRS, GxE, BMI</td>
+      <td>Association of a Genetic Risk Score With Body ...</td>
+      <td>Sebastian</td>
+      <td>Estimates interaction effects between PGS of o...</td>
+      <td>NaN</td>
+      <td>HRS</td>
+      <td>Uses a HLM whereby they estimate effects of ag...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Pays little attention to selection due to surv...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Anything</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>RGDC9R9R</td>
+      <td>Abadi et al. 2017</td>
+      <td>Genomics, GxG, GxE, BMI</td>
+      <td>Penetrance of Polygenic Obesity Susceptibility...</td>
+      <td>Sebastian</td>
+      <td>Are the effects of obesity-susceptibility loci...</td>
+      <td>NaN</td>
+      <td>Several studies, including the Framingham coho...</td>
+      <td>Conditional quantile regression (CQR) to inves...</td>
+      <td>NaN</td>
+      <td>Interesting approach to GxE and GxG.</td>
+      <td>European ancestry, how these results hold in d...</td>
+      <td>Significant positive associations (adjusting f...</td>
+      <td>The role of the individual and compound gene-e...</td>
+      <td>What would be the implications of these result...</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+  </article>
+
+  
+    <br><br><br><br>
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      var disqus_shortname  = 'sdaza';
+      var disqus_identifier = '/blog/2021/zotero-notes';
+      var disqus_title      = "Extracting Zotero's  notes";
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  
+
+</div>
+
+    </div>
+
+    <!-- Footer -->
+
+    
+<footer class="fixed-bottom">
+  <div class="container mt-0">
+    &copy; Copyright 2021 Sebastian  Daza.
+    Powered by <a href="http://jekyllrb.com/" target="_blank">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio">al-folio</a> theme. Hosted by <a href="https://pages.github.com/" target="_blank">GitHub Pages</a>.
+
+    
+    Last updated: July 06, 2021.
+    
+  </div>
+</footer>
+
+
+
+  </body>
+
+  <!-- jQuery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+
+  <!-- Bootsrap & MDB scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.4.4/umd/popper.min.js" integrity="sha512-eUQ9hGdLjBjY3F41CScH3UX+4JDSI9zXeroz7hJ+RteoCaY+GP/LDoM8AO+Pt+DRFw3nXqsjh9Zsts8hnYv8/A==" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha512-M5KW3ztuIICmVIhjSqXe01oV2bpe248gOxqmlcYrEzAvws7Pw3z6BK0iGbrwvdrUQUhi3eXgtxp5I8PDo9YfjQ==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js" integrity="sha512-Mug9KHKmroQFMLm93zGrjhibM2z2Obg9l6qFG2qKjXEXkMp/VDkI4uju9m4QKPjWSwQ6O2qzZEnJDEeCw0Blcw==" crossorigin="anonymous"></script>
+
+  
+<!-- Mansory & imagesLoaded -->
+<script defer src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+<script defer src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
+<script defer src="/assets/js/mansory.js" type="text/javascript"></script>
+
+
+  
+
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-34554402-2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+
+  gtag('config', 'UA-34554402-2');
+</script>
+
+
+<!-- Load Common JS -->
+<script src="/assets/js/common.js"></script>
+
+<!-- Load DarkMode JS -->
+<script src="/assets/js/dark_mode.js"></script>
+
+
+</html>
