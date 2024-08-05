@@ -237,8 +237,8 @@ class PowerSim:
 
             pvalue_adjustment = {
                 'two-tailed': 1,
-                'greater': 2,
-                'smaller': 2
+                'greater': 0.5,
+                'smaller': 0.5
             }
 
             correction_methods = {
