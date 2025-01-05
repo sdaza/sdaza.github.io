@@ -25,6 +25,10 @@ The re-entry study is an intensive longitudinal project that follows more than 2
 
 ## Publications
 
-<div class="publications">
+<!-- <div class="publications">
  {% bibliography -f sdaza --query @*[study=Estudio Reinserciόn, Desistimiento y Reincidencia en Mujeres] --group_by type %}
+</div> -->
+
+<div class="publications">
+ {% bibliography -f sdaza --group_by type %}
 </div>
