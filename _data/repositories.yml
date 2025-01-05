@@ -2,6 +2,7 @@ github_users:
   - sdaza
 
 github_repos:
+  - sdaza/experiment-utils
   - sdaza/acsr
   - sdaza/zotnote
   - sdaza/sampler
