@@ -2,12 +2,9 @@
 layout: post
 author: Sebastian Daza
 title: "Tools for power analysis with multiple comparisons"
-date: 2023-09-26
+date: 2025-11-30
 giscus_comments: true
-tags:
-  - simulation
-  - python
-  - experiments
+tags: python, experiments
 ---
 
 This post will discuss tools for designing and evaluating experiments. These
@@ -172,8 +169,12 @@ I've developed a set of straightforward simulation methods in Python, primarily
 to construct and evaluate our experimental data. The choice to use simulation
 was driven by its flexibility in handling diverse scenarios and metrics.
 However, it does come with a trade-off, as it demands a higher computational
-power. We can live with that :smile:. [Feel free to explore the code for the
-power class](https://github.com/sdaza/sdaza.github.io/tree/main/_jupyter/power_tools.py).
+power. We can live with that :smile:. The functions are part of a Python package
+called `experiment-utils-pd`. You can install it using:
+
+```
+pip install experiment-utils-pd
+```
 
 These methods are useful, particularly for handling multiple variants, different
 allocations, or MDE by group. However, it's important to note that these methods
@@ -185,10 +186,10 @@ Let's start with a simple example using a proportion as the metric of interest:
 
 
 {% highlight python %}
-from power_tools import * 
+from experiment_utils.power_sim import PowerSim
 
 # load class
-p = PowerSim(metric='proportion', relative_effect=False, variants=1, nsim=1000, alpha=0.05, alternative='two-tailed')
+p = PowerSim(metric='proportion', relative_effect=False, variants=1, nsim=5000, alpha=0.05, alternative='two-tailed')
 
 # get power
 p.get_power(baseline=[0.33], effect=[0.03], sample_size=[3000])
@@ -197,8 +198,8 @@ p.get_power(baseline=[0.33], effect=[0.03], sample_size=[3000])
 
 
 
-      comparisons  power
-    0      (0, 1)  0.706
+      comparisons   power
+    0      (0, 1)  0.6814
 
 
 
@@ -217,9 +218,9 @@ p.get_power(baseline=[0.33], effect=[0.03], sample_size=[3000])
 
 
       comparisons  power
-    0      (0, 1)  0.531
-    1      (0, 2)  0.530
-    2      (1, 2)  0.015
+    0      (0, 1)  0.542
+    1      (0, 2)  0.546
+    2      (1, 2)  0.014
 
 
 
@@ -241,8 +242,8 @@ p.get_power(baseline=[0.33], effect=[0.03], sample_size=[3000])
 
 
       comparisons  power
-    0      (0, 1)  0.558
-    1      (0, 2)  0.563
+    0      (0, 1)  0.575
+    1      (0, 2)  0.562
 
 
 
@@ -274,7 +275,7 @@ quickly become convoluted.
 Let's consider a more complex example. The impact of the first and second
 variants on the control group varies as follows: `[0.01, 0.03]`, `[0.03, 0.05]`,
 `[0.03, 0.07]`. The sample sizes are equal for each group, but they increase
-linearly. We apply the `holm` correction.
+linearly in each iteration. We apply the `holm` correction.
 
 
 {% highlight python %}
@@ -289,19 +290,19 @@ rr = p.grid_sim_power(baseline_rates=[[0.33]],
 
 
     
-![png](/assets/img/2023-09-26-statistical-power_files/2023-09-26-statistical-power_10_0.png)
+![png](/assets/img/2025-11-30-statistical-power_files/2025-11-30-statistical-power_10_0.png)
     
 
 
 
     
-![png](/assets/img/2023-09-26-statistical-power_files/2023-09-26-statistical-power_10_1.png)
+![png](/assets/img/2025-11-30-statistical-power_files/2025-11-30-statistical-power_10_1.png)
     
 
 
 
     
-![png](/assets/img/2023-09-26-statistical-power_files/2023-09-26-statistical-power_10_2.png)
+![png](/assets/img/2025-11-30-statistical-power_files/2025-11-30-statistical-power_10_2.png)
     
 
 
@@ -328,19 +329,19 @@ rr = p.grid_sim_power(baseline_rates=[[0.33]],
 
 
     
-![png](/assets/img/2023-09-26-statistical-power_files/2023-09-26-statistical-power_12_0.png)
+![png](/assets/img/2025-11-30-statistical-power_files/2025-11-30-statistical-power_12_0.png)
     
 
 
 
     
-![png](/assets/img/2023-09-26-statistical-power_files/2023-09-26-statistical-power_12_1.png)
+![png](/assets/img/2025-11-30-statistical-power_files/2025-11-30-statistical-power_12_1.png)
     
 
 
 
     
-![png](/assets/img/2023-09-26-statistical-power_files/2023-09-26-statistical-power_12_2.png)
+![png](/assets/img/2025-11-30-statistical-power_files/2025-11-30-statistical-power_12_2.png)
     
 
 
@@ -363,7 +364,7 @@ p.get_power(baseline=[1.2], effect=[0.05], sample_size=[3000, 5000])
 
 
       comparisons  power
-    0      (0, 1)   0.59
+    0      (0, 1)   0.62
 
 
 
@@ -383,7 +384,32 @@ p.get_power(baseline=[1000], effect=[100], standard_deviation=[600], sample_size
 
 
       comparisons   power
-    0      (0, 1)  0.6592
+    0      (0, 1)  0.6602
+
+
+
+We can simulate using real or simulated data. The `get_power_from_data` function
+will simulate absolute or relative effects for the specified number of variants
+and create `n_sim` samples. This is useful when our outcome has an uncommon or
+skewed distribution, as we can use the actual data to estimate power.
+
+
+{% highlight python %}
+np.random.seed(42)
+n = 6000
+df = pd.DataFrame({'converted': np.random.binomial(1, 0.15, n)})
+
+p = PowerSim(metric='proportion', relative_effect=False, variants=1,
+             alpha=0.05, alternative='two-tailed', nsim=1000)
+
+p.get_power_from_data(df, metric_col='converted', effect=[0.01], sample_size=[500])
+{% endhighlight %}
+
+
+
+
+      comparisons  power
+    0      (0, 1)  0.068
 
 
 

@@ -19,6 +19,6 @@ I'm a data scientist, demographer, and sociologist working on industry and acade
 
 I received my Ph.D. in sociology from the [University of Wisconsin-Madison](http://www.ssc.wisc.edu/soc/) and my Bachelor's and Master's in Sociology from the [Catholic University of Chile](http://sociologia.uc.cl/). 
 
-My **academic work** focuses on health disparities, criminal justice system's consequences for health and social integration, and the link between health inequalities and genetics. My research relies on statistical and computational methods, emphasizing data science and agent-based modeling (ABM).
+My **academic work** focuses on health disparities, the impact of the criminal justice system on health and social integration, and the connection between health inequalities and genetics. I use statistical and computational methods, with an emphasis on data science and agent-based modeling (ABM).
 
-Currently, I am working as a **Senior Data Scientist**. I am also an **external faculty** in the Master in [Computational Social Science UC3M](https://www.uc3m.es/master/computational-social-science) (Fall 2022-2023), and collaborate with the [Center for the Study of Justice and Society](http://justiciaysociedad.uc.cl/) of the Catholic University of Chile.
+Currently, I'm a **Senior Data Scientist** at [DocPlanner](https://www.docplanner.com/) and collaborate with the [Center for the Study of Justice and Society](http://justiciaysociedad.uc.cl/) at the Catholic University of Chile.

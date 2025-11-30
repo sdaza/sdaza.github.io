@@ -9,6 +9,9 @@
 # Example:
 # _scripts/convert.sh segregation
 
+# Set Jupyter data path for templates (needed on some Homebrew installations)
+export JUPYTER_PATH=/opt/homebrew/share/jupyter
+
 # Generate a filename with today's date.
 filename=$(date +%Y-%m-%d)-$1
 
