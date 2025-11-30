@@ -1,0 +1,8 @@
+<div class="repo p-2 text-center">
+  <a href="https://github.com/{{ include.username }}">
+    <img class="repo-img-light w-100" alt="{{ include.username }}" src="https://github-readme-stats.vercel.app/api/?username={{ include.username }}&theme={{ site.repo_theme_light }}&show_icons=true" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+    <span class="repo-fallback repo-fallback-light" style="display:none;">📊 <strong>{{ include.username }}</strong>'s GitHub Stats</span>
+    <img class="repo-img-dark w-100" alt="{{ include.username }}" src="https://github-readme-stats.vercel.app/api/?username={{ include.username }}&theme={{ site.repo_theme_dark }}&show_icons=true" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+    <span class="repo-fallback repo-fallback-dark" style="display:none;">📊 <strong>{{ include.username }}</strong>'s GitHub Stats</span>
+  </a>
+</div>
