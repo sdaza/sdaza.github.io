@@ -100,8 +100,6 @@ GEM
       webrick (~> 1.7)
     jekyll-archives (2.3.0)
       jekyll (>= 3.6, < 5.0)
-    jekyll-diagrams (0.10.0)
-      jekyll (>= 3.8, < 5.0)
     jekyll-email-protect (1.1.0)
     jekyll-feed (0.17.0)
       jekyll (>= 3.7, < 5.0)
@@ -114,8 +112,6 @@ GEM
       jekyll (~> 4.0)
       json-minify (~> 0.0.3)
       terser (~> 1.2.3)
-    jekyll-paginate-v2 (3.0.0)
-      jekyll (>= 3.0, < 5.0)
     jekyll-sass-converter (3.0.0)
       sass-embedded (~> 1.54)
     jekyll-scholar (7.2.2)
@@ -209,13 +205,11 @@ DEPENDENCIES
   httparty
   jekyll
   jekyll-archives
-  jekyll-diagrams
   jekyll-email-protect
   jekyll-feed
   jekyll-imagemagick
   jekyll-link-attributes
   jekyll-minifier
-  jekyll-paginate-v2
   jekyll-scholar
   jekyll-sitemap
   jekyll-twitter-plugin
