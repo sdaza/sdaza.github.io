@@ -5,10 +5,7 @@ permalink: /
 description: Demography, Sociology, Simulation, Data Science
 
 profile:
-  align: right
   image: me.jpg
-  address: >
-    <p>Lost somewhere in Santiago, Chile</p>
 
 news: false # includes a list of news items
 selected_papers: false # includes a list of papers marked as "selected={true}"
@@ -21,4 +18,4 @@ I received my Ph.D. in sociology from the [University of Wisconsin-Madison](http
 
 My **academic work** focuses on health disparities, the impact of the criminal justice system on health and social integration, and the connection between health inequalities and genetics. I use statistical and computational methods, with an emphasis on data science and agent-based modeling (ABM).
 
-Currently, I'm a **Senior Data Scientist** at [DocPlanner](https://www.docplanner.com/) and collaborate with the [Center for the Study of Justice and Society](http://justiciaysociedad.uc.cl/) at the Catholic University of Chile.
+Currently, I'm a **Senior Data Scientist** at [DocPlanner](https://www.docplanner.com/) and collaborate with the [Center for the Study of Justice and Society](http://justiciaysociedad.uc.cl/) at the Catholic University of Chile and [Fundación Colunga](https://www.fundacioncolunga.org/).

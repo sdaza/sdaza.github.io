@@ -1,16 +1,6 @@
 ---
 layout: default
 title: blog
-pagination:
-  enabled: true
-  collection: posts
-  permalink: /page/:num/
-  per_page: 5
-  sort_field: date
-  sort_reverse: true
-  trail:
-    before: 1 # The number of links before the current page
-    after: 3  # The number of links after the current page
 ---
 
 <div class="post">
@@ -20,23 +10,16 @@ pagination:
     <h2>{{ site.blog_description }}</h2>
   </div>
 
-  {% if site.display_tags %}
-  <div class="tag-list">
-    <ul class="p-0 m-0">
-      {% for tag in site.display_tags %}
-        <li>
-          <i class="fas fa-hashtag fa-sm"></i> <a href="{{ tag | slugify | prepend: '/blog/tag/' | relative_url }}">{{ tag }}</a>
-        </li>
-        {% unless forloop.last %}
-          <p>&bull;</p>
-        {% endunless %}
-      {% endfor %}
-    </ul>
+  <div class="blog-search">
+    <div class="blog-search-wrapper">
+      <i class="fas fa-search blog-search-icon"></i>
+      <input type="text" id="blog-search-input" placeholder="Search posts..." autocomplete="off">
+    </div>
   </div>
-  {% endif %}
 
-  <ul class="post-list">
-    {% for post in paginator.posts %}
+  {% assign sorted_posts = site.posts | sort: "date" | reverse %}
+  <ul class="post-list" id="post-list">
+    {% for post in sorted_posts %}
 
     {% if post.external_source == blank %}
       {% assign read_time = post.content | number_of_words | divided_by: 180 | plus: 1 %}
@@ -47,7 +30,7 @@ pagination:
     {% assign tags = post.tags | join: "" %}
     {% assign categories = post.categories | join: "" %}
 
-    <li>
+    <li data-tags="{{ post.tags | join: ',' | downcase }}">
       <h3>
         {% if post.redirect == blank %}
           <a class="post-title" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
@@ -95,6 +78,60 @@ pagination:
     {% endfor %}
   </ul>
 
-  {% include pagination.html %}
+  <div id="show-more-wrapper" class="blog-show-more">
+    <button id="show-more-btn" class="btn btn-sm">Show more posts</button>
+  </div>
 
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  var PAGE_SIZE = 5;
+  var visible = PAGE_SIZE;
+  var allPosts = Array.prototype.slice.call(document.querySelectorAll("#post-list > li"));
+  var input = document.getElementById("blog-search-input");
+  var btn = document.getElementById("show-more-btn");
+  var btnWrapper = document.getElementById("show-more-wrapper");
+  var isSearching = false;
+
+  function applyPagination() {
+    allPosts.forEach(function (li, i) {
+      li.style.display = i < visible ? "" : "none";
+    });
+    btnWrapper.style.display = visible >= allPosts.length ? "none" : "";
+  }
+
+  function applySearch(query) {
+    allPosts.forEach(function (li) {
+      // Exact tag match
+      var tags = (li.getAttribute("data-tags") || "").split(",");
+      var tagMatch = tags.some(function (t) { return t.trim() === query; });
+      // Word-boundary text match (avoid matching single letters inside words)
+      var title = li.querySelector("h3") ? li.querySelector("h3").textContent.toLowerCase() : "";
+      var desc = li.querySelector("p:not(.post-meta):not(.post-tags)") ? li.querySelector("p:not(.post-meta):not(.post-tags)").textContent.toLowerCase() : "";
+      var re = new RegExp("\\b" + query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "\\b");
+      var textMatch = re.test(title) || re.test(desc);
+      li.style.display = (tagMatch || textMatch) ? "" : "none";
+    });
+    btnWrapper.style.display = "none";
+  }
+
+  applyPagination();
+
+  btn.addEventListener("click", function () {
+    visible += PAGE_SIZE;
+    applyPagination();
+  });
+
+  input.addEventListener("input", function () {
+    var query = this.value.toLowerCase().trim();
+    if (!query) {
+      isSearching = false;
+      applyPagination();
+    } else {
+      isSearching = true;
+      applySearch(query);
+    }
+  });
+});
+</script>

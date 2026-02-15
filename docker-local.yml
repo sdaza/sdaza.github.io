@@ -1,9 +1,9 @@
 version: "3"
 
 services:
-  jekyll_custom:
+  jekyll:
     build: .
-    container_name: al-folio-local-website
+    container_name: sdaza-website-local
     command: bash -c "
       rm -f Gemfile.lock
       && bundler exec jekyll serve --watch --port=8080 --host=0.0.0.0 --livereload --verbose"

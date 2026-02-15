@@ -1,6 +1,6 @@
 ---
 layout: page
-title: academia
+title: research
 nav: true
 nav_order: 6
 dropdown: true
@@ -10,7 +10,4 @@ children:
     - title: divider
     - title: projects
       permalink: /projects/
-    - title: divider
-    - title: teaching
-      permalink: /teaching/   
 ---

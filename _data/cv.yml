@@ -1,97 +1,140 @@
-- title: General Information
-  type: map
+- title: Summary
+  type: list
   contents:
-    - name: Full Name
-      value: Albert Einstein
-    - name: Date of Birth
-      value: 14th March 1879
-    - name: Languages
-      value: English, German
+    - Senior Data Scientist with hands-on experience building ML pipelines, experimentation frameworks, and causal inference solutions. I lead cross-functional projects end-to-end—from scoping and stakeholder alignment to modeling, deployment, and monitoring—and mentor teams to deliver robust, measurable impact. I thrive at the intersection of product and platform, enabling faster iteration and reliable data products.
+
+- title: Work Experience
+  type: time_table
+  contents:
+    - title: Senior Data Scientist
+      institution: "<a href='https://www.docplanner.com/'>DocPlanner</a> (Telemedicine) · Barcelona, Spain"
+      year: 2025 - Present
+      description:
+        - Technical lead across BI and the new AI & Data Products team, focusing on ML pipelines, experimentation, and model monitoring
+        - Designed and shipped internal Python packages to standardize ML pipelines and experimentation analysis
+        - Mentored junior data scientists through the end-to-end data cycle
+        - Built and deployed uplift, Next Best Action (NBA), and test allocation models
+        - Developed multilevel forecasting models for user bookings across 12 countries
+
+    - title: Senior Data Scientist
+      institution: "<a href='https://www.teladochealth.com/'>Teladoc</a> (Telemedicine) · Barcelona, Spain"
+      year: 2023 - 2025
+      description:
+        - Technical lead in data science, personalization, and causal inference
+        - Led uplift modeling and incrementality testing with geo-experiments and A/B tests
+        - Created experimentation package for causal inference (IPW, IV), meta-analysis, and power analysis
+        - Developed MTA and LTV models to optimize marketing investments
+        - Built LLM pipeline with Azure OpenAI for information extraction
+
+    - title: Senior Data Scientist
+      institution: "<a href='https://www.lookiero.com/'>Lookiero</a> (Online Personal Styling) · Madrid, Spain"
+      year: 2022 - 2023
+      description:
+        - Technical lead in data science and causal inference
+        - "Causal estimation of discount strategies, increasing contribution margin by 5%"
+        - Developed hybrid recommendation model using 200M+ user feedbacks
+
+    - title: Senior Research Scientist
+      institution: "<a href='https://www.csic.es/'>CCSH-CSIC</a>, Institute of Economy, Geography and Demography · Madrid, Spain"
+      year: 2019 - 2022
+      description:
+        - Led research team studying early conditions, delayed effects, and mortality
+        - 5+ academic papers and conference presentations
+        - Complex data analysis on demography and genomics using R and Java
+
+    - title: Data Scientist
+      institution: "<a href='https://www.linkedin.com/company/juntos-global/posts/?feedView=all'>Juntos Global</a> (Conversational fintech) · Bay Area, California"
+      year: 2018 - 2019
+      description:
+        - Led analytics team for banking user insights and A/B testing
+        - Implemented NLP and ML models to classify users and topics
+        - Built data pipeline using Python, PySpark, and Databricks
+
+    - title: Research Assistant
+      institution: "<a href='https://www.ssc.wisc.edu/cde/'>Center for Demography and Ecology</a>, UW-Madison"
+      year: 2014 - 2018
+      description:
+        - 5+ research papers, 10+ conference presentations, and led multiple research studies
+
+    - title: Research Director
+      institution: "<a href='https://www.uc.cl/'>Catholic University of Chile</a>, Center for Social Studies · Santiago, Chile"
+      year: 2005 - 2010
+      description:
+        - Led research projects in organizational studies, political perception, education, and crime
+        - "Survey of Social Cohesion in Latin America: 7 countries, 10,000 cases"
+
+- title: Voluntary Work
+  type: time_table
+  contents:
+    - title: Methodological Advisor
+      institution: "Childhood Challenge Program, <a href='https://www.fundacioncolunga.org/'>Colunga Foundation</a> · Chile"
+      year: 2025 - Present
+      description:
+        - Provided methodological advice on bias adjustments of surveys and assessments of data representativeness and statistics
+        - Assisted the group in methodological decisions to ensure robust data collection and analysis
+    - title: Research Affiliate
+      institution: Women Re-entry Project in Chile
+      year: 2016 - Present
+      description:
+        - Co-investigator of the Women Re-entry Study in Chile
+        - Analyze data and write reports and academic papers to inform policy recommendations
+        - Provide methodological advice on study design, data collection, and analysis
 
 - title: Education
   type: time_table
   contents:
-    - title: PhD
-      institution: University of Zurich, Zurich, Switzerland
-      year: 1905
-      description:
-        - Description 1.
-        - Description 2.
-        - title: Description 3.
-          contents:
-            - Sub-description 1.
-            - Sub-description 2.
-    - title: Federal teaching diploma
-      institution: Eidgenössische Technische Hochschule, Zurich, Switzerland
-      year: 1900
-      description:
-        - Description 1.
-        - Description 2.
+    - title: Ph.D. in Demography and Sociology
+      institution: "<a href='https://www.wisc.edu/'>University of Wisconsin-Madison</a>"
+    - title: Data Science Program
+      institution: "<a href='https://www.thedataincubator.com/'>The Data Incubator</a> · Washington DC"
+    - title: Master of Arts in Sociology
+      institution: "<a href='https://www.uc.cl/'>Catholic University of Chile</a>"
 
-- title: Experience
+- title: Teaching
   type: time_table
   contents:
-    - title: Professor of Theoretical Physics
-      institution: Institute for Advanced Study, Princeton University
-      year: 1933 - 1955
+    - title: Survey Methods I
+      institution: "<a href='https://www.uc3m.es/'>UC3M</a> · Madrid, Spain"
+      year: 2022 - 2023
       description:
-        - Description 1.
-        - Description 2.
-        - title: Description 3.
-          contents:
-            - Sub-description 1.
-            - Sub-description 2.
-    - title: Visiting Professor
-      institution: California Institute of Technology, Pasadena, California, US
-      year: 1933
-      description:
-        - Description 1.
-        - Description 2.
+        - Prepared course materials on statistics and modeling, and provided feedback for over 200 students
+    - title: Mentorship
+      institution: "Master in Computational Social Science, <a href='https://www.uc3m.es/'>UC3M</a>"
+      year: 2021 - 2022
 
-    - title: Director
-      institution: Kaiser Wilhelm Institute for Physics, Berlin, Germany.
-      year: 1917-1933
-
-    - title: Professor of Theoretical Physics
-      institution: Karl-Ferdinand University, Prague, Czechoslovakia
-      year: 1911 - 1917
-      description:
-
-    - title: Associate Professor of Theoretical Physics
-      institution: University of Zurich, Zurich, Switzerland
-      year: 1909 - 1911
-
-- title: Open Source Projects
-  type: time_table
-  contents:
-    - title: <a href="https://github.com/alshedivat/al-folio">al-folio</a>
-      year: 2015-now
-      description: A beautiful, simple, clean, and responsive Jekyll theme for academics.
-
-- title: Honors and Awards
-  type: time_table
-  contents:
-    - year: 1921
-      items: 
-        - Nobel Prize in Physics 
-        - Matteucci Medal
-    - year: 2029
-      items: 
-        - Max Planck Medal
-
-- title: Academic Interests
-  type: nested_list
-  contents:
-    - title: Topic 1.
-      items: 
-        - Description 1.
-        - Description 2.
-    - title: Topic 2.
-      items:
-        - Description 1.
-        - Description 2.
-
-- title: Other Interests
+- title: Software
   type: list
   contents:
-    - <u>Hobbies:</u> Hobby 1, Hobby 2, etc.
+    - "<strong><a href='https://github.com/sdaza/experiment-utils-pd'>experiment-utils-pd</a></strong> — Python package for analysis and design of experiments"
+    - "<strong><a href='https://github.com/sdaza/acsr'>acsr</a></strong> — R package to extract variables from the American Community Survey and Decennial US Census"
+
+- title: Skills
+  type: nested_list
+  contents:
+    - title: Programming
+      items:
+        - "Python, R, SQL, PySpark, Java"
+    - title: ML & DL
+      items:
+        - "Scikit-learn, XGBoost, CatBoost, LightGBM, Keras, PyTorch, Hugging Face"
+    - title: ML Platforms
+      items:
+        - "Databricks, MLFlow, Airflow, Terraform, CI/CD, Model monitoring"
+    - title: Experimentation
+      items:
+        - "A/B testing, Geo-experiments, Uplift modeling, Incrementality testing, Causal inference (IPW/IV), Meta-analysis, Power analysis"
+    - title: Modeling
+      items:
+        - "Recommendation systems, Forecasting, Bayesian, Hierarchical modeling, Survival analysis, NLP, Simulation"
+    - title: LLMs & AI
+      items:
+        - "Azure OpenAI, Ollama, RAG systems, Prompt engineering, Cursor, Copilot, AI agents"
+    - title: Data & Viz
+      items:
+        - "PySpark, Redshift, PostgreSQL, Databricks, Dash, Shiny, Tableau"
+    - title: Tools
+      items:
+        - "Git, Docker, LaTeX, Notion, Jira, Confluence"
+    - title: Languages
+      items:
+        - "English, Spanish"
