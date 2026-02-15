@@ -1,7 +1,11 @@
 {% if site.enable_tooltips %}
   <!-- Enable Tooltips -->
   <script type="text/javascript">
-  $(function () {$('[data-toggle="tooltip"]').tooltip()})
+  document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function (el) {
+      new bootstrap.Tooltip(el);
+    });
+  });
   </script>
 {%- endif %}
 {%- if site.enable_medium_zoom %}

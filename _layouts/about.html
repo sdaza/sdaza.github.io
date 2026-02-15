@@ -10,10 +10,8 @@ layout: default
           {% if page.profile -%}
             {%- if page.profile.image %}
               {%- assign profile_image_path = page.profile.image | prepend: 'assets/img/' -%}
-              {% include figure.html 
-              path=profile_image_path 
-              class="img-fluid about-hero-img"
-              alt=page.profile.image -%}
+              {%- assign profile_alt = page.profile.image -%}
+              {% include figure.html path=profile_image_path class="img-fluid about-hero-img" alt=profile_alt %}
             {% endif -%}
           {%- endif %}
 
