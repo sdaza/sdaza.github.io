@@ -3,11 +3,9 @@ name: deploy
 on:
   push:
     branches:
-      - master
       - main
   pull_request:
     branches:
-      - master
       - main
 
 jobs:
@@ -15,23 +13,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
-    - name: Delete old .ruby-version if exists in cache
-      run: rm -f .ruby-version
+      uses: actions/checkout@v4
+    - name: Install ImageMagick
+      run: sudo apt-get update && sudo apt-get install -y imagemagick
     - name: Setup Ruby
       uses: ruby/setup-ruby@v1
       with:
         ruby-version: '3.2.2'
         bundler-cache: true
-        cache-version: 1
-    - name: Verify Ruby version
-      run: |
-        echo "Ruby version: $(ruby -v)"
-        echo "Bundler version: $(bundle -v)"
-        ruby -v | grep -q "3.2" || (echo "ERROR: Wrong Ruby version!" && exit 1)
-    - name: Install deps
-      run: |
-        npm install -g mermaid.cli
     - name: Setup deploy options
       id: setup
       run: |
@@ -40,11 +29,11 @@ jobs:
         if [[ ${GITHUB_REF} = refs/pull/*/merge ]]; then # pull request
           echo "SRC_BRANCH=${GITHUB_HEAD_REF}" >> $GITHUB_OUTPUT
           echo "NO_PUSH=--no-push" >> $GITHUB_OUTPUT
-        elif [[ ${GITHUB_REF} = refs/heads/* ]]; then # branch, e.g. master, source etc
+        elif [[ ${GITHUB_REF} = refs/heads/* ]]; then # branch, e.g. main
           echo "SRC_BRANCH=${GITHUB_REF#refs/heads/}" >> $GITHUB_OUTPUT
         fi
         echo "DEPLOY_BRANCH=gh-pages" >> $GITHUB_OUTPUT
-    - name: Deploy website 
+    - name: Deploy website
       run:  yes | bash bin/deploy --verbose ${{ steps.setup.outputs.NO_PUSH }}
-                    --src ${{ steps.setup.outputs.SRC_BRANCH }} 
-                    --deploy ${{ steps.setup.outputs.DEPLOY_BRANCH }} 
+                    --src ${{ steps.setup.outputs.SRC_BRANCH }}
+                    --deploy ${{ steps.setup.outputs.DEPLOY_BRANCH }}

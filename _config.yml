@@ -9,12 +9,12 @@ last_name: Daza
 email: sebastian.daza@gmail.com
 description: Demography, Sociology, Simulation, Data Science
 footer_text: >
-  Powered by <a href="https://jekyllrb.com/" target="_blank">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio">al-folio</a> theme.
+  Powered by <a href="https://jekyllrb.com/" target="_blank">Jekyll</a>.
   Hosted by <a href="https://pages.github.com/" target="_blank">GitHub Pages</a>.
 keywords: 
 
 lang: en # the language of your site (for example: en, fr, cn, ru, etc.)
-icon: 🎯  # the emoji used as the favicon (alternatively, provide image name in /assets/img/)
+icon: Σ  # the emoji used as the favicon (alternatively, provide image name in /assets/img/)
 
 url: https://sdaza.com # the base hostname & protocol for your site
 baseurl: # the subpath of your site, e.g. /blog/
@@ -49,9 +49,7 @@ navbar_fixed: true
 footer_fixed: true
 
 # Dimensions
-max_width: 800px
-
-# TODO: add layout settings (single page vs. multi-page)
+max_width: 860px
 
 # -----------------------------------------------------------------------------
 # Open Graph & Schema.org
@@ -117,9 +115,7 @@ blog_nav_title: blog # your blog must have a title for it to be displayed in the
 blog_description: learnings, stats, demography, sociology
 permalink: /blog/:year/:title/
 
-# Pagination
-pagination:
-  enabled: true
+# Pagination (disabled — blog uses client-side pagination)
 
 # Giscus comments (RECOMMENDED)
 # Follow instructions on https://giscus.app/ to setup for your repo to fill out
@@ -133,20 +129,16 @@ giscus:
   strict: 1                      # use strict identification mode
   reactions_enabled: 1           # enable (1) or disable (0) emoji reactions
   input_position: bottom         # whether to display input form below (bottom) or above (top) the comments
-  theme: preferred_color_scheme  # name of the color scheme (preferred works well with al-folio light/dark mode)
+  theme: preferred_color_scheme  # name of the color scheme (works with light/dark mode)
   emit_metadata: 0
   lang: en
-
-# Disqus comments (DEPRECATED)
-# disqus_shortname: al-folio # put your disqus shortname
-# https://help.disqus.com/en/articles/1717111-what-s-a-shortname
 
 # External sources.
 # If you have blog posts published on medium.com or other exteranl sources,
 # you can display them in your blog by adding a link to the RSS feed.
 external_sources:
   # - name: medium.com
-    # rss_url: https://medium.com/@al-folio/feed
+    # rss_url: https://medium.com/@username/feed
 
 # -----------------------------------------------------------------------------
 # Collections
@@ -197,12 +189,10 @@ keep_files:
 # Plug-ins
 plugins:
   - jekyll-archives
-  - jekyll-diagrams
   - jekyll-email-protect
   - jekyll-feed
   - jekyll-imagemagick
   - jekyll-minifier
-  - jekyll-paginate-v2
   - jekyll/scholar
   - jekyll-sitemap
   - jekyll-link-attributes
@@ -222,8 +212,6 @@ defaults:
 
 jekyll-minifier:
   exclude: ['robots.txt']
-  uglifier_args:
-    harmony: true
 
 # -----------------------------------------------------------------------------
 # Jekyll Archives
@@ -240,8 +228,7 @@ jekyll-archives:
     tag: '/blog/tag/:name/'
     category: '/blog/category/:name/'
 
-display_tags: ['R', 'python', 'data science', 'zotero', 'anylogic', 'simulation', 'demography', 'survey'] # this tags will be dispalyed on the front page of your blog
- # this tags will be dispalyed on the front page of your blog
+display_tags: ['R', 'python', 'data science', 'zotero', 'anylogic', 'simulation', 'demography', 'survey']
 
 # -----------------------------------------------------------------------------
 # Jekyll Scholar
@@ -260,7 +247,6 @@ scholar:
   bibliography_template: bib
   # Note: if you have latex math in your bibtex, the latex filter
   # preprocessing may conflict with MathJAX if the latter is enabled.
-  # See https://github.com/alshedivat/al-folio/issues/357.
 
   sort_by: date
   order: descending
@@ -307,7 +293,7 @@ external_links:
 # -----------------------------------------------------------------------------
 
 imagemagick:
-  enabled: true # enables responsive images for your site (recomended, see https://github.com/alshedivat/al-folio/issues/537)
+  enabled: true # enables responsive images for your site
   widths:
     - 480
     - 800
@@ -321,15 +307,6 @@ imagemagick:
     - ".tiff"
   output_formats:
     webp: "-resize 800x"
-
-# -----------------------------------------------------------------------------
-# Jekyll Diagrams
-# -----------------------------------------------------------------------------
-
-jekyll-diagrams:
-    # configuration, see https://github.com/zhustec/jekyll-diagrams.
-    # feel free to comment out this section if not using jekyll diagrams.
-
 
 # -----------------------------------------------------------------------------
 # Optional Features

@@ -2,8 +2,30 @@ github_users:
   - sdaza
 
 github_repos:
-  - sdaza/experiment-utils-pd
-  - sdaza/acsr
-  - sdaza/sampler
-  - sdaza/survey-methods
-  - sdaza/zotnote
+  - name: experiment-utils-pd
+    user: sdaza
+    description: Generic functions for experiment analysis and design
+    language: Python
+    stars: 2
+
+  - name: acsr
+    user: sdaza
+    description: R package to manage ACS files
+    language: R
+    stars: 4
+
+  # - name: sampler
+  #   user: sdaza
+  #   description: R functions for sampling design
+  #   language: R
+
+  - name: survey-methods
+    user: sdaza
+    description: Survey Methods I
+    language: Jupyter Notebook
+    stars: 10
+
+  # - name: zotnote
+  #   user: sdaza
+  #   description: Extract notes from Zotero references
+  #   language: Jupyter Notebook

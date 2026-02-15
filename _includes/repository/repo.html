@@ -1,16 +1,13 @@
-{% assign repo_url =  include.repository | split: '/' %}
+{% assign repo_url = include.repository | split: '/' %}
 
-{% if site.data.repositories.github_users contains repo_url.first %}
-  {% assign show_owner = false %}
-{% else %}
-  {% assign show_owner = true %}
-{% endif %}
-
-<div class="repo p-2 text-center">
-  <a href="https://github.com/{{ include.repository }}">
-    <img class="repo-img-light w-100" alt="{{ include.repository }}" src="https://github-readme-stats.vercel.app/api/pin/?username={{ repo_url[0] }}&repo={{ repo_url[1] }}&theme={{ site.repo_theme_light }}&show_owner={{ show_owner }}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-    <span class="repo-fallback repo-fallback-light" style="display:none;">📁 <strong>{{ repo_url[1] }}</strong></span>
-    <img class="repo-img-dark w-100" alt="{{ include.repository }}" src="https://github-readme-stats.vercel.app/api/pin/?username={{ repo_url[0] }}&repo={{ repo_url[1] }}&theme={{ site.repo_theme_dark }}&show_owner={{ show_owner }}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-    <span class="repo-fallback repo-fallback-dark" style="display:none;">📁 <strong>{{ repo_url[1] }}</strong></span>
+<div class="repo-card">
+  <a href="https://github.com/{{ include.repository }}" target="_blank" rel="noopener noreferrer">
+    <div class="repo-card-inner">
+      <div class="repo-card-icon"><i class="fab fa-github"></i></div>
+      <div class="repo-card-info">
+        <h4 class="repo-card-name">{{ repo_url[1] }}</h4>
+        <p class="repo-card-owner">{{ repo_url[0] }}</p>
+      </div>
+    </div>
   </a>
 </div>
