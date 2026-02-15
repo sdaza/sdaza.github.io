@@ -90,18 +90,6 @@
     - title: Master of Arts in Sociology
       institution: "<a href='https://www.uc.cl/'>Catholic University of Chile</a>"
 
-- title: Teaching
-  type: time_table
-  contents:
-    - title: Survey Methods I
-      institution: "<a href='https://www.uc3m.es/'>UC3M</a> · Madrid, Spain"
-      year: 2022 - 2023
-      description:
-        - Prepared course materials on statistics and modeling, and provided feedback for over 200 students
-    - title: Mentorship
-      institution: "Master in Computational Social Science, <a href='https://www.uc3m.es/'>UC3M</a>"
-      year: 2021 - 2022
-
 - title: Software
   type: list
   contents:
@@ -138,3 +126,15 @@
     - title: Languages
       items:
         - "English, Spanish"
+
+- title: Teaching
+  type: time_table
+  contents:
+    - title: Survey Methods I
+      institution: "<a href='https://www.uc3m.es/'>UC3M</a> · Madrid, Spain"
+      year: 2022 - 2023
+      description:
+        - Prepared course materials on statistics and modeling, and provided feedback for over 200 students
+    - title: Mentorship
+      institution: "Master in Computational Social Science, <a href='https://www.uc3m.es/'>UC3M</a>"
+      year: 2021 - 2022
