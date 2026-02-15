@@ -16,15 +16,6 @@
   --global-divider-color: #e5e7eb;
   --global-card-bg-color: #ffffff;
 
-  .fa-sun {
-    display : none;
-  }
-  .fa-moon {
-    padding-left: 10px;
-    padding-top: 12px;
-    display : block;
-  }
-
   .repo-img-light {
     display: block;
   }
@@ -46,15 +37,6 @@ html[data-theme='dark'] {
   --global-distill-app-color: #a1a1aa;
   --global-divider-color: #2e2e33;
   --global-card-bg-color: #{$grey-900};
-
-  .fa-sun {
-    padding-left: 10px;
-    padding-top: 12px;
-    display : block;
-  }
-  .fa-moon {
-    display : none;
-  }
 
   .repo-img-light {
     display: none;

@@ -1,4 +1,4 @@
-$(document).ready(function() {
+document.addEventListener("DOMContentLoaded", function() {
     // Override styles of the footnotes.
     document.querySelectorAll("d-footnote").forEach(function(footnote) {
         footnote.shadowRoot.querySelector("sup > span")

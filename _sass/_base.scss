@@ -245,37 +245,7 @@ blockquote {
     padding-left: 1rem;
     padding-right: 1rem;
   }
-}
-.navbar .dropdown-menu {
-  background-color: var(--global-bg-color);
-  border: 1px solid var(--global-divider-color);
-  border-radius: 8px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-  padding: 0.4rem 0;
-  min-width: 10rem;
-  margin-top: 0.35rem;
-  a:not(.active) {
-    color: var(--global-text-color);
-  }
-  a:hover {
-    color: var(--global-hover-color);
-  }
-  .dropdown-divider {
-    border-top: 1px solid var(--global-divider-color) !important;
-    margin: 0.25rem 0;
-  }
-}
-.dropdown-item {
-  color: var(--global-text-color);
-  font-size: 0.85rem;
-  padding: 0.4rem 1rem;
-  transition: all 0.15s ease;
-    &:hover {
-      color: var(--global-theme-color);
-      background-color: transparent;
-    }
-}
-.navbar.navbar-light {
+
   a {
     &:hover {
       text-decoration: none;
@@ -322,6 +292,35 @@ blockquote {
     }
   }
 }
+.navbar .dropdown-menu {
+  background-color: var(--global-bg-color);
+  border: 1px solid var(--global-divider-color);
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  padding: 0.4rem 0;
+  min-width: 10rem;
+  margin-top: 0.35rem;
+  a:not(.active) {
+    color: var(--global-text-color);
+  }
+  a:hover {
+    color: var(--global-hover-color);
+  }
+  .dropdown-divider {
+    border-top: 1px solid var(--global-divider-color) !important;
+    margin: 0.25rem 0;
+  }
+}
+.dropdown-item {
+  color: var(--global-text-color);
+  font-size: 0.85rem;
+  padding: 0.4rem 1rem;
+  transition: all 0.15s ease;
+    &:hover {
+      color: var(--global-theme-color);
+      background-color: transparent;
+    }
+}
 
 .navbar-toggler {
   .icon-bar {
@@ -358,12 +357,19 @@ blockquote {
   }
 }
 
+.toggle-container {
+  display: flex;
+  align-items: center;
+}
+
 #light-toggle {
-  padding: 0;
+  padding: 0.5rem 0.85rem;
   border: 0;
   background-color: inherit;
   color: var(--global-text-color-light);
   cursor: pointer;
+  font-size: 0.9rem;
+  line-height: 1;
   transition: color 0.2s ease;
   &:hover {
     color: var(--global-theme-color);
