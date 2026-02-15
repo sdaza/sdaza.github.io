@@ -115,9 +115,7 @@ blog_nav_title: blog # your blog must have a title for it to be displayed in the
 blog_description: learnings, stats, demography, sociology
 permalink: /blog/:year/:title/
 
-# Pagination
-pagination:
-  enabled: true
+# Pagination (disabled — blog uses client-side pagination)
 
 # Giscus comments (RECOMMENDED)
 # Follow instructions on https://giscus.app/ to setup for your repo to fill out
@@ -191,12 +189,10 @@ keep_files:
 # Plug-ins
 plugins:
   - jekyll-archives
-  - jekyll-diagrams
   - jekyll-email-protect
   - jekyll-feed
   - jekyll-imagemagick
   - jekyll-minifier
-  - jekyll-paginate-v2
   - jekyll/scholar
   - jekyll-sitemap
   - jekyll-link-attributes
@@ -216,8 +212,6 @@ defaults:
 
 jekyll-minifier:
   exclude: ['robots.txt']
-  uglifier_args:
-    harmony: true
 
 # -----------------------------------------------------------------------------
 # Jekyll Archives
@@ -313,15 +307,6 @@ imagemagick:
     - ".tiff"
   output_formats:
     webp: "-resize 800x"
-
-# -----------------------------------------------------------------------------
-# Jekyll Diagrams
-# -----------------------------------------------------------------------------
-
-jekyll-diagrams:
-    # configuration, see https://github.com/zhustec/jekyll-diagrams.
-    # feel free to comment out this section if not using jekyll diagrams.
-
 
 # -----------------------------------------------------------------------------
 # Optional Features
