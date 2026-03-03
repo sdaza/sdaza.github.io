@@ -1,12 +1,1 @@
-document.addEventListener("DOMContentLoaded", function () {
-  var gridEl = document.querySelector(".grid");
-  if (!gridEl) return;
-  var msnry = new Masonry(gridEl, {
-    gutter: 10,
-    horizontalOrder: true,
-    itemSelector: ".grid-item",
-  });
-  imagesLoaded(gridEl, function () {
-    msnry.layout();
-  });
-});
+document.addEventListener("DOMContentLoaded",function(){var e=document.querySelector(".grid");if(e){var t=new Masonry(e,{gutter:10,horizontalOrder:!0,itemSelector:".grid-item"});imagesLoaded(e,function(){t.layout()})}});
