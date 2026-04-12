@@ -4,6 +4,6 @@ title: cv
 permalink: /cv/
 description:
 nav: true
-resume_pdf: sdaza_resume.pdf
+resume_pdf: resume.pdf
 cv_pdf: cv_sdaza.pdf
 ---
