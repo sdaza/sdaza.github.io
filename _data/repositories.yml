@@ -14,6 +14,11 @@ github_repos:
     language: R
     stars: 4
 
+  - name: ml-analytics-tools
+    user: sdaza
+    description: Tools for ML projects and data management
+    language: Python
+    stars: 0
   # - name: sampler
   #   user: sdaza
   #   description: R functions for sampling design
