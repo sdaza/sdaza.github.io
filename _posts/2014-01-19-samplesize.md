@@ -12,7 +12,7 @@ tags:
 
 Here I show two functions in R to define sample sizes and errors of a proportion, taking into account design effect, response rate, finite population correction, and stratification. They are useful when one needs to do these calculations quickly.
 
-**Note: I created a package with similar functions. [See here](/survey/2015/09/30/sampler/).**
+**Note: I created a package with similar functions. [See here](/blog/2015/sampler/).**
 
 The inputs are:
 
@@ -156,5 +156,4 @@ frame$e1 <- serr(n=frame$n1, deff=frame$deff, rr=frame$rr, N=frame$N, p=frame$p)
 {% endhighlight %}
 
 As easy as falling off a log!
-
 

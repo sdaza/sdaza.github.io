@@ -6,4 +6,21 @@ description: "Looks like there has been a mistake. Nothing exists here."
 redirect: true
 ---
 
+<script>
+  (function () {
+    var redirects = {
+      {% for redirect in site.data.redirects %}
+      "{{ redirect.from }}": "{{ redirect.to | relative_url }}"{% unless forloop.last %},{% endunless %}
+      {% endfor %}
+    };
+    var path = window.location.pathname;
+    var normalizedPath = path.length > 1 ? path.replace(/\/$/, "") : path;
+    var target = redirects[path] || redirects[normalizedPath] || redirects[normalizedPath + "/"];
+
+    if (target) {
+      window.location.replace(target + window.location.search + window.location.hash);
+    }
+  })();
+</script>
+
 <p>You will be redirected to the main page within 3 seconds. If not redirected, please click <a href="{{ site.baseurl }}/">here</a>.</p>

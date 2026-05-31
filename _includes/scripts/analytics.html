@@ -1,11 +1,22 @@
-{%- if site.enable_google_analytics -%}
+{%- if site.enable_google_analytics and jekyll.environment == 'production' -%}
   <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id={{ site.google_analytics }}"></script>
   <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){ window.dataLayer.push(arguments); }
-    gtag('js', new Date());
-    gtag('config', '{{ site.google_analytics }}');
+    (function () {
+      var allowedHosts = ['sdaza.com', 'www.sdaza.com'];
+      if (allowedHosts.indexOf(window.location.hostname) === -1) {
+        return;
+      }
+
+      var script = document.createElement('script');
+      script.async = true;
+      script.src = 'https://www.googletagmanager.com/gtag/js?id={{ site.google_analytics }}';
+      document.head.appendChild(script);
+
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){ window.dataLayer.push(arguments); }
+      gtag('js', new Date());
+      gtag('config', '{{ site.google_analytics }}');
+    })();
   </script>
 {%- endif -%}
 {%- if site.enable_panelbear_analytics -%}

@@ -6,7 +6,7 @@ category: survey
 tags: [sampling, home]
 ---
 
-In this post I present a simple R package called [**sampler**](https://github.com/sdaza/sampler). The package defines **sample sizes** and **margins of error (MOE)** for a proportion, as usually is done when designing public opinion surveys. [In a previous post](http://sdaza.com/survey/2014/01/19/samplesize/), I presented some functions that do mostly the same thing. This new package, however, includes some new features that might be useful.
+In this post I present a simple R package called [**sampler**](https://github.com/sdaza/sampler). The package defines **sample sizes** and **margins of error (MOE)** for a proportion, as usually is done when designing public opinion surveys. [In a previous post](https://sdaza.com/blog/2014/samplesize/), I presented some functions that do mostly the same thing. This new package, however, includes some new features that might be useful.
 
 ## Installation
 
@@ -145,4 +145,3 @@ chile[, .(reg, pob, pr, sfinal, error_sfinal)]
 ```
 
 That's it. A simple package to do simple calculations.
-
