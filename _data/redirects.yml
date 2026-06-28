@@ -28,3 +28,16 @@
   to: /blog/
 - from: /survey/2012/08/25/raking/
   to: /blog/2012/raking/
+# Project slugs renamed with ordering prefixes; redirect old URLs to new ones.
+- from: /projects/echo/
+  to: /projects/01-echo/
+- from: /projects/reentry/
+  to: /projects/02-reentry/
+- from: /projects/health_income_mobility/
+  to: /projects/03-health_income_mobility/
+- from: /projects/incarceration/
+  to: /projects/04-incarceration/
+- from: /projects/lambda/
+  to: /projects/05-lambda/
+- from: /projects/abm_siena/
+  to: /projects/06-abm-siena/
