@@ -12,7 +12,7 @@ category: previous
 Although Agent-based models (ABM) have been increasingly accepted in social sciences as a valid tool to formalize theory, propose mechanisms able to recreate regularities, and guide empirical research, we are not aware of any research using ABMs to assess the robustness of our statistical methods. We argue that ABMs can be extremely helpful to assess models when the phenomena under study is complex.
 
 <p align='center'>
-    <img style="width: 60%; height: 60%" src="{{ site.baseurl }}/assets/img/action_chart.png" alt="" title="example image"/>
+    <img style="width: 90%; height: 90%" src="{{ site.baseurl }}/assets/img/action_chart.png" alt="" title="example image"/>
 </p>
 <div class="col three caption">
     Action chart of network formation, selection and influence.
