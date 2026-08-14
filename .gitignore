@@ -6,4 +6,5 @@ _site
 .DS_store
 .tweet-cache
 vendor
+.nb_outputs.json
 
