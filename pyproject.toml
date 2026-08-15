@@ -14,6 +14,7 @@ dependencies = [
     "scikit-learn>=1.5",
     "scipy>=1.13",
     "seaborn>=0.13",
+    "experiment-utils-pd==1.5.0",
     "weightpipe @ git+https://github.com/sdaza/weightpipe.git",
 ]
 
