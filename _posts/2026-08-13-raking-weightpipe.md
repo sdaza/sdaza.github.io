@@ -7,16 +7,17 @@ giscus_comments: true
 tags: python, survey, data science
 ---
 
-This is an update to my [2012 post on raking weights in
-R](/blog/2012/raking/). It uses the same Chilean CEP survey example, but this
-time in Python with
+In my [2012 post on raking weights in R](/blog/2012/raking/), I used
+`anesrake` to adjust a Chilean public opinion survey to known population
+margins. In this post, I revisit the same example in Python using
 [weightpipe](https://github.com/sdaza/weightpipe), a package I wrote for
-declarative survey weighting recipes.
+survey weighting recipes.
 
-The conceptual background—what raking is, when to use it, truncation, and
-design-effect checks—has not changed. See the original post for that
-discussion. Here I focus on the Python workflow: define population margins,
-build a `Recipe`, calibrate, trim, and compare estimates.
+The basic ideas—when to use raking, how to select variables, why extreme
+weights may need truncation, and how to examine the design effect—have not
+changed. The original post discusses that background. Here I concentrate on
+the Python workflow and extend the example to estimation and nonresponse
+adjustment.
 
 Install from GitHub (not on PyPI yet):
 
@@ -28,8 +29,8 @@ uv add "git+https://github.com/sdaza/weightpipe.git"
 
 ## Data
 
-Again, I use the Opinion Public Survey CEP, July–August 2012, to estimate
-presidential approval
+As in the original post, I use the CEP Public Opinion Survey from July–August
+2012 to estimate presidential approval
 ([data](https://raw.githubusercontent.com/sdaza/sdaza.github.io/main/_R/data/cep.csv)).
 Five variables enter the raking: `sex`, `agecat`, `ses`, `region`, and `area`.
 
@@ -162,17 +163,16 @@ proportions = {
 
 ## Raking with `weightpipe`
 
-A `Recipe` starts from base weights—uniform weights of one in this
-example—and then chains adjustment steps. Here I use:
+I start with uniform base weights of one and define the adjustments in a
+`Recipe`. The two steps are:
 
 - `step_calibrate(method="raking", proportions=...)` to run iterative
   proportional fitting against the population margins.
 - `step_trim(max_ratio=5, reference="value")` to cap weights at five and
   redistribute the excess so that the total weight is preserved.
 
-Unlike `anesrake`, variable selection options such as `pctlim` and `nlim` are
-not part of this step. You explicitly pass the margins that you have decided to
-use.
+Unlike `anesrake`, this step does not select variables using options such as
+`pctlim` and `nlim`. I pass the margins selected for the analysis directly.
 
 {% highlight python %}
 recipe = (
@@ -376,19 +376,20 @@ disapprove     0.531 0.014     0.504     0.557
         dk     0.023 0.004     0.015     0.031
 ```
 
-The results tell a similar story to the R example. Raking from uniform weights
-and raking from `pond` produce similar approval estimates, and the bootstrap
-intervals overlap. The larger difference is still between the original `pond`
-weights and the full demographic rake, again pointing to socioeconomic
-composition.
+The results are similar to those in the R example. Raking from uniform weights
+and raking from `pond` produce comparable approval estimates, and their
+bootstrap intervals overlap. The larger difference is between the original
+`pond` estimate and the full demographic rake, which again points to the role
+of socioeconomic composition.
 
 ## Nonresponse adjustment, then raking
 
-The CEP file is a respondent file: it does not include sample cases that never
-answered. To show the usual cascade — nonresponse adjustment, then
-calibration — I keep the CEP cases as respondents and add 400 simulated
-nonrespondents with biased demographics (more men, younger, more rural). The
-point is the recipe shape, not a claim about CEP field operations.
+The CEP file contains respondents only; sample cases that did not answer are
+not available. To illustrate the usual sequence—nonresponse adjustment
+followed by calibration—I keep the CEP observations as respondents and add 400
+simulated nonrespondents. I make this simulated group more male, younger, and
+more rural. This is only an illustration of the method, not a claim about CEP
+fieldwork.
 
 `weightpipe` supports two nonresponse methods in `step_nonresponse`:
 
@@ -528,9 +529,9 @@ estimate(
 
 ### Logistic propensity nonresponse
 
-Same cascade, but response propensity is estimated with logistic regression on
-`sex`, `agecat`, and `area`. With `num_classes=5`, units are grouped by
-predicted $$\hat{p}$$ and adjusted within classes:
+I now repeat the adjustment using a logistic response model with `sex`,
+`agecat`, and `area` as predictors. With `num_classes=5`, observations are
+grouped by their predicted $$\hat{p}$$ and adjusted within classes:
 
 {% highlight python %}
 recipe_prop = (
@@ -618,23 +619,24 @@ the same point estimate, with different NR-factor dispersion (max factor about
 3.1 for direct $$1/\hat{p}$$, 1.7 for propensity classes, and 3.5 for
 weighting-class).
 
-Swap `engine="gbm"` or `engine="forest"` for a tree-based response surface.
-Here they track logit closely (Kish ≈ 1.38, same approval story). Prefer them
-when response is clearly nonlinear in the covariates; otherwise logit stays the
-transparent default.
+We can replace `engine="logit"` with `engine="gbm"` or `engine="forest"` when
+the response process is likely to be nonlinear. In this simple example, the
+three engines give almost identical results (Kish deff ≈ 1.38), so I prefer the
+more interpretable logistic model.
 
-So the variants agree on approval here; they differ mainly in how uneven the
-nonresponse factors are. Weighting-class is simple when cells are not sparse;
-propensity is useful when you want a response model and smoother factors across
-many covariates.
+Thus, the alternatives agree on approval in this example. Their main
+difference is the dispersion of the nonresponse factors. Weighting classes are
+simple when cells are not sparse, whereas a propensity model can produce
+smoother factors when several covariates are involved.
 
 ### Keeping propensity classes while raking
 
-Plain demographic raking after propensity classes can reshuffle weight across
-those classes. `assist="propensity_class"` adds the post-NR class totals as an
-extra raking margin so demographics are matched while class mass stays fixed.
-Pass the same `proportions=` as elsewhere — weightpipe scales them to the
-current weight total before attaching the class counts:
+Demographic raking after a propensity adjustment can redistribute weight
+across propensity classes. To avoid this, I use
+`assist="propensity_class"`. It adds the post-nonresponse class totals as
+another raking margin, preserving them while matching the demographic
+targets. I can pass the same `proportions=` used above; `weightpipe` scales
+them to the current weight total before adding the class totals:
 
 {% highlight python %}
 recipe_assist = (
@@ -680,15 +682,15 @@ Kish deff = 1.447
     0.299 0.013     0.274     0.324   0.95     200 proportion  approve bootstrap
 ```
 
-Before trimming, the five propensity-class weight totals match the post-NR
-totals exactly (445, 335, 545, 317, 270). Trim can move mass a little; the
-assist step is what locks the NR adjustment during calibration. Approval stays
-in the same neighborhood as the unassisted cascade (0.297), with a modestly
-higher Kish deff.
+Before trimming, the five propensity-class weight totals exactly match the
+post-nonresponse totals (445, 335, 545, 317, 270). Trimming can change them
+slightly, but the assisted calibration itself preserves the nonresponse
+adjustment. The approval estimate remains close to the unassisted result
+(0.297), although the Kish design effect is modestly higher.
 
-## The reusable recipe
+## Putting the steps together
 
-In short, the updated workflow looks like this:
+The complete workflow can be summarized as follows:
 
 {% highlight python %}
 from weightpipe import Recipe, collect_weights, design_effect, estimate
@@ -726,12 +728,12 @@ estimate(
 )
 {% endhighlight %}
 
-For a clustered sample, pass a `Design` to `Recipe.from_design` and let
-`estimate` pick up strata/PSU from the design for bootstrap or jackknife
-variance. The
-[weightpipe documentation](https://github.com/sdaza/weightpipe) also covers
-eligibility, linear/GREG and model-assisted calibration, design-based
-estimation, and sample-size planning.
+If information on strata and PSUs is available, it can be defined with
+`Design` and passed through `Recipe.from_design`; `estimate` will then use it
+for bootstrap or jackknife variance estimation. Other examples in the
+[weightpipe documentation](https://github.com/sdaza/weightpipe) cover
+eligibility adjustments, linear/GREG calibration, design-based estimation,
+and sample-size planning.
 
 ***
 
