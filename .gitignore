@@ -8,3 +8,9 @@ _site
 vendor
 .nb_outputs.json
 
+# Python notebook env (uv sync → .venv)
+.venv/
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+

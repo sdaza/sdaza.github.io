@@ -9,6 +9,14 @@
 # Example:
 # _scripts/convert.sh segregation
 
+# Use the project venv from `uv sync`.
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+JUPYTER="$ROOT/.venv/bin/jupyter"
+if [[ ! -x "$JUPYTER" ]]; then
+  echo "Missing $JUPYTER — run: uv sync" >&2
+  exit 1
+fi
+
 # Set Jupyter data path for templates (needed on some Homebrew installations)
 export JUPYTER_PATH=/opt/homebrew/share/jupyter
 
@@ -19,7 +27,7 @@ filename=$(date +%Y-%m-%d)-$1
 foldername=$filename"_files"
 
 # Do the conversion.
-jupyter nbconvert ./_jupyter/$1.ipynb --to markdown --output-dir=./_posts --output=$filename --template=./_scripts/jekyll.tpl
+"$JUPYTER" nbconvert ./_jupyter/$1.ipynb --to markdown --output-dir=./_posts --output=$filename --template=./_scripts/jekyll.tpl
 
 # Move the images.
 echo "Moving images..."

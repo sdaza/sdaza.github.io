@@ -34,6 +34,7 @@ presidential approval
 Five variables enter the raking: `sex`, `agecat`, `ses`, `region`, and `area`.
 
 {% highlight python %}
+import numpy as np
 import pandas as pd
 
 pd.set_option("display.notebook_repr_html", False)
@@ -46,6 +47,7 @@ from weightpipe import (
     collect_weights,
     design_effect,
     estimate,
+    weight_factors,
 )
 
 # data used in the 2012 post
@@ -380,6 +382,310 @@ intervals overlap. The larger difference is still between the original `pond`
 weights and the full demographic rake, again pointing to socioeconomic
 composition.
 
+## Nonresponse adjustment, then raking
+
+The CEP file is a respondent file: it does not include sample cases that never
+answered. To show the usual cascade — nonresponse adjustment, then
+calibration — I keep the CEP cases as respondents and add 400 simulated
+nonrespondents with biased demographics (more men, younger, more rural). The
+point is the recipe shape, not a claim about CEP field operations.
+
+`weightpipe` supports two nonresponse methods in `step_nonresponse`:
+
+1. **`weighting_class`** — within cells defined by `by=...` (e.g. sex × age ×
+   area), multiply respondent weights by
+   $$w_{\text{cell}} / w_{\text{respondents in cell}}$$
+   and set nonrespondent weights to zero.
+2. **`propensity`** — fit a response model with `formula=...` and
+   `engine="logit"` (default), `"gbm"`, or `"forest"`, then either:
+   - group units into propensity classes (`num_classes=5`, default) and apply
+     a class adjustment like weighting-class, or
+   - use direct inverse-propensity factors (`num_classes=None`), i.e.
+     $$1/\hat{p}_i$$
+     for respondents.
+
+{% highlight python %}
+rng = np.random.default_rng(42)
+n_nr = 400
+
+nonrespondents = pd.DataFrame(
+    {
+        "sex": rng.choice([1, 2], size=n_nr, p=[0.65, 0.35]),
+        "agecat": rng.choice(
+            [1, 2, 3, 4, 5],
+            size=n_nr,
+            p=[0.25, 0.25, 0.20, 0.15, 0.15],
+        ),
+        "ses": rng.choice(
+            [1, 2, 3, 4, 5],
+            size=n_nr,
+            p=[0.05, 0.10, 0.30, 0.40, 0.15],
+        ),
+        "region": rng.choice(list(range(1, 16)), size=n_nr),
+        "area": rng.choice([1, 2], size=n_nr, p=[0.70, 0.30]),
+        "approval": np.nan,
+        "responded": 0,
+        "base": 1.0,
+    }
+)
+
+respondents = dat.copy()
+respondents["responded"] = 1
+respondents["base"] = 1.0
+for code, name in [
+    (1, "approve"),
+    (2, "disapprove"),
+    (3, "unsure"),
+    (9, "dk"),
+]:
+    respondents[name] = (respondents["approval"] == code).astype(int)
+    nonrespondents[name] = 0
+
+frame = pd.concat([respondents, nonrespondents], ignore_index=True)
+print("n_sample =", len(frame))
+print("n_respondents =", int(frame["responded"].sum()))
+print("response rate =", round(float(frame["responded"].mean()), 3))
+{% endhighlight %}
+
+```
+n_sample = 1912
+n_respondents = 1512
+response rate = 0.791
+```
+
+### Weighting-class nonresponse
+
+{% highlight python %}
+recipe_nr = (
+    Recipe(frame, base_weight="base")
+    .step_nonresponse(
+        respondent="responded",
+        method="weighting_class",
+        by=["sex", "agecat", "area"],
+    )
+    .step_calibrate(
+        method="raking",
+        proportions=proportions,
+        max_iter=100,
+        tol=1e-8,
+    )
+    .step_trim(
+        max_ratio=5.0,
+        reference="value",
+        redistribute=True,
+    )
+)
+
+fitted_nr = recipe_nr.prep(min_cell_n=1, warn=False)
+weighted_nr = collect_weights(
+    fitted_nr,
+    keep_intermediate=True,
+    drop_zero=True,
+)
+factors = weight_factors(fitted_nr)
+
+print("active units =", len(weighted_nr))
+print("sum(weight) =", round(float(weighted_nr["weight"].sum()), 3))
+print("Kish deff =", round(design_effect(fitted_nr), 3))
+factors.loc[frame["responded"] == 1, "factor_nonresponse"].describe().round(3)
+{% endhighlight %}
+
+```
+active units = 1512
+sum(weight) = 1912.0
+Kish deff = 1.383
+
+count   1512.000
+mean       1.265
+std        0.292
+min        1.047
+25%        1.099
+50%        1.140
+75%        1.385
+max        3.545
+```
+
+The sum of final weights matches the full sample size (1912): nonresponse
+inflation restores the weight of nonrespondents, and raking preserves that
+total while matching population margins.
+
+{% highlight python %}
+estimate(
+    recipe_nr,
+    "approve",
+    estimand="proportion",
+    fitted=fitted_nr,
+    variance="bootstrap",
+    replicates=200,
+    seed=42,
+).round(3)
+{% endhighlight %}
+
+```
+ estimate    se  ci_lower  ci_upper  level  R_used   estimand variable  variance
+    0.297 0.012     0.274     0.320   0.95     200 proportion  approve bootstrap
+```
+
+### Logistic propensity nonresponse
+
+Same cascade, but response propensity is estimated with logistic regression on
+`sex`, `agecat`, and `area`. With `num_classes=5`, units are grouped by
+predicted $$\hat{p}$$ and adjusted within classes:
+
+{% highlight python %}
+recipe_prop = (
+    Recipe(frame, base_weight="base")
+    .step_nonresponse(
+        respondent="responded",
+        method="propensity",
+        engine="logit",
+        formula="~ sex + agecat + area",
+        num_classes=5,
+    )
+    .step_calibrate(
+        method="raking",
+        proportions=proportions,
+        max_iter=100,
+        tol=1e-8,
+    )
+    .step_trim(
+        max_ratio=5.0,
+        reference="value",
+        redistribute=True,
+    )
+)
+
+fitted_prop = recipe_prop.prep(min_cell_n=1, warn=False)
+factors_prop = weight_factors(fitted_prop)
+
+print("Kish deff =", round(design_effect(fitted_prop), 3))
+print(
+    "mean propensity =",
+    round(
+        fitted_prop.diagnostics["steps"]["nonresponse"]["mean_propensity"],
+        3,
+    ),
+)
+factors_prop.loc[frame["responded"] == 1, "factor_nonresponse"].describe().round(3)
+{% endhighlight %}
+
+```
+Kish deff = 1.381
+mean propensity = 0.791
+
+count   1512.000
+mean       1.265
+std        0.216
+min        1.047
+25%        1.101
+50%        1.193
+75%        1.373
+max        1.679
+```
+
+{% highlight python %}
+estimate(
+    recipe_prop,
+    "approve",
+    estimand="proportion",
+    fitted=fitted_prop,
+    variance="bootstrap",
+    replicates=200,
+    seed=42,
+).round(3)
+{% endhighlight %}
+
+```
+ estimate    se  ci_lower  ci_upper  level  R_used   estimand variable  variance
+    0.297 0.012     0.274     0.321   0.95     200 proportion  approve bootstrap
+```
+
+For direct inverse-propensity weighting instead of classes, set
+`num_classes=None`:
+
+{% highlight python %}
+.step_nonresponse(
+    respondent="responded",
+    method="propensity",
+    engine="logit",
+    formula="~ sex + agecat + area",
+    num_classes=None,  # factor = 1 / p_hat for respondents
+)
+{% endhighlight %}
+
+On this frame that yields Kish deff ≈ 1.377 and approve ≈ 0.298 — essentially
+the same point estimate, with different NR-factor dispersion (max factor about
+3.1 for direct $$1/\hat{p}$$, 1.7 for propensity classes, and 3.5 for
+weighting-class).
+
+Swap `engine="gbm"` or `engine="forest"` for a tree-based response surface.
+Here they track logit closely (Kish ≈ 1.38, same approval story). Prefer them
+when response is clearly nonlinear in the covariates; otherwise logit stays the
+transparent default.
+
+So the variants agree on approval here; they differ mainly in how uneven the
+nonresponse factors are. Weighting-class is simple when cells are not sparse;
+propensity is useful when you want a response model and smoother factors across
+many covariates.
+
+### Keeping propensity classes while raking
+
+Plain demographic raking after propensity classes can reshuffle weight across
+those classes. `assist="propensity_class"` adds the post-NR class totals as an
+extra raking margin so demographics are matched while class mass stays fixed.
+Pass the same `proportions=` as elsewhere — weightpipe scales them to the
+current weight total before attaching the class counts:
+
+{% highlight python %}
+recipe_assist = (
+    Recipe(frame, base_weight="base")
+    .step_nonresponse(
+        respondent="responded",
+        method="propensity",
+        engine="logit",
+        formula="~ sex + agecat + area",
+        num_classes=5,
+    )
+    .step_calibrate(
+        method="raking",
+        proportions=proportions,
+        assist="propensity_class",
+        max_iter=100,
+        tol=1e-8,
+    )
+    .step_trim(
+        max_ratio=5.0,
+        reference="value",
+        redistribute=True,
+    )
+)
+
+fitted_assist = recipe_assist.prep(min_cell_n=1, warn=False)
+print("Kish deff =", round(design_effect(fitted_assist), 3))
+estimate(
+    recipe_assist,
+    "approve",
+    estimand="proportion",
+    fitted=fitted_assist,
+    variance="bootstrap",
+    replicates=200,
+    seed=42,
+).round(3)
+{% endhighlight %}
+
+```
+Kish deff = 1.447
+
+ estimate    se  ci_lower  ci_upper  level  R_used   estimand variable  variance
+    0.299 0.013     0.274     0.324   0.95     200 proportion  approve bootstrap
+```
+
+Before trimming, the five propensity-class weight totals match the post-NR
+totals exactly (445, 335, 545, 317, 270). Trim can move mass a little; the
+assist step is what locks the NR adjustment during calibration. Approval stays
+in the same neighborhood as the unassisted cascade (0.297), with a modestly
+higher Kish deff.
+
 ## The reusable recipe
 
 In short, the updated workflow looks like this:
@@ -388,10 +694,15 @@ In short, the updated workflow looks like this:
 from weightpipe import Recipe, collect_weights, design_effect, estimate
 
 recipe = (
-    Recipe(dat, base_weight="base")  # or "pond"
+    Recipe(frame, base_weight="base")  # or respondents-only `dat`
+    .step_nonresponse(
+        respondent="responded",
+        method="weighting_class",  # or propensity + engine="logit"|"gbm"|"forest"
+        by=["sex", "agecat", "area"],
+    )
     .step_calibrate(
         method="raking",
-        proportions=proportions,
+        proportions=proportions,  # + assist="propensity_class" after propensity NR
     )
     .step_trim(
         max_ratio=5.0,
@@ -418,9 +729,9 @@ estimate(
 For a clustered sample, pass a `Design` to `Recipe.from_design` and let
 `estimate` pick up strata/PSU from the design for bootstrap or jackknife
 variance. The
-[weightpipe documentation](https://github.com/sdaza/weightpipe) also includes
-eligibility, nonresponse, linear/GREG calibration, estimation, and sample-size
-planning.
+[weightpipe documentation](https://github.com/sdaza/weightpipe) also covers
+eligibility, linear/GREG and model-assisted calibration, design-based
+estimation, and sample-size planning.
 
 ***
 

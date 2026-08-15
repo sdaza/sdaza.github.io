@@ -19,6 +19,7 @@ Built with [Jekyll](https://jekyllrb.com/) and hosted on [GitHub Pages](https://
 
 - Ruby 3.2+
 - Bundler (`gem install bundler`)
+- [uv](https://docs.astral.sh/uv/) (for Jupyter notebooks under `_jupyter/`)
 
 ### Setup
 
@@ -28,6 +29,31 @@ bundle exec jekyll serve --livereload
 ```
 
 The site will be available at `http://localhost:4000`.
+
+### Notebooks
+
+Python deps for `_jupyter/` notebooks are defined in `pyproject.toml`. Create the
+venv and install packages with:
+
+```bash
+uv sync
+```
+
+That creates `.venv/` (Python from `.python-version`). Activate or call tools
+directly:
+
+```bash
+source .venv/bin/activate
+# or
+.venv/bin/jupyter lab
+.venv/bin/python -m jupyter nbconvert ...
+```
+
+Convert a notebook to a Jekyll post (requires `.venv` from `uv sync`):
+
+```bash
+_scripts/convert.sh raking-weightpipe
+```
 
 ### Docker
 
