@@ -3421,7 +3421,7 @@ wheels = [
 [[package]]
 name = "weightpipe"
 version = "0.1.0"
-source = { git = "https://github.com/sdaza/weightpipe.git#385bdc293e77dbe567a37d28074d2fcbf21faa7d" }
+source = { git = "https://github.com/sdaza/weightpipe.git#e131edff93c707812ac279d0d27629d9a580b9c8" }
 dependencies = [
     { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
     { name = "numpy", version = "2.5.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
