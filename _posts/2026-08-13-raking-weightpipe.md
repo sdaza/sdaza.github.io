@@ -215,6 +215,36 @@ Kish's approximate design effect from unequal weighting is again about **1.38**
 \mathrm{deff} - 1 \approx 0.38$$, under the usual caveats (no clustering in this
 approximation).
 
+### Checking margins after raking
+
+The unweighted sample was off on several margins (for example, sex was about
+40.7% / 59.3% versus population targets 49% / 51%). After raking, you can check
+what the weighted sample actually matches. Calibrate diagnostics include a tidy
+`margin_table`; `pipe.margins(...)` recomputes the same idea from the **current**
+weights (so it still works after trim):
+
+{% highlight python %}
+# Built-in after calibrate:
+pipe.diagnostics["steps"]["calibrate"]["margin_table"].head()
+
+# Anytime (here: reuse the rake targets, including after trim):
+check = pipe.margins(targets="calibrate")
+check.loc[
+    check["variable"] == "sex",
+    ["category", "target_proportion", "achieved_proportion", "abs_diff"],
+].round(3)
+
+{% endhighlight %}
+
+    category  target_proportion  achieved_proportion  abs_diff
+           1              0.490                0.490     0.000
+           2              0.510                0.510     0.000
+
+Across all raking variables, the largest absolute difference from the targets is
+essentially zero (on the order of $$10^{-7}$$), including after the ratio-5 trim
+with redistribution. Call `pipe.margins("sex")` without targets anytime you only
+want the current weighted distribution.
+
 ### Approval estimates with bootstrap CIs
 
 Approval codes: 1 = approve, 2 = disapprove, 3 = unsure, 9 = don't know.
