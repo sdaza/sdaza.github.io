@@ -60,6 +60,22 @@ gsed -i.tmp -e 's/'"$foldername"'/'"\/assets\/img\/$foldername"'/g' ./_posts/$fi
 # Remove backup file created by sed command.
 rm ./_posts/$filename.md.tmp
 rm -r ./_posts/$foldername
+
+# nbconvert pads every output block, so cells that both print and return a value
+# end up separated by several blank lines. Collapse runs of blank lines and drop
+# trailing whitespace.
+"$ROOT/.venv/bin/python" - "./_posts/$filename.md" <<'PY'
+import re
+import sys
+from pathlib import Path
+
+path = Path(sys.argv[1])
+text = path.read_text()
+text = "\n".join(line.rstrip() for line in text.splitlines())
+text = re.sub(r"\n{3,}", "\n\n", text)
+text = re.sub(r"\A(---\n.*?\n---\n)\n?", r"\1\n", text, flags=re.DOTALL)
+path.write_text(text.rstrip() + "\n")
+PY
 # Check if the conversion has left a blank line at the top of the file.
 # firstline=$(head -n 1 ./_posts/$filename.md)
 # if [ "$firstline" = "" ]; then
