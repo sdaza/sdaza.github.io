@@ -1,14 +1,22 @@
 - title: Summary
   type: list
   contents:
-    - Senior Data Scientist with hands-on experience building ML pipelines, experimentation frameworks, and causal inference solutions. I lead cross-functional projects end-to-end—from scoping and stakeholder alignment to modeling, deployment, and monitoring—and mentor teams to deliver robust, measurable impact. I thrive at the intersection of product and platform, enabling faster iteration and reliable data products.
+    - Senior Data Scientist with hands-on experience building ML pipelines, experimentation frameworks, and causal inference solutions. Currently at Preply (Supply / Marketplace Analytics). I lead cross-functional projects end-to-end—from scoping and stakeholder alignment to modeling, deployment, and monitoring—and mentor teams to deliver robust, measurable impact. I thrive at the intersection of product and platform, enabling faster iteration and reliable data products.
 
 - title: Work Experience
   type: time_table
   contents:
     - title: Senior Data Scientist
+      institution: "<a href='https://preply.com/'>Preply</a> (Online Learning) · Barcelona, Spain"
+      year: 2026 - Present
+      description:
+        - Data scientist for Supply / Marketplace Analytics, partnering with Supply Ops and Product on tutor-side decisions
+        - Built experiment-effect priors, winner's-curse shrinkage, and cumulative-impact tooling (including guardrail / multi-metric joint shrinkage) in experiment-utils-pd
+        - Led analyses on tutor quality and value-added, profile scoring, referral pilots, and opportunity sizing for Supply OKRs
+
+    - title: Senior Data Scientist
       institution: "<a href='https://www.docplanner.com/'>DocPlanner</a> (Telemedicine) · Barcelona, Spain"
-      year: 2025 - Present
+      year: 2025 - 2026
       description:
         - Technical lead across BI and the new AI & Data Products team, focusing on ML pipelines, experimentation, and model monitoring
         - Designed and shipped internal Python packages to standardize ML pipelines and experimentation analysis
@@ -93,7 +101,8 @@
 - title: Software
   type: list
   contents:
-    - "<strong><a href='https://github.com/sdaza/experiment-utils-pd'>experiment-utils-pd</a></strong> — Python package for analysis and design of experiments"
+    - "<strong><a href='https://github.com/sdaza/experiment-utils-pd'>experiment-utils-pd</a></strong> — Python package for analysis and design of experiments (winner's-curse shrinkage, cumulative impact, NSS / MVN joint shrink)"
+    - "<strong><a href='https://github.com/sdaza/weightpipe'>weightpipe</a></strong> — Python package for survey weighting recipes (raking, estimation, design effects)"
     - "<strong><a href='https://github.com/sdaza/acsr'>acsr</a></strong> — R package to extract variables from the American Community Survey and Decennial US Census"
 
 - title: Skills
@@ -119,7 +128,7 @@
         - "Azure OpenAI, Ollama, RAG systems, Prompt engineering, Cursor, Copilot, AI agents"
     - title: Data & Viz
       items:
-        - "PySpark, Redshift, PostgreSQL, Databricks, Dash, Shiny, Tableau"
+        - "PySpark, Snowflake, Redshift, PostgreSQL, Databricks, Looker, Dash, Shiny, Tableau"
     - title: Tools
       items:
         - "Git, Docker, LaTeX, Notion, Jira, Confluence"
