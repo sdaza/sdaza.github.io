@@ -4,34 +4,25 @@ author: Sebastian Daza
 title: "Raking weights with Python and weightpipe"
 date: 2026-08-13
 giscus_comments: true
-tags: python, survey, data science
+tags: [python, survey, data science]
 ---
 
-In my [2012 post on raking weights in R](/blog/2012/raking/), I used `anesrake`
-to adjust a Chilean public opinion survey to known population margins. In this
-post, I revisit the same example in Python using
-[weightpipe](https://github.com/sdaza/weightpipe), a package I wrote for survey
-weighting recipes.
+In my [2012 post on raking weights in R](/blog/2012/raking/), I used `anesrake` to adjust a Chilean public opinion survey to known population margins. In this post, I revisit the same example in Python using [weightpipe](https://github.com/sdaza/weightpipe), a package I wrote for survey weighting recipes.
 
-The basic ideas—when to use raking, how to select variables, why extreme weights
-may need truncation, and how to examine the design effect—have not changed. The
-original post discusses that background. Here I concentrate on the Python
-workflow and extend the example to estimation and nonresponse adjustment.
+The basic ideas—when to use raking, how to select variables, why extreme weights may need truncation, and how to examine the design effect—have not changed. The original post discusses that background. Here I concentrate on the Python workflow and extend the example to estimation and nonresponse adjustment.
 
-Install from GitHub (not on PyPI yet):
+Install the published package from PyPI (Python 3.11+):
 
 ```bash
-pip install "git+https://github.com/sdaza/weightpipe.git"
+pip install weightpipe
 # or
-uv add "git+https://github.com/sdaza/weightpipe.git"
+uv add weightpipe
 ```
 
 ## Data
 
-As in the original post, I use the CEP Public Opinion Survey from July–August
-2012 to estimate presidential approval
-([data](https://raw.githubusercontent.com/sdaza/sdaza.github.io/main/_R/data/cep
-.csv)).
+As in the original post, I use the CEP Public Opinion Survey from July–August 2012 to estimate presidential approval
+([data](https://raw.githubusercontent.com/sdaza/sdaza.github.io/main/_R/data/cep.csv)).
 Five variables enter the raking: `sex`, `agecat`, `ses`, `region`, and `area`.
 
 {% highlight python %}
@@ -45,8 +36,6 @@ pd.set_option("display.max_columns", None)
 
 from weightpipe import (
     WeightPipe,
-    boot_proportion,
-    bootstrap_weights,
     design_effect,
     weight_factors,
 )
@@ -125,10 +114,7 @@ for var in ["sex", "agecat", "ses", "region", "area"]:
 
 ## Population targets
 
-Population shares come from the Chilean Census 2002 (`sex`, `agecat`, `region`,
-`area`) and the Bicentenario Survey 2009 (`ses`) — same targets as in 2012.
-Rounded census vectors may not sum exactly to one; `weightpipe` renormalizes
-them by default (`force1=True`), as in `anesrake`.
+Population shares come from the Chilean Census 2002 (`sex`, `agecat`, `region`, `area`) and the Bicentenario Survey 2009 (`ses`) — same targets as in 2012. Rounded census vectors may not sum exactly to one; `weightpipe` renormalizes them by default (`force1=True`), as in `anesrake`.
 
 {% highlight python %}
 # Chilean Census 2002
@@ -162,18 +148,12 @@ proportions = {
 
 ## Raking with `weightpipe`
 
-`WeightPipe(dat)` assigns unit base weights automatically when no design weights
-are supplied. I then define the two adjustment steps:
+`WeightPipe(dat)` assigns unit base weights automatically when no design weights are supplied. I then define the two adjustment steps:
 
-- `calibrate(method="raking", proportions=...)` to run iterative proportional
-fitting against the population margins.
-- `trim(max_ratio=5, reference="value")` to cap weights at five and redistribute
-the excess so that the total weight is preserved.
+- `calibrate(method="raking", proportions=...)` to run iterative proportional fitting against the population margins.
+- `trim(max_ratio=5, reference="value")` to cap weights at five and redistribute the excess so that the total weight is preserved.
 
-Unlike `anesrake`, this step does not select variables using options such as
-`pctlim` and `nlim`. I pass the margins selected for the analysis directly.
-Weights are computed on first use of `collect_weights()`, `weights`, or
-`estimate()`.
+Unlike `anesrake`, this step does not select variables using options such as `pctlim` and `nlim`. I pass the margins selected for the analysis directly. Weights are computed on first use of `collect_weights()`, `weights`, or `estimate()`.
 
 {% highlight python %}
 pipe = (
@@ -210,18 +190,11 @@ weighted[["weight"]].describe().T
               count  mean   std   min   25%   50%   75%   max
     weight 1512.000 1.000 0.616 0.332 0.618 0.804 1.105 4.304
 
-Kish's approximate design effect from unequal weighting is again about **1.38**
-— the same figure as in the original R post. Weighting loss is $$L_w =
-\mathrm{deff} - 1 \approx 0.38$$, under the usual caveats (no clustering in this
-approximation).
+Kish's approximate design effect from unequal weighting is again about **1.38** — the same figure as in the original R post. Weighting loss is $$L_w = \mathrm{deff} - 1 \approx 0.38$$, under the usual caveats (no clustering in this approximation).
 
 ### Checking margins after raking
 
-The unweighted sample was off on several margins (for example, sex was about
-40.7% / 59.3% versus population targets 49% / 51%). After raking, you can check
-what the weighted sample actually matches. Calibrate diagnostics include a tidy
-`margin_table`; `pipe.margins(...)` recomputes the same idea from the **current**
-weights (so it still works after trim):
+The unweighted sample was off on several margins (for example, sex was about 40.7% / 59.3% versus population targets 49% / 51%). After raking, you can check what the weighted sample actually matches. Calibrate diagnostics include a tidy `margin_table`; `pipe.margins(...)` recomputes the same idea from the **current** weights (so it still works after trim):
 
 {% highlight python %}
 # Built-in after calibrate:
@@ -236,27 +209,25 @@ check.loc[
 
 {% endhighlight %}
 
-    category  target_proportion  achieved_proportion  abs_diff
-           1              0.490                0.490     0.000
-           2              0.510                0.510     0.000
+      category  target_proportion  achieved_proportion  abs_diff
+    0        1              0.490                0.490     0.000
+    1        2              0.510                0.510     0.000
 
-Across all raking variables, the largest absolute difference from the targets is
-essentially zero (on the order of $$10^{-7}$$), including after the ratio-5 trim
-with redistribution. Call `pipe.margins("sex")` without targets anytime you only
-want the current weighted distribution.
+Across all raking variables, the largest absolute difference from the targets is essentially zero (on the order of $$10^{-7}$$), including after the ratio-5 trim with redistribution. Call `pipe.margins("sex")` without targets anytime you only want the current weighted distribution.
 
 ### Approval estimates with bootstrap CIs
 
 Approval codes: 1 = approve, 2 = disapprove, 3 = unsure, 9 = don't know.
-Use `pipe.estimate` on binary indicators instead of a custom weighted
-tabulation.
+Use `pipe.estimate.proportion` on binary indicators instead of a custom weighted tabulation.
 With no strata/PSU in the CEP file, this is an unequal-weight bootstrap that
 re-runs the full weighting cascade in each replicate.
 
+Passing a list of indicators returns one row per variable and builds the
+replicate weights once, so all four categories come from a single call.
+
 {% highlight python %}
-pipe.estimate(
+pipe.estimate.proportion(
     "approve",
-    estimand="proportion",
     variance="bootstrap",
     replicates=400,
     seed=42,
@@ -264,30 +235,22 @@ pipe.estimate(
 
 {% endhighlight %}
 
-       estimate    se  ci_lower  ci_upper  level  R_used    estimand variable   variance  design
-    0     0.298 0.013     0.272     0.325  0.950     400  proportion  approve  bootstrap  custom
+         estimand variable  estimate    se    cv  ci_lower  ci_upper  level  R_used   variance  design
+    0  proportion  approve     0.298 0.013 0.045     0.272     0.325  0.950     400  bootstrap  custom
 
 {% highlight python %}
-boot = bootstrap_weights(
-    pipe.recipe,
+approval_ci = pipe.estimate.proportion(
+    ["approve", "disapprove", "unsure", "dk"],
+    variance="bootstrap",
     replicates=400,
     seed=42,
-    point=pipe.result,
 )
 
-approval_ci = pd.concat(
-    [
-        boot_proportion(boot, name).assign(category=name)
-        for name in ["approve", "disapprove", "unsure", "dk"]
-    ],
-    ignore_index=True,
-)[["category", "estimate", "se", "ci_lower", "ci_upper"]]
-
-approval_ci.round(3)
+approval_ci[["variable", "estimate", "se", "ci_lower", "ci_upper"]].round(3)
 
 {% endhighlight %}
 
-         category  estimate    se  ci_lower  ci_upper
+         variable  estimate    se  ci_lower  ci_upper
     0     approve     0.298 0.013     0.272     0.325
     1  disapprove     0.521 0.013     0.494     0.547
     2      unsure     0.161 0.010     0.141     0.181
@@ -295,10 +258,7 @@ approval_ci.round(3)
 
 ## Raking on top of existing survey weights
 
-The CEP file includes `pond` weights (max ≈ 17.6). As before, documentation of
-how they were built is thin. We can still use them as the base weight and rake
-(here only on `ses` and `region`, the margins that were most off after applying
-`pond` in the 2012 analysis).
+The CEP file includes `pond` weights (max ≈ 17.6). As before, documentation of how they were built is thin. We can still use them as the base weight and rake (here only on `ses` and `region`, the margins that were most off after applying `pond` in the 2012 analysis).
 
 {% highlight python %}
 print("pond summary")
@@ -338,49 +298,33 @@ print("min / max weight =", round(weighted_pond["weight"].min(), 3), "/", round(
     min / max weight = 0.055 / 5.0
 
 {% highlight python %}
-boot_pond = bootstrap_weights(
-    pipe_pond.recipe,
+approval_pond_ci = pipe_pond.estimate.proportion(
+    ["approve", "disapprove", "unsure", "dk"],
+    variance="bootstrap",
     replicates=400,
     seed=42,
-    point=pipe_pond.result,
 )
 
-approval_pond_ci = pd.concat(
-    [
-        boot_proportion(boot_pond, name).assign(category=name)
-        for name in ["approve", "disapprove", "unsure", "dk"]
-    ],
-    ignore_index=True,
-)[["category", "estimate", "se", "ci_lower", "ci_upper"]]
-
-approval_pond_ci.round(3)
+approval_pond_ci[["variable", "estimate", "se", "ci_lower", "ci_upper"]].round(3)
 
 {% endhighlight %}
 
-         category  estimate    se  ci_lower  ci_upper
+         variable  estimate    se  ci_lower  ci_upper
     0     approve     0.292 0.013     0.266     0.319
     1  disapprove     0.531 0.014     0.504     0.557
     2      unsure     0.154 0.013     0.128     0.179
     3          dk     0.023 0.004     0.015     0.031
 
-The results are similar to those in the R example. Raking from uniform weights
-and raking from `pond` produce comparable approval estimates, and their
-bootstrap intervals overlap.
+The results are similar to those in the R example. Raking from uniform weights and raking from `pond` produce comparable approval estimates, and their bootstrap intervals overlap.
 
 ## Nonresponse adjustment, then raking
 
-The CEP file contains respondents only; sample cases that did not answer are not
-available. To illustrate nonresponse adjustment followed by calibration, I keep
-the CEP observations as respondents and add simulated nonrespondents. This is
-only an illustration of the method, not a claim about CEP fieldwork.
+The CEP file contains respondents only; sample cases that did not answer are not available. To illustrate nonresponse adjustment followed by calibration, I keep the CEP observations as respondents and add simulated nonrespondents. This is only an illustration of the method, not a claim about CEP fieldwork.
 
 `weightpipe` supports two `nonresponse` methods:
 
-1. **`weighting_class`** — inflate respondents within `by=` cells and set
-nonrespondent weights to zero.
-2. **`propensity`** — fit a response model with `engine="logit"` (default),
-`"gbm"`, or `"forest"`, then use propensity classes (`num_classes=5`) or direct
-inverse-propensity factors (`num_classes=None`).
+1. **`weighting_class`** — inflate respondents within `by=` cells and set nonrespondent weights to zero.
+2. **`propensity`** — fit a response model with `engine="logit"` (default), `"gbm"`, or `"forest"`, then use propensity classes (`num_classes=5`) or direct inverse-propensity factors (`num_classes=None`).
 
 {% highlight python %}
 rng = np.random.default_rng(42)
@@ -453,9 +397,8 @@ factors.loc[frame["responded"] == 1, ["factor_nonresponse"]].describe().T.round(
     factor_nonresponse 1512.000 1.265 0.292 1.047 1.099 1.140 1.385 3.545
 
 {% highlight python %}
-pipe_nr.estimate(
+pipe_nr.estimate.proportion(
     "approve",
-    estimand="proportion",
     variance="bootstrap",
     replicates=200,
     seed=42,
@@ -463,8 +406,8 @@ pipe_nr.estimate(
 
 {% endhighlight %}
 
-       estimate    se  ci_lower  ci_upper  level  R_used    estimand variable   variance  design
-    0     0.297 0.012     0.274     0.320  0.950     200  proportion  approve  bootstrap  custom
+         estimand variable  estimate    se    cv  ci_lower  ci_upper  level  R_used   variance  design
+    0  proportion  approve     0.297 0.012 0.040     0.274     0.320  0.950     200  bootstrap  custom
 
 ### Logistic propensity nonresponse
 
@@ -510,9 +453,8 @@ factors_prop.loc[frame["responded"] == 1, ["factor_nonresponse"]].describe().T.r
     factor_nonresponse 1512.000 1.265 0.216 1.047 1.101 1.193 1.373 1.679
 
 {% highlight python %}
-pipe_prop.estimate(
+pipe_prop.estimate.proportion(
     "approve",
-    estimand="proportion",
     variance="bootstrap",
     replicates=200,
     seed=42,
@@ -520,12 +462,11 @@ pipe_prop.estimate(
 
 {% endhighlight %}
 
-       estimate    se  ci_lower  ci_upper  level  R_used    estimand variable   variance  design
-    0     0.297 0.012     0.274     0.321  0.950     200  proportion  approve  bootstrap  custom
+         estimand variable  estimate    se    cv  ci_lower  ci_upper  level  R_used   variance  design
+    0  proportion  approve     0.297 0.012 0.040     0.274     0.321  0.950     200  bootstrap  custom
 
 For direct inverse-propensity weighting, use `num_classes=None`
-(factor = $$1/\hat{p}$$ for respondents). In this example, that gives deff ≈
-1.377
+(factor = $$1/\hat{p}$$ for respondents). In this example, that gives deff ≈ 1.377
 and approval ≈ 0.298. The point estimate is similar to those from weighting
 classes and propensity classes, although the factors have different dispersion.
 
@@ -565,9 +506,8 @@ pipe_assist = (
 )
 
 print("Kish deff =", round(design_effect(pipe_assist.result), 3))
-pipe_assist.estimate(
+pipe_assist.estimate.proportion(
     "approve",
-    estimand="proportion",
     variance="bootstrap",
     replicates=200,
     seed=42,
@@ -577,8 +517,8 @@ pipe_assist.estimate(
 
     Kish deff = 1.447
 
-       estimate    se  ci_lower  ci_upper  level  R_used    estimand variable   variance  design
-    0     0.299 0.013     0.274     0.324  0.950     200  proportion  approve  bootstrap  custom
+         estimand variable  estimate    se    cv  ci_lower  ci_upper  level  R_used   variance  design
+    0  proportion  approve     0.299 0.013 0.042     0.274     0.324  0.950     200  bootstrap  custom
 
 Before trimming, the five propensity-class weight totals exactly match the
 post-nonresponse totals. Trimming can change them slightly, but the assisted
@@ -598,30 +538,29 @@ pipe = (
     # With a design: WeightPipe(frame, weight="pw", psu="psu", strata="stratum")
     .nonresponse(
         respondent="responded",
-        method="weighting_class",  # or propensity +
-engine="logit"|"gbm"|"forest"
+        method="weighting_class",  # or propensity + engine="logit"|"gbm"|"forest"
         by=["sex", "agecat", "area"],
     )
     .calibrate(
         method="raking",
-        proportions=proportions,  # + assist="propensity_class" after propensity
-NR
+        proportions=proportions,  # + assist="propensity_class" after propensity NR
     )
     .trim(max_ratio=5.0, reference="value", redistribute=True)
 )
 
 pipe.collect_weights()
 design_effect(pipe.result)
-pipe.estimate("approve", estimand="proportion", variance="bootstrap",
-replicates=400, seed=42)
+pipe.estimate.proportion(
+    "approve", variance="bootstrap", replicates=400, seed=42
+)
 ```
 
 If strata and PSUs are available, pass them when constructing the pipe
 (`psu=`, `strata=`). `estimate` then uses them for bootstrap or jackknife
 variance. Other examples in the
-[weightpipe documentation](https://github.com/sdaza/weightpipe) cover
-eligibility adjustments, linear/GREG calibration, design-based estimation,
-and sample-size planning.
+[weightpipe documentation](https://github.com/sdaza/weightpipe#readme) cover
+eligibility adjustments, linear/GREG calibration, design-based estimation and
+GLMs, and sample-size planning.
 
 ***
 
