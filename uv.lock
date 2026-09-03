@@ -3046,7 +3046,7 @@ requires-dist = [
     { name = "scikit-learn", specifier = ">=1.5" },
     { name = "scipy", specifier = ">=1.13" },
     { name = "seaborn", specifier = ">=0.13" },
-    { name = "weightpipe", git = "https://github.com/sdaza/weightpipe.git" },
+    { name = "weightpipe", specifier = "==0.1.0" },
 ]
 
 [package.metadata.requires-dev]
@@ -3421,7 +3421,7 @@ wheels = [
 [[package]]
 name = "weightpipe"
 version = "0.1.0"
-source = { git = "https://github.com/sdaza/weightpipe.git#e131edff93c707812ac279d0d27629d9a580b9c8" }
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
     { name = "numpy", version = "2.5.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
@@ -3430,6 +3430,10 @@ dependencies = [
     { name = "scikit-learn" },
     { name = "scipy", version = "1.17.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
     { name = "scipy", version = "1.18.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/56/ba/c713e87fff7543a5216e9629756d834811ae9e4ac305dd370b5f01815bc2/weightpipe-0.1.0.tar.gz", hash = "sha256:3e0f84081f02d2877e7d6e1ad5bf6fde4d5aef30afb292a390bc6476abdff4f0", size = 90171, upload-time = "2026-08-28T21:03:13.885Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/b1/c1/a0f3fa5bb648eb362127512951c4027f5045fe821ce1d7409733f924b697/weightpipe-0.1.0-py3-none-any.whl", hash = "sha256:c7f5a358773cbad3f0bbdb66b81fa86f2d3b916f3f2e095e00ce79b46dee00e5", size = 75082, upload-time = "2026-08-28T21:03:12.517Z" },
 ]
 
 [[package]]

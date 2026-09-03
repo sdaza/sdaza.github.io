@@ -1,13 +1,20 @@
 #!/bin/bash
 #
-# Convert Jupyter notebook files (in _jupyter folder) to markdown files (in _drafts folder).
+# Convert a Jupyter notebook (in _jupyter) to a Jekyll post (in _posts).
 #
 # Arguments:
-# $1 filename (excluding extension)
-# Install:
-# brew install gnu-sed
-# Example:
+# $1 notebook filename, excluding the extension
+# $2 post date as YYYY-MM-DD, optional, defaults to today. Pass the original
+#    date when re-converting an existing post so it keeps its filename and URL.
+#
+# Re-converting an existing post preserves its front matter, so any keys added
+# by hand (tags, for instance) survive.
+#
+# Examples:
 # _scripts/convert.sh segregation
+# _scripts/convert.sh system-dynamics-marketplace 2026-08-21
+
+set -euo pipefail
 
 # Use the project venv from `uv sync`.
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -20,67 +27,73 @@ fi
 # Set Jupyter data path for templates (needed on some Homebrew installations)
 export JUPYTER_PATH=/opt/homebrew/share/jupyter
 
-# Generate a filename with today's date.
-filename=$(date +%Y-%m-%d)-$1
+post_date=${2:-$(date +%Y-%m-%d)}
+filename=$post_date-$1
+post=./_posts/$filename.md
 
 # Jupyter will put all the assets associated with the notebook in a folder with this naming convention.
 foldername=$filename"_files"
 
+# Stash the current front matter before nbconvert overwrites the post, and ask
+# for a title only when there is nothing to reuse.
+previous=$(mktemp)
+trap 'rm -f "$previous"' EXIT
+if [[ -f $post ]]; then
+  cp "$post" "$previous"
+  echo "Re-converting $post, keeping its front matter."
+  ttl=""
+else
+  echo "What's the title of this post going to be?"
+  read ttl
+fi
+
 # Do the conversion.
 "$JUPYTER" nbconvert ./_jupyter/$1.ipynb --to markdown --output-dir=./_posts --output=$filename --template=./_scripts/jekyll.tpl
 
-# Move the images.
+# Move the images, replacing any previous export so re-runs stay idempotent.
 echo "Moving images..."
+rm -rf ./assets/img/$foldername
 mv ./_posts/$foldername ./assets/img/
 
-# Remove the now empty folder.
-# rmdir ./_posts/$foldername
-
-# Gets the title of the post
-echo "What's the title of this post going to be?"
-read ttl
-gsed -ie "4 i title: \"$ttl\"" ./_posts/$filename.md
-gsed -ie "5 i date: $(date +%Y-%m-%d)" ./_posts/$filename.md
-
-echo "added title $ttl in line 4"
-rm ./_posts/$filename.mde
-
-echo "folder name $foldername"
-
-# Go through the markdown file and rewrite image paths.
-# echo "Rewriting image paths..."
-
-# gsed -i.tmp -e "/assets/img/$foldername/" ./_posts/$filename.md
-# 2018-02-08-segregation_files/2018-02-08-segregation_7_0.png
-# gsed -i.tmp -e "s/_post/$foldername/\/assets/img/$foldername/" ./_posts/$filename.md
-# gsed  -i.tmp 's|$foldername|new_path|g' ./_posts/$filename.md
-# gsed -i 's|2023-07-31-statistical-power_files/|assets/img/2023-07-31-statistical-power_files/|' your_markdown_file.md
-gsed -i.tmp -e 's/'"$foldername"'/'"\/assets\/img\/$foldername"'/g' ./_posts/$filename.md
-
-# Remove backup file created by sed command.
-rm ./_posts/$filename.md.tmp
-rm -r ./_posts/$foldername
-
-# nbconvert pads every output block, so cells that both print and return a value
-# end up separated by several blank lines. Collapse runs of blank lines and drop
-# trailing whitespace.
-"$ROOT/.venv/bin/python" - "./_posts/$filename.md" <<'PY'
+# The template writes a front matter block without a title or a date. Restore
+# the previous one or fill in the missing keys, point the image paths at the
+# assets folder, and tidy the spacing nbconvert leaves around output blocks.
+"$ROOT/.venv/bin/python" - "$post" "$foldername" "$ttl" "$post_date" "$previous" <<'PY'
 import re
 import sys
 from pathlib import Path
 
-path = Path(sys.argv[1])
+path, foldername, title, date, previous = (
+    Path(sys.argv[1]), sys.argv[2], sys.argv[3], sys.argv[4], Path(sys.argv[5]))
+
+FRONT_MATTER = re.compile(r"\A---\n(.*?)\n---\n", flags=re.DOTALL)
+
+
+def front_matter(text):
+    match = FRONT_MATTER.match(text)
+    return match.group(1).rstrip("\n") if match else None
+
+
 text = path.read_text()
+match = FRONT_MATTER.match(text)
+if not match:
+    sys.exit(f"no front matter found in {path}")
+
+# nbconvert emits exactly one front matter block. Replace it in place; writing a
+# second one would leave the first to render as body text.
+keys = front_matter(previous.read_text()) if previous.stat().st_size else None
+if keys is None:
+    keys = match.group(1).rstrip("\n")
+    if "title:" not in keys:
+        keys += f"\ntitle: {title}"
+    if "date:" not in keys:
+        keys += f"\ndate: {date}"
+text = f"---\n{keys}\n---\n\n" + text[match.end():].lstrip("\n")
+
+text = text.replace(foldername, f"/assets/img/{foldername}")
 text = "\n".join(line.rstrip() for line in text.splitlines())
 text = re.sub(r"\n{3,}", "\n\n", text)
-text = re.sub(r"\A(---\n.*?\n---\n)\n?", r"\1\n", text, flags=re.DOTALL)
 path.write_text(text.rstrip() + "\n")
 PY
-# Check if the conversion has left a blank line at the top of the file.
-# firstline=$(head -n 1 ./_posts/$filename.md)
-# if [ "$firstline" = "" ]; then
-#   # If it has, get rid of it.
-#   tail -n +2 "./_posts/$filename.md" > "./_posts/$filename.tmp" && mv "./_posts/$filename.tmp" "./_posts/$filename.md"
-# fi
 
-echo "Done converting."
+echo "Done converting: $post"

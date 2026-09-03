@@ -14,3 +14,11 @@ __pycache__/
 *.py[cod]
 .ipynb_checkpoints/
 
+# AnyLogic scratch files
+*.alp.autosave
+*.alp.bak*
+
+# Generated scenario output, and the CSVs the AnyLogic experiments write
+data/experiments/
+assets/files/experiments/
+
