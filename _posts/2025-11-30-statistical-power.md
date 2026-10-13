@@ -4,7 +4,7 @@ author: Sebastian Daza
 title: "Tools for power analysis with multiple comparisons"
 date: 2025-11-30
 giscus_comments: true
-tags: [python, experiments]
+tags: [python, experiments, simulation]
 ---
 
 This post will discuss tools for designing and evaluating experiments. These

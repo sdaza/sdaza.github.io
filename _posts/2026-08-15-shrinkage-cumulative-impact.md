@@ -4,7 +4,7 @@ author: Sebastian Daza
 title: "The winner's curse: shrinkage and cumulative impact"
 date: 2026-08-15
 giscus_comments: true
-tags: [python, experiments, statistics, data science]
+tags: [python, experiments, statistics, data science, simulation]
 ---
 
 Suppose a team ran 200 experiments in a year, shipped those that "won," and
